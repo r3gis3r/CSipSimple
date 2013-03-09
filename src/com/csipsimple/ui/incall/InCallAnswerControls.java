@@ -99,7 +99,7 @@ public class InCallAnswerControls extends RelativeLayout implements IOnLeftRight
                     slidingTabWidget.setOnLeftRightListener(this);
                     this.addView(slidingTabWidget, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
                     slidingTabWidget.setLeftHintText(R.string.take_call);
-                    slidingTabWidget.setRightHintText(R.string.decline_call);
+                    slidingTabWidget.setRightHintText(R.string.ignore_call);
                     LayoutParams lp = (LayoutParams) slidingTabWidget.getLayoutParams();
                     lp.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
                     slidingTabWidget.setLayoutParams(lp);
@@ -182,12 +182,11 @@ public class InCallAnswerControls extends RelativeLayout implements IOnLeftRight
 		switch (whichHandle) {
 		case LEFT_HANDLE:
 			Log.d(THIS_FILE, "We take the call");
-			
 			dispatchTriggerEvent(IOnCallActionTrigger.TAKE_CALL);
 			break;
 		case RIGHT_HANDLE:
 			Log.d(THIS_FILE, "We clear the call");
-			dispatchTriggerEvent(IOnCallActionTrigger.DECLINE_CALL);
+			dispatchTriggerEvent(IOnCallActionTrigger.DONT_TAKE_CALL);
 		default:
 			break;
 		}
@@ -208,7 +207,7 @@ public class InCallAnswerControls extends RelativeLayout implements IOnLeftRight
     			return true;
     		case KeyEvent.KEYCODE_ENDCALL:
     		//case KeyEvent.KEYCODE_POWER:
-    			dispatchTriggerEvent(IOnCallActionTrigger.DECLINE_CALL);
+    			dispatchTriggerEvent(IOnCallActionTrigger.REJECT_CALL);
     			return true;
     		default:
     			break;

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">Ответить</string>
-  <string name="decline_call">Игнорировать</string>
+  <string name="ignore_call">Игнорировать</string>
   <string name="clear_call">Завершить</string>
   <string name="touch_lock">Дважды нажмите, чтобы разблокировать</string>
   <string name="dialpad">Кнопки</string>

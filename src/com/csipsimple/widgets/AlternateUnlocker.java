@@ -61,7 +61,7 @@ public class AlternateUnlocker extends LinearLayout implements IOnLeftRightProvi
         View btn;
         btn = findViewById(R.id.takeCallButton);
         btn.setOnClickListener(this);
-        btn = findViewById(R.id.declineCallButton);
+        btn = findViewById(R.id.dontTakeCallButton);
         btn.setOnClickListener(this);
 	}
 
@@ -77,7 +77,7 @@ public class AlternateUnlocker extends LinearLayout implements IOnLeftRightProvi
         if(onTriggerListener != null) {
             if (id == R.id.takeCallButton) {
                 onTriggerListener.onLeftRightChoice(IOnLeftRightChoice.LEFT_HANDLE);
-            } else if (id == R.id.declineCallButton) {
+            } else if (id == R.id.dontTakeCallButton) {
                 onTriggerListener.onLeftRightChoice(IOnLeftRightChoice.RIGHT_HANDLE);
             }
         }

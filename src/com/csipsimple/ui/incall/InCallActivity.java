@@ -823,8 +823,8 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
     public void onTrigger(int whichAction, final SipCallSession call) {
 
         // Sanity check for actions requiring valid call id
-        if (whichAction == TAKE_CALL || whichAction == DECLINE_CALL ||
-            whichAction == CLEAR_CALL || whichAction == DETAILED_DISPLAY || 
+        if (whichAction == TAKE_CALL || whichAction == REJECT_CALL || whichAction == DONT_TAKE_CALL ||
+            whichAction == TERMINATE_CALL || whichAction == DETAILED_DISPLAY || 
             whichAction == TOGGLE_HOLD || whichAction == START_RECORDING ||
             whichAction == STOP_RECORDING || whichAction == DTMF_DISPLAY ||
             whichAction == XFER_CALL || whichAction == TRANSFER_CALL ||
@@ -876,8 +876,14 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                     }
                     break;
                 }
-                case DECLINE_CALL:
-                case CLEAR_CALL: {
+                case DONT_TAKE_CALL: {
+                    if (service != null) {
+                        service.hangup(call.getCallId(), 486);
+                    }
+                    break;
+                }
+                case REJECT_CALL:
+                case TERMINATE_CALL: {
                     if (service != null) {
                         service.hangup(call.getCallId(), 0);
                     }
@@ -1058,7 +1064,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                 break;
             case RIGHT_HANDLE:
                 Log.d(THIS_FILE, "We clear the call");
-                onTrigger(IOnCallActionTrigger.CLEAR_CALL, getActiveCallInfo());
+                onTrigger(IOnCallActionTrigger.TERMINATE_CALL, getActiveCallInfo());
                 proximityManager.release(0);
             default:
                 break;

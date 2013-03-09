@@ -312,12 +312,13 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         
         boolean active = callInfo.isBeforeConfirmed() && callInfo.isIncoming();
         btnMenuBuilder.findItem(R.id.takeCallButton).setVisible(active);
+        btnMenuBuilder.findItem(R.id.dontTakeCallButton).setVisible(active);
         btnMenuBuilder.findItem(R.id.declineCallButton).setVisible(active);
         
         active = !callInfo.isAfterEnded()
                 && (!callInfo.isBeforeConfirmed() || (!callInfo.isIncoming() && callInfo
                         .isBeforeConfirmed()));
-        btnMenuBuilder.findItem(R.id.clearCallButton).setVisible(active);
+        btnMenuBuilder.findItem(R.id.terminateCallButton).setVisible(active);
         
         active = (!callInfo.isAfterEnded() && !callInfo.isBeforeConfirmed());
         btnMenuBuilder.findItem(R.id.xferCallButton).setVisible(active);
@@ -609,9 +610,9 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         int id = v.getId();
         if(id == R.id.endButton) {
             if (callInfo.isBeforeConfirmed() && callInfo.isIncoming()) {
-                dispatchTriggerEvent(IOnCallActionTrigger.DECLINE_CALL);
+                dispatchTriggerEvent(IOnCallActionTrigger.REJECT_CALL);
             }else if (!callInfo.isAfterEnded()) {
-                dispatchTriggerEvent(IOnCallActionTrigger.CLEAR_CALL);
+                dispatchTriggerEvent(IOnCallActionTrigger.TERMINATE_CALL);
             }
         }
     }
@@ -622,11 +623,14 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         if(itemId == R.id.takeCallButton) {
             dispatchTriggerEvent(IOnCallActionTrigger.TAKE_CALL);
             return true;
-        }else if(itemId == R.id.clearCallButton) {
-            dispatchTriggerEvent(IOnCallActionTrigger.CLEAR_CALL);
+        }else if(itemId == R.id.terminateCallButton) {
+            dispatchTriggerEvent(IOnCallActionTrigger.TERMINATE_CALL);
+            return true;
+        }else if(itemId ==  R.id.dontTakeCallButton) {
+            dispatchTriggerEvent(IOnCallActionTrigger.DONT_TAKE_CALL);
             return true;
         }else if(itemId ==  R.id.declineCallButton) {
-            dispatchTriggerEvent(IOnCallActionTrigger.DECLINE_CALL);
+            dispatchTriggerEvent(IOnCallActionTrigger.REJECT_CALL);
             return true;
         }else if(itemId == R.id.detailedDisplayCallButton) {
             dispatchTriggerEvent(IOnCallActionTrigger.DETAILED_DISPLAY);

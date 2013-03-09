@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">回复</string>
-  <string name="decline_call">忽略</string>
+  <string name="ignore_call">忽略</string>
   <string name="clear_call">终止</string>
   <string name="touch_lock">双击解锁</string>
   <string name="dialpad">拨号盘</string>

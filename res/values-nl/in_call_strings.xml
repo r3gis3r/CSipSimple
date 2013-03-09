@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">Antwoorden</string>
-  <string name="decline_call">Negeren</string>
+  <string name="ignore_call">Negeren</string>
   <string name="clear_call">Beëindigen</string>
   <string name="touch_lock">Tik dubbel om te ontgrendelen</string>
   <string name="dialpad">Kiezer</string>

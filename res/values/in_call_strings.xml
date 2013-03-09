@@ -17,7 +17,8 @@
 <resources>
 
     <string name="take_call">Answer</string>
-    <string name="decline_call">Ignore</string>
+    <string name="ignore_call">Ignore</string>
+    <string name="reject_call">Reject</string>
     <string name="clear_call">End</string>
     <string name="touch_lock">Double tap to unlock</string>
     <string name="dialpad">DTMF</string>

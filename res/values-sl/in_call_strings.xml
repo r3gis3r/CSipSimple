@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">Odgovori</string>
-  <string name="decline_call">Prezri</string>
+  <string name="ignore_call">Prezri</string>
   <string name="clear_call">Zaključi</string>
   <string name="touch_lock">Dvodotik za odklep</string>
   <string name="dialpad">Številčnica</string>

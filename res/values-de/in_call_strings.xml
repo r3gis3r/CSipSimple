@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">Annehmen</string>
-  <string name="decline_call">Abweisen</string>
+  <string name="ignore_call">Abweisen</string>
   <string name="clear_call">Auflegen</string>
   <string name="touch_lock">Doppelklicken zum Entsperren</string>
   <string name="dialpad">Wähltasten</string>

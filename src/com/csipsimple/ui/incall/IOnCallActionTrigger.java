@@ -32,19 +32,23 @@ public interface IOnCallActionTrigger {
     /**
      * When user clics on clear call
      */
-    int CLEAR_CALL = 1;
+    int TERMINATE_CALL = 1;
     /**
      * When user clics on take call
      */
-    int TAKE_CALL = CLEAR_CALL + 1;
+    int TAKE_CALL = TERMINATE_CALL + 1;
     /**
-     * When user clics on take call
+     * When user clics on not taking call
      */
-    int DECLINE_CALL = TAKE_CALL + 1;
+    int DONT_TAKE_CALL = TAKE_CALL + 1;
+    /**
+     * When user clics on reject call
+     */
+    int REJECT_CALL = DONT_TAKE_CALL + 1;
     /**
      * When mute is set on
      */
-    int MUTE_ON = DECLINE_CALL + 1;
+    int MUTE_ON = REJECT_CALL + 1;
     /**
      * When mute is set off
      */

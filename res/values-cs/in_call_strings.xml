@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">Odpověď</string>
-  <string name="decline_call">Ignorovat</string>
+  <string name="ignore_call">Ignorovat</string>
   <string name="clear_call">Ukončit</string>
   <string name="touch_lock">Dvakrát klepněte pro odemknutí</string>
   <string name="dialpad">DTMF</string>

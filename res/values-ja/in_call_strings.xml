@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">応答</string>
-  <string name="decline_call">無視</string>
+  <string name="ignore_call">無視</string>
   <string name="clear_call">終了</string>
   <string name="touch_lock">ダブルタップでアンロック</string>
   <string name="dialpad">DTMF</string>

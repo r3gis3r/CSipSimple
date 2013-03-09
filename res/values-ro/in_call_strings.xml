@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">Răspunde</string>
-  <string name="decline_call">Ignoră</string>
+  <string name="ignore_call">Ignoră</string>
   <string name="clear_call">Sfârşit</string>
   <string name="touch_lock">Atingeţi de două ori pentru a debloca</string>
   <string name="dialpad">Tastatură</string>

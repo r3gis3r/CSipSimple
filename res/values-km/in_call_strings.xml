@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">ឆ្លើយតប</string>
-  <string name="decline_call">មិន​អើពើ</string>
+  <string name="ignore_call">មិន​អើពើ</string>
   <string name="clear_call">បញ្ចប់</string>
   <string name="touch_lock">ប៉ះ​ពីរដង​ដើម្បីដោះសោ</string>
   <string name="dialpad">DTMF</string>
