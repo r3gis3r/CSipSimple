@@ -252,6 +252,8 @@
   <string name="codec_h264_bitrate_desc">Użyj 0 dla domyślnie wybranego poziomu</string>
   <string name="thread_count">Ilość wątków</string>
   <string name="thread_count_desc">Liczba wątków przeznaczonych dla rodzimego stosu</string>
+  <string name="media_thread_count">Ilość wątków mediów</string>
+  <string name="media_thread_count_desc">Liczba wątków przeznaczonych do przetwarzania mediów</string>
   <string name="setup_audio_before_init">Skonfiguruj dźwięk przed jego inicjalizacją</string>
   <string name="setup_audio_before_init_desc">Ustaw dźwięk w odpowiednim trybie przed inicjalizacją strumienia dźwiękowego</string>
   <string name="video_capture_size">Rozmiar przechwytywania obrazu</string>

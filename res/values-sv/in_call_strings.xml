@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">Svara</string>
-  <string name="ignore_call">Ignorera</string>
   <string name="clear_call">Avsluta</string>
   <string name="touch_lock">Dubbelknacka för att låsa upp</string>
   <string name="dialpad">Tonval</string>

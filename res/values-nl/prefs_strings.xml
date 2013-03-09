@@ -252,6 +252,8 @@
   <string name="codec_h264_bitrate_desc">Gebruik 0 voor geselecteerd level</string>
   <string name="thread_count">Aantal threads</string>
   <string name="thread_count_desc">Aantal threads toegewezen voor de SIP stack.</string>
+  <string name="media_thread_count">Media thread aantal</string>
+  <string name="media_thread_count_desc">Hoeveel threads toegewezen worden voor mediaverwerking</string>
   <string name="setup_audio_before_init">Audio instellen voor initialisatie</string>
   <string name="setup_audio_before_init_desc">Audio in correcte modus zetten voor stream initialisatie</string>
   <string name="video_capture_size">Video-opname formaat</string>

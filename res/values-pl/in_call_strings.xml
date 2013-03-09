@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">Odbierz</string>
-  <string name="ignore_call">Odrzuć</string>
   <string name="clear_call">Odłóż</string>
   <string name="touch_lock">Dwukrotnie dotknij, aby odblokować</string>
   <string name="dialpad">DTMF</string>

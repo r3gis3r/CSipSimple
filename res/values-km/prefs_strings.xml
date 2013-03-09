@@ -252,6 +252,8 @@
   <string name="codec_h264_bitrate_desc">ប្រើ ០ ជា​លំនាំដើម សម្រាប់​កម្រិត​បាន​ជ្រើស</string>
   <string name="thread_count">ចំនួន​សែស្រឡាយ</string>
   <string name="thread_count_desc">ចំនួន​សែស្រឡាយ​បាន​បម្រុងទុក​សម្រាប់​ជង់​ដើម</string>
+  <string name="media_thread_count">ចំនួន​សែ​ស្រឡាយ​មេឌៀ</string>
+  <string name="media_thread_count_desc">ចំនួន​សែ​ស្រឡាយ​ដែលបាន​បម្រុង​ទុក​សម្រាប់​ដំណើរការ​មេឌៀ</string>
   <string name="setup_audio_before_init">រៀបចំ​អូឌីយ៉ូ​មុន init</string>
   <string name="setup_audio_before_init_desc">ដាក់​អូឌីយ៉ូ​ក្នុង​របៀប​ត្រឹមត្រូវ​មុន​នឹង​ចាប់ផ្ដើម​ចរន្ត</string>
   <string name="video_capture_size">ទំហំ​ចាប់​វីដេអូ</string>

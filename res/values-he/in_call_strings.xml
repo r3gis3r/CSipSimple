@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">מענה</string>
-  <string name="ignore_call">התעלמות</string>
   <string name="clear_call">סיום</string>
   <string name="touch_lock">טפיחה כפולה לפתיחה</string>
   <string name="dialpad">לוח חיוג</string>

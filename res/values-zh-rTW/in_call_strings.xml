@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">接聽</string>
-  <string name="ignore_call">略過</string>
   <string name="clear_call">結束</string>
   <string name="touch_lock">雙擊解鎖</string>
   <string name="dialpad">撥號盤</string>

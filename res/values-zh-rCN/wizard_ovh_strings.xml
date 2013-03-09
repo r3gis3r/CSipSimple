@@ -1,4 +1,6 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_ovh_phone_number_desc">电话号码格式如 0033xxxxxx</string>
+  <string name="w_sapo_phone_number_desc">电话号码格式如 +35130xxxxxx</string>
+  <string name="w_pbxes_user_extension">用户分机 (比如user-1)</string>
 </resources>

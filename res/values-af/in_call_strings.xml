@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">Antwoord</string>
-  <string name="ignore_call">Ignoreer</string>
   <string name="clear_call">Einde</string>
   <string name="bluetooth">Bluetooth</string>
   <string name="call_state_calling">Bel tans…</string>

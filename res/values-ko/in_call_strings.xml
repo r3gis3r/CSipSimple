@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">응답</string>
-  <string name="ignore_call">무시</string>
   <string name="clear_call">종료</string>
   <string name="touch_lock">해제할 더블 탭</string>
   <string name="dialpad">다이얼패드</string>

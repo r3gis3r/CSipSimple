@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">Válasz</string>
-  <string name="ignore_call">Mellőz</string>
   <string name="clear_call">Vége</string>
   <string name="touch_lock">Két érintes a feloldáshoz</string>
   <string name="dialpad">Tárcsázó</string>

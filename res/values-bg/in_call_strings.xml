@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">Отговор</string>
-  <string name="ignore_call">Игнориране</string>
   <string name="clear_call">Край</string>
   <string name="touch_lock">За отключване, докоснете двукратно</string>
   <string name="dialpad">DTMF</string>

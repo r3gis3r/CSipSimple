@@ -1,33 +1,31 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="take_call">Répondre</string>
-    <string name="ignore_call">Ignore</string>
-    <string name="reject_call">Rejeter</string>
-    <string name="clear_call">Raccrocher</string>
-    <string name="touch_lock">Tapotter deux fois pour débloquer</string>
-    <string name="dialpad">Clavier</string>
-    <string name="bluetooth">Bluetooth</string>
-    <string name="speaker">Ht. parleur</string>
-    <string name="mute">Muet</string>
-    <string name="add_call">Aj. Appel</string>
-    <string name="call_state_calling">Appel…</string>
-    <string name="call_state_confirmed">En conversation</string>
-    <string name="call_state_connecting">Connexion…</string>
-    <string name="call_state_disconnected">Fin d\'appel</string>
-    <string name="call_state_early">En train de sonner…</string>
-    <string name="call_state_incoming">Appel entrant…</string>
-    <string name="call_state_null">ERREUR</string>
-    <string name="unlock">Déverrouiller</string>
-    <string name="record">Enregistrer</string>
-    <string name="stop_recording">Arrêter l\'enregistrement</string>
-    <string name="xfer_uri">Transférer vers un numéro</string>
-    <string name="hold_call">Mettre en attente</string>
-    <string name="on_hold">En attente</string>
-    <string name="resume_call">Reprendre</string>
-    <string name="transfer_to_call">Transférer vers un appel</string>
-    <string name="send_dtmf">Envoyer DTMF</string>
-    <string name="zrtp_trust_remote">Faire confiance au ZRTP distant</string>
-    <string name="zrtp_revoke_trusted_remote">Révoquer le ZRTP distant</string>
-
+  <string name="take_call">Répondre</string>
+  <string name="ignore_call">Ignorer</string>
+  <string name="reject_call">Rejeter</string>
+  <string name="clear_call">Raccrocher</string>
+  <string name="touch_lock">Tapotter deux fois pour débloquer</string>
+  <string name="dialpad">Clavier</string>
+  <string name="bluetooth">Bluetooth</string>
+  <string name="speaker">Ht. parleur</string>
+  <string name="mute">Muet</string>
+  <string name="add_call">Aj. Appel</string>
+  <string name="call_state_calling">Appel…</string>
+  <string name="call_state_confirmed">En conversation</string>
+  <string name="call_state_connecting">Connexion…</string>
+  <string name="call_state_disconnected">Fin d\'appel</string>
+  <string name="call_state_early">En train de sonner…</string>
+  <string name="call_state_incoming">Appel entrant…</string>
+  <string name="call_state_null">ERREUR</string>
+  <string name="unlock">Déverrouiller</string>
+  <string name="record">Enregistrer</string>
+  <string name="stop_recording">Arrêter l\'enregistrement</string>
+  <string name="xfer_uri">Transférer vers un numéro</string>
+  <string name="hold_call">Mettre en attente</string>
+  <string name="on_hold">En attente</string>
+  <string name="resume_call">Reprendre</string>
+  <string name="transfer_to_call">Transférer vers un appel</string>
+  <string name="send_dtmf">Envoyer DTMF</string>
+  <string name="zrtp_trust_remote">Faire confiance au ZRTP distant</string>
+  <string name="zrtp_revoke_trusted_remote">Révoquer le ZRTP distant</string>
 </resources>

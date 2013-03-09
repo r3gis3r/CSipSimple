@@ -252,6 +252,8 @@
   <string name="codec_h264_bitrate_desc">選択したレベルのデフォルトには0を利用</string>
   <string name="thread_count">スレッドカウント</string>
   <string name="thread_count_desc">ネイティブスタックに割り当てるスレッド数</string>
+  <string name="media_thread_count">メディアスレッド数</string>
+  <string name="media_thread_count_desc">メディア処理に割り当てるスレッド数</string>
   <string name="setup_audio_before_init">初期化前にオーディオを設定</string>
   <string name="setup_audio_before_init_desc">音声通話初期化前にオーディオを正しく設定する</string>
   <string name="video_capture_size">映像取得サイズ</string>

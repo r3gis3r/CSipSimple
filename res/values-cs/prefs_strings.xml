@@ -252,6 +252,8 @@
   <string name="codec_h264_bitrate_desc">Použijte 0 pro výchozí zvolenou úroveň</string>
   <string name="thread_count">Počet vláken</string>
   <string name="thread_count_desc">Počet vláken přidělených pro nativní zásobník</string>
+  <string name="media_thread_count">Počet vláken pro media</string>
+  <string name="media_thread_count_desc">Počet vláken přidělených pro zpracování medií</string>
   <string name="setup_audio_before_init">Před inicializací nastavete audio</string>
   <string name="setup_audio_before_init_desc">Zadejte audio ve správném režimu před  inicializací audio streamu</string>
   <string name="video_capture_size">Velikost zachytávaného videa</string>

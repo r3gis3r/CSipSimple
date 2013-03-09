@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">回复</string>
-  <string name="ignore_call">忽略</string>
   <string name="clear_call">终止</string>
   <string name="touch_lock">双击解锁</string>
   <string name="dialpad">拨号盘</string>
@@ -19,4 +18,6 @@
   <string name="unlock">解锁</string>
   <string name="record">录音</string>
   <string name="stop_recording">停止录音</string>
+  <string name="hold_call">保持</string>
+  <string name="on_hold">正在保持</string>
 </resources>

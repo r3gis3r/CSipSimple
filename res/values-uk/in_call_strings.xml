@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">Відповісти</string>
-  <string name="ignore_call">Ігнорувати</string>
   <string name="clear_call">Завершення</string>
   <string name="touch_lock">Натисніть двічі щоб розблокувати</string>
   <string name="dialpad">Панель набору номера</string>
