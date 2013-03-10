@@ -49,7 +49,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
-import com.csipsimple.api.SipCallSession.InvState;
+import com.csipsimple.api.SipCallSession.MediaState;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
@@ -329,9 +329,8 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         
 
         // DTMF
-        active = !callInfo.isAfterEnded()
-                && (callInfo.getCallState() == InvState.EARLY
-                        || callInfo.getCallState() == InvState.CONFIRMED || callInfo.getCallState() == InvState.CONNECTING);
+        active = callInfo.isActive() ;
+        active &= ( (callInfo.getMediaStatus() == MediaState.ACTIVE) || (callInfo.getMediaStatus() == MediaState.REMOTE_HOLD));
         btnMenuBuilder.findItem(R.id.dtmfCallButton).setVisible(active);
         
         // Info

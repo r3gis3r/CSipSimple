@@ -1319,6 +1319,9 @@ public class PjSipService {
         if (pjsua.call_is_active(callId) != pjsuaConstants.PJ_TRUE) {
             return -1;
         }
+        if(pjsua.call_has_media(callId) != pjsuaConstants.PJ_TRUE) {
+            return -1;
+        }
 
         String dtmfToDial = keyPressed;
         String remainingDtmf = "";
