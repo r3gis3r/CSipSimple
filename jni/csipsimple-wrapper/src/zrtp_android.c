@@ -175,16 +175,27 @@ pjmedia_transport* on_zrtp_transport_created(pjsua_call_id call_id,
 	unsigned media_idx,
 	pjmedia_transport *base_tp,
 	unsigned flags) {
-
+        pjsua_call *call;
 		pjmedia_transport *zrtp_tp = NULL;
 		pj_status_t status;
 		pjmedia_endpt* endpt = pjsua_get_pjmedia_endpt();
 
+		// For now, do zrtp only on audio stream
+        call = &pjsua_var.calls[call_id];
+        if (media_idx < call->med_prov_cnt) {
+            pjsua_call_media *call_med = &call->media_prov[media_idx];
+            if (call_med->tp && call_med->type != PJMEDIA_TYPE_AUDIO) {
+                PJ_LOG(2, (THIS_FILE, "ZRTP transport not yet supported for : %d", call_med->type));
+                return base_tp;
+            }
+        }
+
+	    // Create zrtp transport adapter
 		status = pjmedia_transport_zrtp_create(endpt, NULL, base_tp,
 											   &zrtp_tp, (flags & PJSUA_MED_TP_CLOSE_MEMBER));
 
 		if(status == PJ_SUCCESS){
-			PJ_LOG(3,(THIS_FILE, "ZRTP transport created"));
+			PJ_LOG(4,(THIS_FILE, "ZRTP transport created"));
 			// TODO : we should use our own pool
 			// Build callback data ponter
 			zrtp_cb_user_data* zrtp_cb_data = PJ_POOL_ZALLOC_T(css_var.pool, zrtp_cb_user_data);

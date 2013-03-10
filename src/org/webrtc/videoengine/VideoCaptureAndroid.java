@@ -250,9 +250,13 @@ public class VideoCaptureAndroid implements PreviewCallback, Callback {
         Log.d(TAG, "VideoCaptureAndroid::surfaceDestroyed");
         captureLock.lock();
         try {
-            camera.setPreviewDisplay(null);
+            if(camera != null) {
+                camera.setPreviewDisplay(null);
+            }
         } catch (IOException e) {
             Log.e(TAG, "Failed to clear preview surface!", e);
+        } catch (RuntimeException e) {
+            Log.w(TAG, "Clear preview surface useless", e);
         }
         captureLock.unlock();
     }
