@@ -44,4 +44,5 @@ private static AccountCreationWebviewHelper instance;
         return instance;
     }
     public abstract void setSSLNoSecure(WebView webView);
+    public abstract void setAllowRedirect(WebView webView);
 }

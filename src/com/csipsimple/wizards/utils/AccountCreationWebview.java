@@ -86,8 +86,19 @@ public class AccountCreationWebview {
         });
     }
     
+    /**
+     * Allow untrusted (self signed / invalid domain match / etc) ssl certificates.
+     * Highly discouraged and only works on android 8+
+     */
     public void setUntrustedCertificate() {
         AccountCreationWebviewHelper.getInstance().setSSLNoSecure(webView);
+    }
+    /**
+     * Allow redirects from the loaded webpage.
+     * Highly discouraged and only works on android 8+
+     */
+    public void setAllowRedirects() {
+        AccountCreationWebviewHelper.getInstance().setAllowRedirect(webView);
     }
 
     private class HideWebviewRunnable implements Runnable {

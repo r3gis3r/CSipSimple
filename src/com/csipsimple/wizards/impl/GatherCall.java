@@ -36,7 +36,7 @@ import com.csipsimple.wizards.utils.AccountCreationWebview.OnAccountCreationDone
 
 public class GatherCall extends SimpleImplementation  implements OnAccountCreationDoneListener, OnAccountCreationFirstViewListener {
 
-    private static final String webCreationPage = "http://212.4.110.135:8080/subscriber/newSubscriberFree/alta?execution=e2s1";
+    private static final String webCreationPage = "http://csip.gathercall.com";
 
     private AccountCreationWebview extAccCreator;
     private AccountCreationFirstView firstView;
@@ -68,7 +68,7 @@ public class GatherCall extends SimpleImplementation  implements OnAccountCreati
         settingsContainer = (ViewGroup) parent.findViewById(R.id.settings_container);
         validationBar = (ViewGroup) parent.findViewById(R.id.validation_bar);
         extAccCreator = new AccountCreationWebview(parent, webCreationPage, this);
-        
+        extAccCreator.setAllowRedirects();
         updateAccountInfos(account);
 	}
 	
