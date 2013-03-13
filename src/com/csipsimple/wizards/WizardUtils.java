@@ -933,6 +933,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_voiptelie, 45, 
                     new Locale[]{Locale.UK, Locale.US, new Locale("EN", "ie"), locale("en_AU") }, false, false, 
                     GatherCall.class));
+            WIZARDS_DICT.put("CONEXION", new WizardInfo("CONEXION", "Conexion", 
+                    R.drawable.ic_wizard_cnx, 45, 
+                    new Locale[]{new Locale("ES", "pa")}, false, false, 
+                    Conexion.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
