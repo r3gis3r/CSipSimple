@@ -279,9 +279,7 @@ public class SipNotifications {
 		    inCallNotification.setOngoing(true);
 		}
         
-		Intent notificationIntent = new Intent(SipManager.ACTION_SIP_CALL_UI);
-		notificationIntent.putExtra(SipManager.EXTRA_CALL_INFO, currentCallInfo2);
-		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		Intent notificationIntent = SipService.buildCallUiIntent(context, currentCallInfo2);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		
         inCallNotification.setContentTitle(context.getText(R.string.ongoing_call));

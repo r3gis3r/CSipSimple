@@ -132,6 +132,7 @@ public class PreferencesWrapper {
 		
 		put(SipConfigManager.DEFAULT_CALLER_ID, "");
 		put(SipConfigManager.THEME, "");
+        put(SipConfigManager.CALL_UI_PACKAGE, "");
 		put(SipConfigManager.RINGTONE, "");
 		
 		

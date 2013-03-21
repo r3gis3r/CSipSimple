@@ -47,6 +47,7 @@ import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.csipsimple.R;
@@ -71,6 +72,8 @@ import com.csipsimple.service.receiver.DynamicReceiver5;
 import com.csipsimple.ui.incall.InCallMediaControl;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
+import com.csipsimple.utils.ExtraPlugins;
+import com.csipsimple.utils.ExtraPlugins.DynActivityPlugin;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -81,6 +84,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Semaphore;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1940,6 +1944,38 @@ public class SipService extends Service {
     	}
     }
     
+    private static String UI_CALL_PACKAGE = null;
+    public static Intent buildCallUiIntent(Context ctxt, SipCallSession callInfo) {
+        // Resolve the package to handle call.
+        if(UI_CALL_PACKAGE == null) {
+            UI_CALL_PACKAGE = ctxt.getPackageName();
+            try {
+                Map<String, DynActivityPlugin> callsUis = ExtraPlugins.getDynActivityPlugins(ctxt, SipManager.ACTION_SIP_CALL_UI);
+                String preferredPackage  = SipConfigManager.getPreferenceStringValue(ctxt, SipConfigManager.CALL_UI_PACKAGE, UI_CALL_PACKAGE);
+                String packageName = null;
+                boolean foundPref = false;
+                for(String activity : callsUis.keySet()) {
+                    packageName = activity.split("/")[0];
+                    if(preferredPackage.equalsIgnoreCase(packageName)) {
+                        UI_CALL_PACKAGE = packageName;
+                        foundPref = true;
+                        break;
+                    }
+                }
+                if(!foundPref && !TextUtils.isEmpty(packageName)) {
+                    UI_CALL_PACKAGE = packageName;
+                }
+            }catch(Exception e) {
+                Log.e(THIS_FILE, "Error while resolving package", e);
+            }
+        }
+        
+        Intent intent = new Intent(SipManager.ACTION_SIP_CALL_UI);
+        intent.putExtra(SipManager.EXTRA_CALL_INFO, callInfo);
+        intent.setPackage(UI_CALL_PACKAGE);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        return intent;
+    }
     
     
     public static void setVideoWindow(int callId, Object window, boolean local) {

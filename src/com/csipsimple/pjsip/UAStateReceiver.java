@@ -51,6 +51,7 @@ import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.service.MediaManager;
 import com.csipsimple.service.SipNotifications;
+import com.csipsimple.service.SipService;
 import com.csipsimple.service.SipService.SameThreadException;
 import com.csipsimple.service.SipService.SipRunnable;
 import com.csipsimple.service.impl.SipCallSessionImpl;
@@ -894,21 +895,18 @@ public class UAStateReceiver extends Callback {
      */
     private synchronized void launchCallHandler(SipCallSession currentCallInfo2) {
         long currentElapsedTime = SystemClock.elapsedRealtime();
-
         // Synchronized ensure we do not get this launched several time
         // We also ensure that a minimum delay has been consumed so that we do
         // not fire this too much times
         // Specially for EARLY - CONNECTING states
         if (lastLaunchCallHandler + LAUNCH_TRIGGER_DELAY < currentElapsedTime) {
+            Context ctxt = pjService.service;
 
             // Launch activity to choose what to do with this call
-            Intent callHandlerIntent = new Intent(SipManager.ACTION_SIP_CALL_UI);
-            callHandlerIntent.putExtra(SipManager.EXTRA_CALL_INFO, currentCallInfo2);
-            callHandlerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            Intent callHandlerIntent = SipService.buildCallUiIntent(ctxt, currentCallInfo2);
 
             Log.d(THIS_FILE, "Anounce call activity");
-            pjService.service.startActivity(callHandlerIntent);
+            ctxt.startActivity(callHandlerIntent);
             lastLaunchCallHandler = currentElapsedTime;
         } else {
             Log.d(THIS_FILE, "Ignore extra launch handler");

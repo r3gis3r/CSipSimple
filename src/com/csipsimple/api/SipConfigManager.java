@@ -439,6 +439,15 @@ public class SipConfigManager {
      */
     public static final String THEME = "selected_theme";
     /**
+     * Package to manage calls UI.<br/>
+     * The package that will handle calls user interface.
+     * Might be moved as per account later.
+     * If invalid or empty the self application package will be used.
+     * 
+     * @see #setPreferenceStringValue(Context, String, String)
+     */
+    public static final String CALL_UI_PACKAGE = "call_ui_package";
+    /**
      * Display the icon status bar when registered? <br/>
      * Warning, disabling that will unflag the application as important in
      * backgroud. And android may decide to kill it more frequently
