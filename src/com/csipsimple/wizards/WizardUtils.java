@@ -357,6 +357,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_securdata, 45, 
                     new Locale[]{}, false, true, 
                     SecurData.class));
+            WIZARDS_DICT.put("NECC", new WizardInfo("NECC", "Voip Necc", 
+                    R.drawable.ic_wizard_necc, 45, 
+                    new Locale[]{}, false, true, 
+                    Necc.class));
             
 			
 			//Locales
