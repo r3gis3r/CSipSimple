@@ -418,6 +418,14 @@ public class SipProfile implements Parcelable {
      */
     public static final String FIELD_TRANSPORT = "transport";
     /**
+     * Default scheme to automatically add for this account when calling without uri scheme.<br/>
+     * 
+     * This is free field but should be one of :
+     * sip, sips, tel
+     * If invalid (or empty) will automatically fallback to sip
+     */
+    public static final String FIELD_DEFAULT_URI_SCHEME = "default_uri_scheme";
+    /**
      * Way the application should use SRTP. <br/>
      * <a target="_blank" href=
      * "http://www.pjsip.org/pjsip/docs/html/structpjsua__acc__config.htm#a34b00edb1851924a99efd8fedab917ba"
@@ -776,6 +784,10 @@ public class SipProfile implements Parcelable {
      */
     public Integer transport = 0;
     /**
+     * @see #FIELD_DEFAULT_URI_SCHEME
+     */
+    public String default_uri_scheme  = "sip";
+    /**
      * @see #FIELD_ACTIVE
      */
     public boolean active = true;
@@ -1065,6 +1077,7 @@ public class SipProfile implements Parcelable {
         initial_auth = (in.readInt() != 0);
         auth_algo = getReadParcelableString(in.readString());
         wizard_data = getReadParcelableString(in.readString());
+        default_uri_scheme = getReadParcelableString(in.readString());
     }
 
     /**
@@ -1153,6 +1166,7 @@ public class SipProfile implements Parcelable {
         dest.writeInt(initial_auth ? 1 : 0);
         dest.writeString(getWriteParcelableString(auth_algo));
         dest.writeString(getWriteParcelableString(wizard_data));
+        dest.writeString(getWriteParcelableString(default_uri_scheme));
     }
 
     // Yes yes that's not clean but well as for now not problem with that.
@@ -1201,6 +1215,10 @@ public class SipProfile implements Parcelable {
         tmp_i = args.getAsInteger(FIELD_TRANSPORT);
         if (tmp_i != null) {
             transport = tmp_i;
+        }
+        tmp_s = args.getAsString(FIELD_DEFAULT_URI_SCHEME);
+        if (tmp_s != null) {
+            default_uri_scheme = tmp_s;
         }
 
         tmp_i = args.getAsInteger(FIELD_ACTIVE);
@@ -1449,6 +1467,7 @@ public class SipProfile implements Parcelable {
         args.put(FIELD_WIZARD, wizard);
         args.put(FIELD_DISPLAY_NAME, display_name);
         args.put(FIELD_TRANSPORT, transport);
+        args.put(FIELD_DEFAULT_URI_SCHEME, default_uri_scheme);
         args.put(FIELD_WIZARD_DATA, wizard_data);
 
         args.put(FIELD_PRIORITY, priority);

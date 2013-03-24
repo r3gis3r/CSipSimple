@@ -81,7 +81,7 @@ public final class SipUri {
         
         public String toString(boolean includeDisplayName) {
             StringBuffer buildString = new StringBuffer();
-            if(!TextUtils.isEmpty(scheme)) {
+            if(TextUtils.isEmpty(scheme)) {
                 buildString.append("<sip:");
             }else {
                 buildString.append("<" + scheme + ":");

@@ -58,7 +58,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
                 SipProfile.FIELD_ACC_ID, // Needed for default domain
                 SipProfile.FIELD_REG_URI, // Needed for default domain
                 SipProfile.FIELD_PROXY, // Needed for default domain
-                SipProfile.FIELD_TRANSPORT, // Needed for default scheme
+                SipProfile.FIELD_DEFAULT_URI_SCHEME, // Needed for default scheme
                 SipProfile.FIELD_DISPLAY_NAME,
                 SipProfile.FIELD_WIZARD
         };

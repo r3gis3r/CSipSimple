@@ -101,7 +101,7 @@ public class DBProvider extends ContentProvider {
 		SipProfile.FIELD_FORCE_CONTACT, SipProfile.FIELD_ALLOW_CONTACT_REWRITE, SipProfile.FIELD_CONTACT_REWRITE_METHOD, 
 		SipProfile.FIELD_ALLOW_VIA_REWRITE,
 		SipProfile.FIELD_CONTACT_PARAMS, SipProfile.FIELD_CONTACT_URI_PARAMS,
-		SipProfile.FIELD_TRANSPORT, SipProfile.FIELD_USE_SRTP, SipProfile.FIELD_USE_ZRTP,
+		SipProfile.FIELD_TRANSPORT, SipProfile.FIELD_DEFAULT_URI_SCHEME, SipProfile.FIELD_USE_SRTP, SipProfile.FIELD_USE_ZRTP,
 		SipProfile.FIELD_REG_DELAY_BEFORE_REFRESH,
 		
 		// RTP config
@@ -148,7 +148,7 @@ public class DBProvider extends ContentProvider {
 		String.class, Integer.class, Integer.class,
 		Integer.class,
 		String.class, String.class,
-		Integer.class, Integer.class, Integer.class,
+		Integer.class, String.class, Integer.class, Integer.class,
 		Integer.class,
 		
 

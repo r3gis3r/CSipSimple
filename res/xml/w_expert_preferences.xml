@@ -83,6 +83,13 @@
             android:key="transport"
             android:summary="@string/transport_desc"
             android:title="@string/transport" />
+        <ListPreference
+            android:defaultValue="sip"
+            android:entries="@array/uri_scheme_choices"
+            android:entryValues="@array/uri_scheme_values"
+            android:key="default_uri_scheme"
+            android:summary="@string/w_expert_default_uri_scheme_desc"
+            android:title="@string/w_expert_default_uri_scheme" />
 
         <CheckBoxPreference
             android:defaultValue="false"

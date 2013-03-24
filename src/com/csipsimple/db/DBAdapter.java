@@ -46,7 +46,7 @@ public class DBAdapter {
 
 	public static class DatabaseHelper extends SQLiteOpenHelper {
 		
-		private static final int DATABASE_VERSION = 38;
+		private static final int DATABASE_VERSION = 39;
 
 		// Creation sql command
 		private static final String TABLE_ACCOUNT_CREATE = "CREATE TABLE IF NOT EXISTS "
@@ -74,6 +74,7 @@ public class DBAdapter {
 				+ SipProfile.FIELD_CONTACT_PARAMS 		+ " TEXT,"
 				+ SipProfile.FIELD_CONTACT_URI_PARAMS	+ " TEXT,"
 				+ SipProfile.FIELD_TRANSPORT	 		+ " INTEGER," 
+		        + SipProfile.FIELD_DEFAULT_URI_SCHEME           + " TEXT," 
 				+ SipProfile.FIELD_USE_SRTP	 			+ " INTEGER," 
 				+ SipProfile.FIELD_USE_ZRTP	 			+ " INTEGER," 
 
@@ -426,6 +427,14 @@ public class DBAdapter {
                 }catch(SQLiteException e) {
                     Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
                 }
+            }
+            if(oldVersion < 39) {
+                try {
+                    db.execSQL("ALTER TABLE " + SipProfile.ACCOUNTS_TABLE_NAME + " ADD " + SipProfile.FIELD_DEFAULT_URI_SCHEME + " TEXT");
+                }catch(SQLiteException e) {
+                    Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
+                }
+                
             }
 			onCreate(db);
 		}

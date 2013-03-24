@@ -21,8 +21,6 @@
 
 package com.csipsimple.wizards.impl;
 
-import java.util.HashMap;
-
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -31,6 +29,8 @@ import android.text.TextUtils;
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.Log;
+
+import java.util.HashMap;
 
 public class Expert extends BaseImplementation {
 
@@ -46,7 +46,7 @@ public class Expert extends BaseImplementation {
     private EditTextPreference  accountAuthAlgo;
     private ListPreference accountDataType;
 	private EditTextPreference accountRealm;
-	private ListPreference accountScheme;
+	private ListPreference accountScheme, accountDefaultUriScheme;
 	private ListPreference accountTransport;
 	private CheckBoxPreference accountPublishEnabled;
 	private EditTextPreference accountRegTimeout;
@@ -87,6 +87,7 @@ public class Expert extends BaseImplementation {
         accountInitAuth = (CheckBoxPreference) findPreference(SipProfile.FIELD_AUTH_INITIAL_AUTH);
 		accountScheme = (ListPreference) findPreference(SipProfile.FIELD_SCHEME);
 		accountTransport = (ListPreference) findPreference(SipProfile.FIELD_TRANSPORT);
+        accountDefaultUriScheme = (ListPreference) findPreference(SipProfile.FIELD_DEFAULT_URI_SCHEME);
 		accountUseSrtp = (ListPreference) findPreference(SipProfile.FIELD_USE_SRTP);
         accountUseZrtp = (ListPreference) findPreference(SipProfile.FIELD_USE_ZRTP);
 		accountPublishEnabled = (CheckBoxPreference) findPreference(SipProfile.FIELD_PUBLISH_ENABLED);
@@ -162,6 +163,9 @@ public class Expert extends BaseImplementation {
 		accountAuthAlgo.setText(account.auth_algo);
 
 		accountTransport.setValue(account.transport.toString());
+		if(!TextUtils.isEmpty(account.default_uri_scheme)) {
+            accountDefaultUriScheme.setValue(account.default_uri_scheme);
+        }
 		accountPublishEnabled.setChecked((account.publish_enabled == 1));
 		accountRegTimeout.setText(Long.toString(account.reg_timeout));
 		accountRegDelayRefresh.setText(Long.toString(account.reg_delay_before_refresh));
@@ -221,6 +225,7 @@ public class Expert extends BaseImplementation {
 		setListFieldSummary(SipProfile.FIELD_DATATYPE);
         setStringFieldSummary(SipProfile.FIELD_REG_DELAY_BEFORE_REFRESH);
         setListFieldSummary(SipProfile.FIELD_USE_SRTP);
+        setListFieldSummary(SipProfile.FIELD_DEFAULT_URI_SCHEME);
 	}
 	
 	private static HashMap<String, Integer>SUMMARIES = new  HashMap<String, Integer>(){/**
@@ -239,6 +244,7 @@ public class Expert extends BaseImplementation {
         put(SipProfile.FIELD_DATATYPE, R.string.w_expert_datatype_desc);
         put(SipProfile.FIELD_REG_DELAY_BEFORE_REFRESH, R.string.w_expert_reg_dbr_desc);
         put(SipProfile.FIELD_USE_SRTP, R.string.use_srtp_desc);
+        put(SipProfile.FIELD_DEFAULT_URI_SCHEME, R.string.w_expert_default_uri_scheme_desc);
 	}};
 
 	@Override
@@ -281,6 +287,7 @@ public class Expert extends BaseImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		account.display_name = accountDisplayName.getText();
 		account.transport = getIntValue(accountTransport, SipProfile.TRANSPORT_UDP);
+		account.default_uri_scheme = accountDefaultUriScheme.getValue();
 		account.acc_id = getText(accountAccId);
 		account.reg_uri = getText(accountRegUri);
 		account.use_srtp = getIntValue(accountUseSrtp, -1);

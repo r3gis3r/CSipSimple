@@ -1847,8 +1847,8 @@ public class PjSipService {
             finalCallee.domain = defaultDomain;
         }
         if (TextUtils.isEmpty(finalCallee.scheme)) {
-            if (account.transport == SipProfile.TRANSPORT_TLS) {
-                finalCallee.scheme = SipManager.PROTOCOL_SIPS;
+            if (!TextUtils.isEmpty(account.default_uri_scheme)) {
+                finalCallee.scheme = account.default_uri_scheme;
             } else {
                 finalCallee.scheme = SipManager.PROTOCOL_SIP;
             }
