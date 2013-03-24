@@ -7,6 +7,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := pj_aac_codec
 
 
+ifneq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI),armeabi mips))
 # pj
 PJ_DIR = $(LOCAL_PATH)/../../pjsip/sources
 LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include \
@@ -35,6 +36,7 @@ LOCAL_CFLAGS := $(MY_PJSIP_FLAGS) -DPJMEDIA_HAS_AAC_CODEC=1
 LOCAL_SHARED_LIBRARIES += libpjsipjni
 LOCAL_STATIC_LIBRARIES += libFraunhoferAAC 
 LOCAL_STATIC_LIBRARIES += libgcc
+endif
 
 include $(BUILD_SHARED_LIBRARY)
 include $(CLEAR_VARS)
