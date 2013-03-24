@@ -44,5 +44,7 @@
     <string name="send_dtmf">Send DTMF</string>
     <string name="zrtp_trust_remote">Trust ZRTP remote</string>
     <string name="zrtp_revoke_trusted_remote">Revoke trusted ZRTP remote</string>
+    <string name="transport_secure_to_server">TLS transport is used for immediate hop</string>
+    <string name="transport_secure_full">End-to-end signaling is supposed secure</string>
 
 </resources>

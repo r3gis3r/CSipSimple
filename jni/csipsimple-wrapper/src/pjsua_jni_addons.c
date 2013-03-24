@@ -93,7 +93,7 @@ struct css_data css_var;
 /**
  * Is call using a secure RTP method (SRTP/ZRTP)
  */
-PJ_DECL(pj_str_t) call_secure_info(pjsua_call_id call_id) {
+PJ_DECL(pj_str_t) call_secure_media_info(pjsua_call_id call_id) {
 
 	pjsua_call *call;
 	pj_status_t status;
@@ -160,6 +160,25 @@ PJ_DECL(pj_str_t) call_secure_info(pjsua_call_id call_id) {
 
 	return result;
 }
+
+/**
+ * Is call using a secure transport method (No (0) / TLS (1) / SIPS (2))
+ */
+PJ_DECL(int) call_secure_sig_level(pjsua_call_id call_id) {
+    int value = 0;
+    pjsua_call *call;
+    PJ_ASSERT_RETURN(call_id>=0 && call_id<(int)pjsua_var.ua_cfg.max_calls,
+            value);
+
+    PJSUA_LOCK();
+    call = &pjsua_var.calls[call_id];
+    value = call->secure_level;
+    PJSUA_UNLOCK();
+
+    return value;
+
+}
+
 
 // ZRTP and other media dispatcher
 pjmedia_transport* on_transport_created_wrapper(pjsua_call_id call_id,

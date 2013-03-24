@@ -185,6 +185,20 @@ public class SipCallSession implements Parcelable {
     }
 
     /**
+     * The call signaling is not secure
+     */
+    public static int TRANSPORT_SECURE_NONE = 0;
+    /**
+     * The call signaling is secure until it arrives on server. After, nothing ensures how it goes.
+     */
+    public static int TRANSPORT_SECURE_TO_SERVER = 1;
+    /**
+     * The call signaling is supposed to be secured end to end.
+     */
+    public static int TRANSPORT_SECURE_FULL = 2;
+
+    
+    /**
      * Id of an invalid or not existant call
      */
     public static final int INVALID_CALL_ID = -1;
@@ -206,6 +220,7 @@ public class SipCallSession implements Parcelable {
     protected long accId = SipProfile.INVALID_ID;
     protected int mediaStatus = MediaState.NONE;
     protected boolean mediaSecure = false;
+    protected int transportSecure = 0;
     protected boolean mediaHasVideoStream = false;
     protected long connectStart = 0;
     protected int lastStatusCode = 0;
@@ -241,6 +256,7 @@ public class SipCallSession implements Parcelable {
         isRecording = (in.readInt() == 1);
         hasZrtp = (in.readInt() == 1);
         zrtpSASVerified = (in.readInt() == 1);
+        transportSecure = (in.readInt());
     }
 
     /**
@@ -285,6 +301,7 @@ public class SipCallSession implements Parcelable {
         dest.writeInt(isRecording ? 1 : 0);
         dest.writeInt(hasZrtp ? 1 : 0);
         dest.writeInt(zrtpSASVerified ? 1 : 0);
+        dest.writeInt(transportSecure);
     }
 
     /**
@@ -420,11 +437,20 @@ public class SipCallSession implements Parcelable {
     }
 
     /**
-     * Get the secure level of the call
+     * Get the secure level of the signaling of the call.
+     * 
+     * @return one of {@link #TRANSPORT_SECURE_NONE}, {@link #TRANSPORT_SECURE_TO_SERVER}, {@link #TRANSPORT_SECURE_FULL}
+     */
+    public int getTransportSecureLevel() {
+        return transportSecure;
+    }
+    
+    /**
+     * Get the secure level of the media of the call
      * 
      * @return true if the call has a <b>media</b> encrypted
      */
-    public boolean isSecure() {
+    public boolean isMediaSecure() {
         return mediaSecure;
     }
 

@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.FloatMath;
 import android.view.LayoutInflater;
@@ -66,6 +67,8 @@ import com.csipsimple.utils.PreferencesProviderWrapper;
 
 import org.webrtc.videoengine.ViERenderer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class InCallCard extends FrameLayout implements OnClickListener, Callback {
@@ -488,8 +491,23 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
 
         elapsedTime.setBase(callInfo.getConnectStart());
         
-        setVisibleWithFade(callSecureBar, callInfo.isSecure());
-        callSecureText.setText(callInfo.getMediaSecureInfo());
+        int sigSecureLevel = callInfo.getTransportSecureLevel();
+        boolean isSecure = (callInfo.isMediaSecure() || sigSecureLevel > 0); 
+        setVisibleWithFade(callSecureBar, isSecure);
+        String secureMsg = "";
+        if (isSecure) {
+            List<String> secureTxtList = new ArrayList<String>();
+            if(sigSecureLevel == SipCallSession.TRANSPORT_SECURE_TO_SERVER) {
+                secureTxtList.add(getContext().getString(R.string.transport_secure_to_server));
+            }else if(sigSecureLevel == SipCallSession.TRANSPORT_SECURE_FULL) {
+                secureTxtList.add(getContext().getString(R.string.transport_secure_full));
+            }
+            if(callInfo.isMediaSecure()) {
+                secureTxtList.add(callInfo.getMediaSecureInfo());
+            }
+            secureMsg = TextUtils.join("\r\n", secureTxtList);
+        }
+        callSecureText.setText(secureMsg);
         
         int state = callInfo.getCallState();
         switch (state) {

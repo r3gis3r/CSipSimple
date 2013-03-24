@@ -86,7 +86,8 @@ public final class PjSipCalls {
             }
             
             // And now, about secure information
-            String secureInfo = PjSipService.pjStrToString(pjsua.call_secure_info(session
+            session.setSignalisationSecure(pjsua.call_secure_sig_level(session.getCallId()));
+            String secureInfo = PjSipService.pjStrToString(pjsua.call_secure_media_info(session
                     .getCallId()));
             session.setMediaSecureInfo(secureInfo);
             session.setMediaSecure(!TextUtils.isEmpty(secureInfo));

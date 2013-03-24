@@ -162,7 +162,8 @@ typedef struct csipsimple_acc_config {
 // methods
 PJ_DECL(pj_status_t) send_dtmf_info(int current_call, pj_str_t digits);
 PJ_DECL(pj_str_t) call_dump(pjsua_call_id call_id, pj_bool_t with_media, const char *indent);
-PJ_DECL(pj_str_t) call_secure_info(pjsua_call_id call_id);
+PJ_DECL(pj_str_t) call_secure_media_info(pjsua_call_id call_id);
+PJ_DECL(int)  call_secure_sig_level(pjsua_call_id call_id);
 PJ_DECL(pj_str_t) get_error_message(int status);
 PJ_DECL(int) get_event_status_code(pjsip_event *e);
 
