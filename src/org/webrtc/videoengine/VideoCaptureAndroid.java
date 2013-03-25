@@ -201,6 +201,7 @@ public class VideoCaptureAndroid implements PreviewCallback, Callback {
             int width = 0;
             int height = 0;
             int framerate = 0;
+            boolean wasCaptureRunning = isCaptureRunning;
 
             if (isCaptureRunning) {
                 width = mCaptureWidth;
@@ -223,7 +224,7 @@ public class VideoCaptureAndroid implements PreviewCallback, Callback {
             }
             cameraUtils.setDisplayOrientation(camera, resultRotation);
 
-            if (isCaptureRunning) {
+            if (wasCaptureRunning) {
                 StartCapture(width, height, framerate);
             }
             previewBufferLock.unlock();
