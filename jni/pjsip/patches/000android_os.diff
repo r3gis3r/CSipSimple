@@ -1,10 +1,10 @@
 Index: pjsip/sources/pjlib/include/pj/compat/os_auto.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjlib/include/pj/compat/os_auto.h	2012-12-04 00:02:51.953397653 +0100
-@@ -0,0 +1,134 @@
++++ pjsip/sources/pjlib/include/pj/compat/os_auto.h	2013-03-28 22:03:12.580814663 +0100
+@@ -0,0 +1,136 @@
 +/* $Id: os_linux.h 3553 2011-05-05 06:14:19Z nanang $ */
-+/*
++/* 
 + * Copyright (C) 2008-2011 Teluu Inc. (http://www.teluu.com)
 + * Copyright (C) 2003-2008 Benny Prijono <benny@prijono.org>
 + *
@@ -20,7 +20,7 @@ Index: pjsip/sources/pjlib/include/pj/compat/os_auto.h
 + *
 + * You should have received a copy of the GNU General Public License
 + * along with this program; if not, write to the Free Software
-+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
 + */
 +#ifndef __PJ_COMPAT_OS_AUTO_H__
 +#define __PJ_COMPAT_OS_AUTO_H__
@@ -66,11 +66,10 @@ Index: pjsip/sources/pjlib/include/pj/compat/os_auto.h
 +#define PJ_SOCK_HAS_INET_NTOP	    1
 +#define PJ_SOCK_HAS_INET_PTON	1
 +
-+/* Set 1 if native sockaddr_in has sin_len member.
++/* Set 1 if native sockaddr_in has sin_len member. 
 + * Default: 0
 + */
 +#define PJ_SOCKADDR_HAS_LEN	    0
-+#define sin_zero     __pad
 +
 +/**
 + * If this macro is set, it tells select I/O Queue that select() needs to
@@ -117,10 +116,13 @@ Index: pjsip/sources/pjlib/include/pj/compat/os_auto.h
 +
 +#define PJ_ATOMIC_VALUE_TYPE	    long
 +
-+/* pthread_rwlock_t does not appear to be defined on all Android arch -- TODO : don't emulate when available */
-+#define PJ_EMULATE_RWMUTEX	    1
++/* 
++ * pthread_rwlock_t does not appear to be defined on all Android arch
++ * From android 4 it seems to be there, so enable it
++ */
++#define PJ_EMULATE_RWMUTEX	    0
 +
-+/* If 1, pj_thread_create() should enforce the stack size when creating
++/* If 1, pj_thread_create() should enforce the stack size when creating 
 + * threads.
 + * Default: 0 (let OS decide the thread's stack size).
 + */
@@ -134,13 +136,13 @@ Index: pjsip/sources/pjlib/include/pj/compat/os_auto.h
 +/* Linux has socklen_t */
 +#define PJ_HAS_SOCKLEN_T		1
 +
-+#endif	/* __PJ_COMPAT_OS_AUTO_H__ */
 +
++#endif	/* __PJ_COMPAT_OS_AUTO_H__ */
 +
 Index: pjsip/sources/pjlib/include/pj/config_site.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjlib/include/pj/config_site.h	2012-12-01 19:35:25.974725579 +0100
++++ pjsip/sources/pjlib/include/pj/config_site.h	2013-03-28 21:54:16.848837068 +0100
 @@ -0,0 +1,134 @@
 +//We distribute only for android so by default activate it
 +#ifndef PJ_ANDROID
@@ -279,7 +281,7 @@ Index: pjsip/sources/pjlib/include/pj/config_site.h
 Index: pjsip/sources/pjmedia/include/pjmedia/config_auto.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjmedia/include/pjmedia/config_auto.h	2012-12-01 19:35:25.978725947 +0100
++++ pjsip/sources/pjmedia/include/pjmedia/config_auto.h	2013-03-28 21:54:16.848837068 +0100
 @@ -0,0 +1,38 @@
 +/* $Id: config_auto.h.in 3295 2010-08-25 12:51:29Z bennylp $ */
 +/*
@@ -322,7 +324,7 @@ Index: pjsip/sources/pjmedia/include/pjmedia/config_auto.h
 Index: pjsip/sources/pjsip/include/pjsip/sip_autoconf.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjsip/include/pjsip/sip_autoconf.h	2012-12-01 19:35:25.978725947 +0100
++++ pjsip/sources/pjsip/include/pjsip/sip_autoconf.h	2013-03-28 21:54:16.848837068 +0100
 @@ -0,0 +1,30 @@
 +/* $Id: sip_autoconf.h.in 3295 2010-08-25 12:51:29Z bennylp $ */
 +/*
@@ -357,7 +359,7 @@ Index: pjsip/sources/pjsip/include/pjsip/sip_autoconf.h
 Index: pjsip/sources/pjlib/include/pj/compat/m_auto.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjlib/include/pj/compat/m_auto.h	2012-12-01 19:35:25.978725947 +0100
++++ pjsip/sources/pjlib/include/pj/compat/m_auto.h	2013-03-28 21:54:16.848837068 +0100
 @@ -0,0 +1,38 @@
 +/* $Id: m_auto.h.in 3295 2010-08-25 12:51:29Z bennylp $ */
 +/*
@@ -400,7 +402,7 @@ Index: pjsip/sources/pjlib/include/pj/compat/m_auto.h
 Index: pjsip/sources/pjmedia/include/pjmedia-codec/config_auto.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjmedia/include/pjmedia-codec/config_auto.h	2012-12-01 19:35:25.978725947 +0100
++++ pjsip/sources/pjmedia/include/pjmedia-codec/config_auto.h	2013-03-28 21:54:16.848837068 +0100
 @@ -0,0 +1,32 @@
 +/* $Id: config_auto.h.in 3841 2011-10-24 09:28:13Z ming $ */
 +/*

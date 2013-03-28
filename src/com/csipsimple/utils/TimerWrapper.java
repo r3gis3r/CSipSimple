@@ -193,7 +193,7 @@ public class TimerWrapper extends BroadcastReceiver {
 			}
 			int timerEntry = intent.getIntExtra(EXTRA_TIMER_ENTRY, -1);
 
-            Log.d(THIS_FILE, "Treat " + timerEntry);
+            Log.v(THIS_FILE, "Treat " + timerEntry);
 			singleton.treatAlarm(timerEntry);
 		}
 	}
