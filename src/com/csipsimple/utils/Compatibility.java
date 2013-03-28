@@ -154,6 +154,11 @@ public final class Compatibility {
         if (android.os.Build.DEVICE.toUpperCase().startsWith("ONE_TOUCH_993D")) {
             return true;
         }
+
+        // N4
+        if (android.os.Build.DEVICE.toUpperCase().startsWith("MAKO")) {
+            return true;
+        }
         
         return false;
     }
@@ -384,10 +389,14 @@ public final class Compatibility {
 
     private static void resetCodecsSettings(PreferencesWrapper preferencesWrapper) {
         boolean supportFloating = false;
+        boolean isHeavyCpu = false;
         String abi = getCpuAbi();
         if(!TextUtils.isEmpty(abi)) {
             if(abi.equalsIgnoreCase("mips") || abi.equalsIgnoreCase("x86")) {
                 supportFloating = true;
+            }
+            if(abi.equalsIgnoreCase("armeabi-v7a") || abi.equalsIgnoreCase("x86")) {
+                isHeavyCpu = true;
             }
         }
 
@@ -430,8 +439,8 @@ public final class Compatibility {
         preferencesWrapper.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("SILK/8000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("SILK/12000/1", SipConfigManager.CODEC_WB, "0");
-        preferencesWrapper.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_WB, "0");
-        preferencesWrapper.setCodecPriority("SILK/24000/1", SipConfigManager.CODEC_WB, "220");
+        preferencesWrapper.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_WB, isHeavyCpu ? "0" : "220");
+        preferencesWrapper.setCodecPriority("SILK/24000/1", SipConfigManager.CODEC_WB, isHeavyCpu ? "220": "0");
         preferencesWrapper.setCodecPriority("CODEC2/8000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("G7221/16000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("G7221/32000/1", SipConfigManager.CODEC_WB, "0");
@@ -844,6 +853,11 @@ public final class Compatibility {
         }
         if(lastSeenVersion < 2147) {
             prefWrapper.setPreferenceStringValue(SipConfigManager.DSCP_RTP_VAL, "48");
+        }
+
+        if (lastSeenVersion < 2172 && android.os.Build.DEVICE.toUpperCase().startsWith("MAKO")) {
+            prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
+                    shouldUseModeApi());
         }
         prefWrapper.endEditing();
     }
