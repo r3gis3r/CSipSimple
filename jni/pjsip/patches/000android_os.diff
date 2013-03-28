@@ -1,7 +1,7 @@
 Index: pjsip/sources/pjlib/include/pj/compat/os_auto.h
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjlib/include/pj/compat/os_auto.h	2013-03-28 22:03:12.580814663 +0100
++++ pjsip/sources/pjlib/include/pj/compat/os_auto.h	2013-03-28 22:28:12.468751933 +0100
 @@ -0,0 +1,136 @@
 +/* $Id: os_linux.h 3553 2011-05-05 06:14:19Z nanang $ */
 +/* 
@@ -117,10 +117,10 @@ Index: pjsip/sources/pjlib/include/pj/compat/os_auto.h
 +#define PJ_ATOMIC_VALUE_TYPE	    long
 +
 +/* 
-+ * pthread_rwlock_t does not appear to be defined on all Android arch
-+ * From android 4 it seems to be there, so enable it
++ * pthread_rwlock_t does not appear to be defined on all Android arch/version
++ * TODO : patch to enable dynamically
 + */
-+#define PJ_EMULATE_RWMUTEX	    0
++#define PJ_EMULATE_RWMUTEX	    1
 +
 +/* If 1, pj_thread_create() should enforce the stack size when creating 
 + * threads.
