@@ -941,6 +941,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_cnx, 45, 
                     new Locale[]{new Locale("ES", "pa")}, false, false, 
                     Conexion.class));
+            WIZARDS_DICT.put("SPIRIT", new WizardInfo("SPIRIT", "Spirit World", 
+                    R.drawable.ic_wizard_spirit, 19, 
+                    new Locale[]{ Locale.US, Locale.CANADA }, false, false, 
+                    Spirit.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
