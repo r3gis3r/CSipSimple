@@ -88,7 +88,6 @@ public class CodecsFragment extends SherlockListFragment implements OnCheckedCha
     private static final Map<String, String> NON_FREE_CODECS = new HashMap<String, String>();
 
     static {
-        NON_FREE_CODECS.put("G729/8000/1", "http://www.synapseglobal.com/g729_codec_license.html");
     };
 
     @Override

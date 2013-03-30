@@ -420,6 +420,7 @@ public final class Compatibility {
         preferencesWrapper.setCodecPriority("ISAC/16000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("ISAC/32000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("AMR/8000/1", SipConfigManager.CODEC_NB, "0");
+        preferencesWrapper.setCodecPriority("AMR-WB/16000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("G726-16/8000/1", SipConfigManager.CODEC_NB, "0");
         preferencesWrapper.setCodecPriority("G726-24/8000/1", SipConfigManager.CODEC_NB, "0");
@@ -447,6 +448,7 @@ public final class Compatibility {
         preferencesWrapper.setCodecPriority("ISAC/16000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("ISAC/32000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("AMR/8000/1", SipConfigManager.CODEC_WB, "0");
+        preferencesWrapper.setCodecPriority("AMR-WB/16000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("G726-16/8000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("G726-24/8000/1", SipConfigManager.CODEC_WB, "0");
@@ -858,6 +860,12 @@ public final class Compatibility {
         if (lastSeenVersion < 2172 && android.os.Build.DEVICE.toUpperCase().startsWith("MAKO")) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
                     shouldUseModeApi());
+        }
+
+        if (lastSeenVersion < 2175) {
+            // By default, disable new codecs
+            prefWrapper.setCodecPriority("AMR-WB/16000/1", SipConfigManager.CODEC_WB, "0");
+            prefWrapper.setCodecPriority("AMR-WB/16000/1", SipConfigManager.CODEC_NB, "0");
         }
         prefWrapper.endEditing();
     }
