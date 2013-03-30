@@ -945,6 +945,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_spirit, 19, 
                     new Locale[]{ Locale.US, Locale.CANADA }, false, false, 
                     Spirit.class));
+            WIZARDS_DICT.put("DIGITEL", new WizardInfo("DIGITEL", "DigiTel", 
+                    R.drawable.ic_wizard_digitel, 19, 
+                    new Locale[]{ Locale.ITALY}, false, false, 
+                    DigiTel.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
