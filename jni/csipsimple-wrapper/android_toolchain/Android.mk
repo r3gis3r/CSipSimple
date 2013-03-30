@@ -45,12 +45,11 @@ LOCAL_SRC_FILES := $(JNI_SRC_DIR)/pjsua_jni_addons.c $(JNI_SRC_DIR)/q850_reason_
 
 LOCAL_LDLIBS += -llog -ldl
 
+
 ifeq ($(MY_USE_AMR),1)
-	LOCAL_STATIC_LIBRARIES += pj_amr_stagefright_codec
 	LOCAL_C_INCLUDES += $(LOCAL_PATH)/../amr-stagefright/pj_sources
+	LOCAL_STATIC_LIBRARIES += pj_amr_stagefright_codec
 endif
-
-
 # Pjsip basics
 LOCAL_STATIC_LIBRARIES += swig-glue pjsip pjmedia swig-glue pjnath pjlib-util pjlib resample srtp 
 
@@ -66,6 +65,9 @@ ifeq ($(MY_USE_GSM),1)
 endif
 ifeq ($(MY_USE_SPEEX),1)
 	LOCAL_STATIC_LIBRARIES += speex
+endif
+ifeq ($(MY_USE_AMR),1)
+	LOCAL_STATIC_LIBRARIES += android_dyn_opencore
 endif
 ifeq ($(MY_USE_SILK),1)
 	LOCAL_STATIC_LIBRARIES += pj_silk_codec

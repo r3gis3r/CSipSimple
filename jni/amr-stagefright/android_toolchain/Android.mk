@@ -14,14 +14,38 @@ LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include \
 	$(PJ_DIR)/pjnath/include \
 	$(PJ_DIR)/pjmedia/include
 # self
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../pj_sources
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../pj_sources $(LOCAL_PATH)/..
 
 
-LOCAL_SRC_FILES := ../pj_sources/amr_stagefright_dyn_codec.c
+LOCAL_SRC_FILES := ../pj_sources/stagefright_amr.c 
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 
 include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
+
+### Fake opencore ###
+include $(CLEAR_VARS)
+LOCAL_MODULE := android_dyn_opencore
+
+# pj
+PJ_DIR = $(LOCAL_PATH)/../../pjsip/sources
+LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include \
+	$(PJ_DIR)/pjlib-util/include \
+	$(PJ_DIR)/pjnath/include \
+	$(PJ_DIR)/pjmedia/include
+# self
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../pj_sources $(LOCAL_PATH)/..
+
+
+LOCAL_SRC_FILES :=../pj_sources/stagefright_amrnb_dynloader.c \
+										../pj_sources/stagefright_amrwb_dynloader.c \
+										../pj_sources/cmnMemory.c \
+										../pj_sources/homing_amr_wb_dec.c
+
+LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
+
+include $(BUILD_STATIC_LIBRARY)
+include $(CLEAR_VARS)
 endif

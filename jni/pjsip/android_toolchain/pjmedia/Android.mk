@@ -58,6 +58,10 @@ endif
 ifeq ($(MY_USE_SPEEX),1)
 	LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/speex_codec.c 
 endif
+ifeq ($(MY_USE_AMR),1)
+	LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../amr-stagefright
+	LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/opencore_amr.c 
+endif
 ifeq ($(MY_USE_ILBC),1)
 	LOCAL_SRC_FILES += $(PJMEDIACODEC_SRC_DIR)/ilbc.c 
 endif

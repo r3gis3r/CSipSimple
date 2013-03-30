@@ -24,8 +24,8 @@
 #include <webrtc_codec.h>
 #endif
 
-#if PJMEDIA_HAS_AMR_STAGEFRIGHT_CODEC
-#include <amr_stagefright_dyn_codec.h>
+#if PJMEDIA_HAS_OPENCORE_AMRNB_CODEC || DPJMEDIA_HAS_OPENCORE_AMRWB_CODEC
+#include <stagefright_amr.h>
 #endif
 
 #define THIS_FILE "audio_codecs.c"
@@ -100,11 +100,11 @@ PJ_DEF(pj_status_t) pjmedia_codec_register_audio_codecs(pjmedia_endpt *endpt,
 	return status;
 #endif	/* PJMEDIA_HAS_L16_CODEC */
 
-#if PJMEDIA_HAS_OPENCORE_AMRNB_CODEC || PJMEDIA_HAS_AMR_STAGEFRIGHT_CODEC
-	/* Register OpenCORE AMR-NB */
-	status = pjmedia_codec_opencore_amrnb_init(endpt);
-	if (status != PJ_SUCCESS)
-		return status;
+#if PJMEDIA_HAS_OPENCORE_AMRNB_CODEC || PJMEDIA_HAS_OPENCORE_AMRWB_CODEC
+	/* Register OpenCORE AMR */
+    status = pjmedia_codec_opencore_stagefright_init(endpt);
+    if (status != PJ_SUCCESS)
+        return status;
 #endif
 
 #if PJMEDIA_HAS_WEBRTC_CODEC
