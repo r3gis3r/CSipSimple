@@ -8,9 +8,11 @@ ifeq ($(MY_USE_SILK),1)
 include $(CLEAR_VARS)
 LOCAL_MODULE := pj_silk_codec
 ifeq ($(TARGET_ARCH_ABI),armeabi)
+LOCAL_ARM_MODE := arm
 SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_ARM_$(version)
 else
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+LOCAL_ARM_MODE := arm
 SILK_PATH := $(LOCAL_PATH)/../sources/SILK_SDK_SRC_ARM_$(version)
 else
 ifeq ($(TARGET_ARCH_ABI),mips)
