@@ -77,4 +77,3 @@ BASE_PJSIP_FLAGS += -DPJ_HAS_SSL_SOCK=$(MY_USE_TLS) -DPJMEDIA_HAS_ZRTP=$(MY_USE_
 # Force some settings for compatibility with some buggy sip providers (Pflingo)
 BASE_PJSIP_FLAGS += -DPJSUA_SDP_SESS_HAS_CONN=1 
 
-BASE_PJSIP_FLAGS += -Wno-psabi

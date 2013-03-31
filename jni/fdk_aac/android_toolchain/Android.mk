@@ -13,7 +13,7 @@ PJ_DIR = $(LOCAL_PATH)/../../pjsip/sources
 LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include \
 	$(PJ_DIR)/pjlib-util/include \
 	$(PJ_DIR)/pjnath/include \
-	$(PJ_DIR)/pjmedia/include \
+	$(PJ_DIR)/pjmedia/include
 
 # fdk
 AAC_DIR := $(LOCAL_PATH)/../sources

@@ -1,0 +1,28 @@
+Index: fdk_aac/sources/libSYS/include/genericStds.h
+===================================================================
+--- fdk_aac.orig/sources/libSYS/include/genericStds.h	2013-03-31 15:37:48.185893666 +0200
++++ fdk_aac/sources/libSYS/include/genericStds.h	2013-03-31 15:39:49.185896804 +0200
+@@ -96,9 +96,6 @@
+ 
+ #include "machine_type.h"
+ 
+-/* Work around for broken android toolchain: sys/types.h:137: error: 'uint64_t' does not name a type */
+-#define _SYS_TYPES_H_
+-
+ 
+ /* Always increase verbosity of memory allocation in case of a debug built. DEBUG is defined globally in that case. */
+ #if defined(DEBUG) || defined(FDK_DEBUG)
+Index: fdk_aac/sources/libSYS/src/cmdl_parser.cpp
+===================================================================
+--- fdk_aac.orig/sources/libSYS/src/cmdl_parser.cpp	2013-03-31 15:37:45.829893604 +0200
++++ fdk_aac/sources/libSYS/src/cmdl_parser.cpp	2013-03-31 15:40:14.765897467 +0200
+@@ -92,9 +92,6 @@
+ 
+ #define _CRT_SECURE_NO_WARNINGS
+ 
+-/* Work around for broken android toolchain: sys/types.h:137: error: 'uint64_t' does not name a type */
+-#define _SYS_TYPES_H_
+-
+ #include <stdarg.h>
+ #include <stdio.h>
+ #include <string.h>
