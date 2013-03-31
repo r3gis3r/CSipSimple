@@ -1,8 +1,8 @@
 Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_core.c
 ===================================================================
---- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_core.c	2013-02-16 16:05:01.467598938 +0100
-+++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_core.c	2013-02-16 16:05:13.243598446 +0100
-@@ -1949,7 +1949,7 @@
+--- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_core.c	2013-03-31 19:06:27.202008510 +0200
++++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_core.c	2013-03-31 19:06:31.322008598 +0200
+@@ -1954,7 +1954,7 @@
  			 pj_ntohs(pjsua_var.stun_srv.ipv4.sin_port);
  	status = pjstun_get_mapped_addr2(&pjsua_var.cp.factory, &stun_opt,
  					 1, &sock, &p_pub_addr->ipv4);

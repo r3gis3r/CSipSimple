@@ -48,7 +48,7 @@ PYTHON ?= python
 #
 # Modules for video is
 # pj_video_android
-#  
+#
 # Module for screen capture is
 # pj_screen_capture_android
 
