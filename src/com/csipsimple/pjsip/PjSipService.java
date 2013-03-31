@@ -46,6 +46,7 @@ import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
+import com.csipsimple.pjsip.earlylock.EarlyLockModule;
 import com.csipsimple.pjsip.player.IPlayerHandler;
 import com.csipsimple.pjsip.player.impl.SimpleWavPlayerHandler;
 import com.csipsimple.pjsip.recorder.IRecorderHandler;
@@ -2257,6 +2258,9 @@ public class PjSipService {
 
         rModule = new SipClfModule();
         pjsipModules.put(SipClfModule.class.getCanonicalName(), rModule);
+        
+        rModule = new EarlyLockModule();
+        pjsipModules.put(EarlyLockModule.class.getCanonicalName(), rModule);
 
         for (PjsipModule mod : pjsipModules.values()) {
             mod.setContext(service);
