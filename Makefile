@@ -12,7 +12,7 @@ all : libraries
 
 libraries : ext-sources webrtc-preprocess libvpx-preprocess
 	# Build main libraries using android ndk
-	@(ndk-build -j)
+	@(ndk-build -j2)
 
 ffmpeg-lib : jni/ffmpeg/.patched_sources
 	# Build ffmpeg using make
