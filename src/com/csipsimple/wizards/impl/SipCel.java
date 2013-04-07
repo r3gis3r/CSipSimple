@@ -21,6 +21,7 @@
 
 package com.csipsimple.wizards.impl;
 
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.text.TextUtils;
 
@@ -38,7 +39,12 @@ import java.util.regex.Pattern;
 public class SipCel extends SimpleImplementation {
 
 	ListPreference accountState;
-	//CheckBoxPreference useSafePort;
+	CheckBoxPreference useSafePort;
+    CheckBoxPreference useStun;
+    
+    private final static String KEY_SAFE_PORT = "safe_port";
+    private final static String KEY_STUN = "stun";
+    private final static String KEY_SERVER_CHOICE  = "server_choice";
 
 	@Override
 	protected String getDomain() {
@@ -57,8 +63,22 @@ public class SipCel extends SimpleImplementation {
 
 		CharSequence[] states = new CharSequence[] {"com", "eu", "mobi", "tel"};
 		
-        accountState = new ListPreference(parent);
-        //useSafePort = new CheckBoxPreference(parent);
+		boolean recycle = true;
+		accountState = (ListPreference) findPreference(KEY_SERVER_CHOICE);
+		useSafePort = (CheckBoxPreference) findPreference(KEY_SAFE_PORT);
+		useStun = (CheckBoxPreference) findPreference(KEY_STUN);
+		if(accountState == null) {
+		    recycle = false;
+	        
+	        accountState = new ListPreference(parent);
+	        useSafePort = new CheckBoxPreference(parent);
+	        useStun = new CheckBoxPreference(parent);
+
+	        useSafePort.setTitle("Change port (if can't connect)");
+	        useSafePort.setSummary("Connect to port 443 instead of 5060");
+	        useStun.setTitle("Enable stun (if not media)");
+	        useStun.setSummary("Enable stun for nat traversal");
+		}
         
         accountState.setEntries(states);
         accountState.setEntryValues(states);
@@ -67,10 +87,9 @@ public class SipCel extends SimpleImplementation {
         accountState.setTitle(R.string.w_common_server);
         accountState.setDefaultValue("com");
 
-        addPreference(accountState);
         
         String domain = account.reg_uri;
-        //boolean useSafe = false;
+        boolean useSafe = false;
         if( domain != null ) {
 	        for(CharSequence state : states) {
 	        	String currentComp = "sip:sip.sipcel."+state;
@@ -79,20 +98,24 @@ public class SipCel extends SimpleImplementation {
 	        		break;
 	        	}
 	        }
-	        /*
-	        if(domain.endsWith(":443")) {
-	        	useSafe = true;
-	        }
-	        */
         }
-        /*
-        addPreference(useSafePort);
+        if (account.proxies != null) {
+            for (String proxy : account.proxies) {
+                if(proxy.endsWith(":443")) {
+                    useSafe = true;
+                }
+            }
+        }
         
+        if(!recycle) {
+            addPreference(accountState);
+            addPreference(useStun);
+            addPreference(useSafePort);
+        
+        }
         useSafePort.setChecked(useSafe);
-        useSafePort.setTitle("Use alternate port");
-        useSafePort.setSummary("Connect to port 443 instead of 5060");
-        */
 
+        useStun.setChecked(account.sip_stun_use == 1);
 	}
 	
 	@Override
@@ -117,15 +140,18 @@ public class SipCel extends SimpleImplementation {
 		}
 
         String proxyPort = "";
-		if(account.transport == SipProfile.TRANSPORT_TCP) {
+		if(useSafePort.isChecked()) {
 		    proxyPort = ":443";
 		}
+		
 		
 		remoteServerUri += ext;
 		acc.reg_uri = remoteServerUri;
 		acc.proxies = new String[] { remoteServerUri + proxyPort };
 		acc.publish_enabled = 1;
 		acc.reg_timeout = 120;
+		acc.sip_stun_use = useStun.isChecked() ? 1 : 0;
+		acc.media_stun_use = useStun.isChecked() ? 1 : 0;
 		
 		return acc;
 	}
@@ -135,6 +161,10 @@ public class SipCel extends SimpleImplementation {
 	@Override
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
+		if(useStun.isChecked()) {
+		    prefs.addStunServer("stun.sipcel.com");
+		}
+		
 		prefs.setPreferenceBooleanValue(SipConfigManager.ECHO_CANCELLATION, true);
 		prefs.setPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM, true);
         prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_QOS, true);
