@@ -389,11 +389,6 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
      * Bind the main visible view with data from call info
      */
     private void updateCallStateBar() {
-        // Useless to process that
-        if (cachedInvState == callInfo.getCallState() &&
-                cachedMediaState == callInfo.getMediaStatus()) {
-            return;
-        }
         
         int stateText = -1; 
         //int stateIcon = R.drawable.ic_incall_ongoing;
