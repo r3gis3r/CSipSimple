@@ -361,6 +361,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_necc, 45, 
                     new Locale[]{}, false, true, 
                     Necc.class));
+            WIZARDS_DICT.put("TELACCESS", new WizardInfo("TELACCESS", "TelAccess", 
+                    R.drawable.ic_wizard_telaccess, 45, 
+                    new Locale[]{}, false, true, 
+                    TelAccess.class));
             
 			
 			//Locales
