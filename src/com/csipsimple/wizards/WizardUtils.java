@@ -953,6 +953,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_digitel, 19, 
                     new Locale[]{ Locale.ITALY}, false, false, 
                     DigiTel.class));
+            WIZARDS_DICT.put("MEGATEL", new WizardInfo("MEGATEL", "MegaTel", 
+                    R.drawable.ic_wizard_megatel, 15, 
+                    new Locale[]{new Locale("BG"), new Locale("UA"), new Locale("RF"), new Locale("KZ"), new Locale("BY"), new Locale("MK"),  new Locale("UK"), }, false, false, 
+                    MegaTel.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
