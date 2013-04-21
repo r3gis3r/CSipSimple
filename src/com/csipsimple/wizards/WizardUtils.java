@@ -365,6 +365,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_telaccess, 45, 
                     new Locale[]{}, false, true, 
                     TelAccess.class));
+            WIZARDS_DICT.put("SIGAPY", new WizardInfo("SIGAPY", "Sigapy", 
+                    R.drawable.ic_wizard_sigapy, 45, 
+                    new Locale[]{}, false, true, 
+                    Sigapy.class));
             
 			
 			//Locales
