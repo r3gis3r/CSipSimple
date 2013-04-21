@@ -369,6 +369,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_sigapy, 45, 
                     new Locale[]{}, false, true, 
                     Sigapy.class));
+            WIZARDS_DICT.put("ENAKNET", new WizardInfo("ENAKNET", "Enaknet", 
+                    R.drawable.ic_wizard_enaknet, 45, 
+                    new Locale[]{}, false, true, 
+                    Enaknet.class));
             
 			
 			//Locales
