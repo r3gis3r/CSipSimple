@@ -83,7 +83,7 @@
     </PreferenceCategory>
 
     <EditTextPreference
-        android:defaultValue="2"
+        android:defaultValue="1"
         android:key="media_thread_count"
         android:numeric="signed"
         android:summary="@string/media_thread_count_desc"

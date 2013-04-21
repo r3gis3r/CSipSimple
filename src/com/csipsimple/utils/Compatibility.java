@@ -37,7 +37,10 @@ import android.text.TextUtils;
 
 import com.csipsimple.api.SipConfigManager;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.lang.reflect.Field;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("deprecation")
 public final class Compatibility {
@@ -237,6 +240,30 @@ public final class Compatibility {
 
         }
         return "armeabi";
+    }
+
+    public final static int getNumCores() {
+        //Private Class to display only CPU devices in the directory listing
+        class CpuFilter implements FileFilter {
+            @Override
+            public boolean accept(File pathname) {
+                //Check if filename is "cpu", followed by a single digit number
+                if(Pattern.matches("cpu[0-9]", pathname.getName())) {
+                    return true;
+                }
+                return false;
+            }
+        }
+        try {
+            //Get directory containing CPU info
+            File dir = new File("/sys/devices/system/cpu/");
+            //Filter to only list the devices we care about
+            File[] files = dir.listFiles(new CpuFilter());
+            //Return the number of cores (virtual CPU devices)
+            return files.length;
+        } catch (Exception e) {
+            return Runtime.getRuntime().availableProcessors();
+        }
     }
 
     private static boolean needPspWorkaround() {
@@ -477,6 +504,8 @@ public final class Compatibility {
         // HTC PSP mode hack
         preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL,
                 needPspWorkaround());
+        preferencesWrapper.setPreferenceStringValue(SipConfigManager.MEDIA_THREAD_COUNT,
+                getNumCores() > 1 ? "2" : "1");
 
         // Proximity sensor inverted
         if (android.os.Build.PRODUCT.equalsIgnoreCase("SPH-M900") /* Sgs moment */) {
@@ -866,6 +895,10 @@ public final class Compatibility {
             // By default, disable new codecs
             prefWrapper.setCodecPriority("AMR-WB/16000/1", SipConfigManager.CODEC_WB, "0");
             prefWrapper.setCodecPriority("AMR-WB/16000/1", SipConfigManager.CODEC_NB, "0");
+        }
+        if(lastSeenVersion < 2195) {
+            prefWrapper.setPreferenceStringValue(SipConfigManager.MEDIA_THREAD_COUNT,
+                    getNumCores() > 1 ? "2" : "1");
         }
         prefWrapper.endEditing();
     }

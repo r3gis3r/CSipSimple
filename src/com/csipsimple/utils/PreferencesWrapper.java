@@ -98,7 +98,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.SIP_AUDIO_MODE, "0");
 		put(SipConfigManager.MICRO_SOURCE, "1");
 		put(SipConfigManager.THREAD_COUNT, "0");
-        put(SipConfigManager.MEDIA_THREAD_COUNT, "2");
+        put(SipConfigManager.MEDIA_THREAD_COUNT, "1");
 		put(SipConfigManager.HEADSET_ACTION, "0");
 		put(SipConfigManager.AUDIO_IMPLEMENTATION, "0");
 		put(SipConfigManager.H264_PROFILE, "66");
