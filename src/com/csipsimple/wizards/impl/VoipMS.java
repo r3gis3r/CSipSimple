@@ -21,13 +21,13 @@
 
 package com.csipsimple.wizards.impl;
 
-import java.util.SortedMap;
-import java.util.TreeMap;
-
 import android.preference.ListPreference;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
+
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 
 public class VoipMS extends SimpleImplementation {
@@ -129,5 +129,15 @@ public class VoipMS extends SimpleImplementation {
 		}
 		
 		return super.getDefaultFieldSummary(fieldName);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.csipsimple.wizards.impl.SimpleImplementation#buildAccount(com.csipsimple.api.SipProfile)
+	 */
+	@Override
+	public SipProfile buildAccount(SipProfile account) {
+	    SipProfile acc = super.buildAccount(account);
+	    acc.vm_nbr = "*97";
+	    return acc;
 	}
 }
