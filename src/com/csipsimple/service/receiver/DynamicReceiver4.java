@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.TextUtils;
 
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
@@ -39,7 +40,9 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -145,7 +148,7 @@ public class DynamicReceiver4 extends BroadcastReceiver {
                 BufferedReader buf = new BufferedReader(fr);
                 String line;
                 while ((line = buf.readLine()) != null) {
-                    contentBuf.append(line);
+                    contentBuf.append(line+"\n");
                 }
                 routes = contentBuf.toString();
                 buf.close();
@@ -162,7 +165,40 @@ public class DynamicReceiver4 extends BroadcastReceiver {
             }
         }
         
-        return routes;
+        // Clean routes that point unique host 
+        // this aims to workaround the fact android 4.x wakeup 3G layer when position is retrieve to resolve over 3g position
+        String finalRoutes = routes;
+        if(!TextUtils.isEmpty(routes)) {
+            String[] items = routes.split("\n");
+            List<String> finalItems = new ArrayList<String>();
+            int line = 0;
+            for(String item : items) {
+                boolean addItem = true;
+                if(line > 0){
+                    String[] ent = item.split("\t");
+                    if(ent.length > 8) {
+                        String maskStr = ent[7];
+                        if(maskStr.matches("^[0-9A-F]{8}$")) {
+                            int lastMaskPart = Integer.parseInt(maskStr.substring(0, 2), 16);
+                            if(lastMaskPart > 192) {
+                                // if more than 255.255.255.192 : ignore this line
+                                addItem = false;
+                            }
+                        }else {
+                            Log.w(THIS_FILE, "The route mask does not looks like a mask" + maskStr);
+                        }
+                    }
+                }
+                
+                if(addItem) {
+                    finalItems.add(item);
+                }
+                line ++;
+            }
+            finalRoutes = TextUtils.join("\n", finalItems); 
+        }
+        
+        return finalRoutes;
     }
 
     
