@@ -669,7 +669,7 @@ public class PjSipService {
         // long flags = 1; /*< Lazy disconnect : only RX */
         // Try with TX & RX if network is considered as available
         long flags = 0;
-        if (!prefsWrapper.isValidConnectionForOutgoing()) {
+        if (!prefsWrapper.isValidConnectionForOutgoing(false)) {
             // If we are current not valid for outgoing,
             // it means that we don't want the network for SIP now
             // so don't use RX | TX to not consume data at all

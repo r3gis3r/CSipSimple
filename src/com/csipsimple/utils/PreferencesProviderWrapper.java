@@ -216,9 +216,20 @@ public class PreferencesProviderWrapper {
      * @return true if connection is valid
      */
     public boolean isValidConnectionForOutgoing() {
-        if (getPreferenceBooleanValue(PreferencesWrapper.HAS_BEEN_QUIT, false)) {
-            // Don't go further, we have been explicitly stopped
-            return false;
+        return isValidConnectionForOutgoing(true);
+    }
+    
+    /**
+     * Say whether current connection is valid for outgoing calls
+     * @param considerQuit pass true if we should consider app quitted as a reason to not consider available for outgoing
+     * @return true if connection is valid
+     */
+    public boolean isValidConnectionForOutgoing(boolean considerQuit) {
+        if(considerQuit) {
+            if (getPreferenceBooleanValue(PreferencesWrapper.HAS_BEEN_QUIT, false)) {
+                // Don't go further, we have been explicitly stopped
+                return false;
+            }
         }
         NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
         return isValidConnectionFor(ni, "out");
