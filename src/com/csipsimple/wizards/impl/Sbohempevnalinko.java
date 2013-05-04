@@ -27,14 +27,13 @@ public class Sbohempevnalinko extends SimpleImplementation {
 	
 	@Override
 	protected String getDomain() {
-		return "81.91.216.18";
+		return "aps.sbohempevnalinko.cz";
 	}
 
 	@Override
 	protected String getDefaultName() {
 		return "sbohempevnalinko.cz";
 	}
-	
 	
 	@Override
 	public SipProfile buildAccount(SipProfile account) {
