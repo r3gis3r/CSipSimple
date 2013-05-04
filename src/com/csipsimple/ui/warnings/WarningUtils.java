@@ -138,6 +138,10 @@ public class WarningUtils {
     // SDCard
     public static String WARNING_SDCARD = "warn_sdcard";
     public static boolean shouldWarnSDCard(Context ctxt, PreferencesProviderWrapper prefs) {
+
+        if(prefs.getPreferenceBooleanValue(getIgnoreKey(WARNING_SDCARD), false)) {
+            return false;
+        }
         if(Compatibility.isInstalledOnSdCard(ctxt)) {
             if(prefs.getPreferenceBooleanValue(SipConfigManager.USE_WIFI_IN) || 
                     prefs.getPreferenceBooleanValue(SipConfigManager.USE_3G_IN) || 
@@ -147,7 +151,6 @@ public class WarningUtils {
                 return true;
             }
         }
-        
         return false;
     }
     
