@@ -74,10 +74,10 @@ public final class Compatibility {
             // falled back to music
             return AudioManager.STREAM_MUSIC;
         }
-        if(requestBluetooth) {
+        if (requestBluetooth) {
             return 6; /* STREAM_BLUETOOTH_SCO -- Thx @Stefan for the contrib */
         }
-        
+
         // return AudioManager.STREAM_MUSIC;
         return AudioManager.STREAM_VOICE_CALL;
     }
@@ -96,8 +96,8 @@ public final class Compatibility {
             return true;
         }
 
-        // Samsung  GT-S5830
-        if( android.os.Build.DEVICE.toUpperCase().startsWith("GT-S") ) {
+        // Samsung GT-S5830
+        if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-S")) {
             return true;
         }
 
@@ -117,11 +117,11 @@ public final class Compatibility {
             return true;
         }
         // Samsung GT-S5360 GT-S5830 GT-S6102 ... probably all..
-        if( android.os.Build.DEVICE.toUpperCase().startsWith("GT-") ||
+        if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-") ||
                 android.os.Build.PRODUCT.toUpperCase().startsWith("GT-")) {
             return true;
         }
-        
+
         // HTC evo 4G
         if (android.os.Build.PRODUCT.equalsIgnoreCase("htc_supersonic")) {
             return true;
@@ -131,7 +131,8 @@ public final class Compatibility {
             return true;
         }
         // LG-E720(b)
-        if (android.os.Build.MODEL.toUpperCase().startsWith("LG-E720") && !Compatibility.isCompatible(9)) {
+        if (android.os.Build.MODEL.toUpperCase().startsWith("LG-E720")
+                && !Compatibility.isCompatible(9)) {
             return true;
         }
         // LG-LS840
@@ -144,10 +145,10 @@ public final class Compatibility {
                 android.os.Build.DEVICE.equalsIgnoreCase("U8110") ||
                 android.os.Build.DEVICE.equalsIgnoreCase("U8120") ||
                 android.os.Build.DEVICE.equalsIgnoreCase("U8100") ||
-                android.os.Build.PRODUCT.equalsIgnoreCase("U8655") ) {
+                android.os.Build.PRODUCT.equalsIgnoreCase("U8655")) {
             return true;
         }
-        
+
         // Moto defy mini
         if (android.os.Build.MODEL.equalsIgnoreCase("XT320")) {
             return true;
@@ -162,7 +163,7 @@ public final class Compatibility {
         if (android.os.Build.DEVICE.toUpperCase().startsWith("MAKO")) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -243,23 +244,23 @@ public final class Compatibility {
     }
 
     public final static int getNumCores() {
-        //Private Class to display only CPU devices in the directory listing
+        // Private Class to display only CPU devices in the directory listing
         class CpuFilter implements FileFilter {
             @Override
             public boolean accept(File pathname) {
-                //Check if filename is "cpu", followed by a single digit number
-                if(Pattern.matches("cpu[0-9]", pathname.getName())) {
+                // Check if filename is "cpu", followed by a single digit number
+                if (Pattern.matches("cpu[0-9]", pathname.getName())) {
                     return true;
                 }
                 return false;
             }
         }
         try {
-            //Get directory containing CPU info
+            // Get directory containing CPU info
             File dir = new File("/sys/devices/system/cpu/");
-            //Filter to only list the devices we care about
+            // Filter to only list the devices we care about
             File[] files = dir.listFiles(new CpuFilter());
-            //Return the number of cores (virtual CPU devices)
+            // Return the number of cores (virtual CPU devices)
             return files.length;
         } catch (Exception e) {
             return Runtime.getRuntime().availableProcessors();
@@ -325,16 +326,16 @@ public final class Compatibility {
             return true;
         }
         // Motorola milestone 1 and 2 & motorola droid & defy not under 2.3
-        if ( (android.os.Build.DEVICE.toLowerCase().contains("milestone2") ||
+        if ((android.os.Build.DEVICE.toLowerCase().contains("milestone2") ||
                 android.os.Build.BOARD.toLowerCase().contains("sholes") ||
                 android.os.Build.PRODUCT.toLowerCase().contains("sholes") ||
                 android.os.Build.DEVICE.equalsIgnoreCase("olympus") ||
-                android.os.Build.DEVICE.toLowerCase().contains("umts_jordan") ) && !isCompatible(9)) {
+                android.os.Build.DEVICE.toLowerCase().contains("umts_jordan")) && !isCompatible(9)) {
             return true;
         }
-        
-        // Alcatel ONE touch 
-        if(android.os.Build.DEVICE.startsWith("one_touch_990")) {
+
+        // Alcatel ONE touch
+        if (android.os.Build.DEVICE.startsWith("one_touch_990")) {
             return true;
         }
 
@@ -360,7 +361,7 @@ public final class Compatibility {
         }
         return false;
     }
-    
+
     private static boolean needWebRTCImplementation() {
         if (android.os.Build.DEVICE.toLowerCase().contains("droid2")) {
             return true;
@@ -371,32 +372,35 @@ public final class Compatibility {
         if (android.os.Build.DEVICE.toLowerCase().contains("sunfire")) {
             return true;
         }
-        return false;
-    }
-    
-    public static boolean shouldSetupAudioBeforeInit() {
-        // Setup for GT / GS samsung devices.
-        if (android.os.Build.DEVICE.toLowerCase().startsWith("gt-")
-                || android.os.Build.PRODUCT.toLowerCase().startsWith("gt-") ) {
+        // Huawei Y300
+        if (android.os.Build.DEVICE.equalsIgnoreCase("U8833")) {
             return true;
         }
         return false;
     }
-    
+
+    public static boolean shouldSetupAudioBeforeInit() {
+        // Setup for GT / GS samsung devices.
+        if (android.os.Build.DEVICE.toLowerCase().startsWith("gt-")
+                || android.os.Build.PRODUCT.toLowerCase().startsWith("gt-")) {
+            return true;
+        }
+        return false;
+    }
 
     private static boolean shouldFocusAudio() {
         /* HTC One X */
         if (android.os.Build.DEVICE.toLowerCase().startsWith("endeavoru") ||
-                android.os.Build.DEVICE.toLowerCase().startsWith("evita") ) {
+                android.os.Build.DEVICE.toLowerCase().startsWith("evita")) {
             return false;
         }
-        
-        if(android.os.Build.DEVICE.toUpperCase().startsWith("GT-P7510") && isCompatible(15)) {
+
+        if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-P7510") && isCompatible(15)) {
             return false;
         }
         return true;
     }
-    
+
     private static int getDefaultAudioImplementation() {
         // Acer A510
         if (android.os.Build.DEVICE.toLowerCase().startsWith("picasso")) {
@@ -418,11 +422,11 @@ public final class Compatibility {
         boolean supportFloating = false;
         boolean isHeavyCpu = false;
         String abi = getCpuAbi();
-        if(!TextUtils.isEmpty(abi)) {
-            if(abi.equalsIgnoreCase("mips") || abi.equalsIgnoreCase("x86")) {
+        if (!TextUtils.isEmpty(abi)) {
+            if (abi.equalsIgnoreCase("mips") || abi.equalsIgnoreCase("x86")) {
                 supportFloating = true;
             }
-            if(abi.equalsIgnoreCase("armeabi-v7a") || abi.equalsIgnoreCase("x86")) {
+            if (abi.equalsIgnoreCase("armeabi-v7a") || abi.equalsIgnoreCase("x86")) {
                 isHeavyCpu = true;
             }
         }
@@ -457,7 +461,7 @@ public final class Compatibility {
         // For Wideband
         preferencesWrapper.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB, "60");
         preferencesWrapper.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB, "50");
-        preferencesWrapper.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_WB, "0"); 
+        preferencesWrapper.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_WB, "0");
@@ -467,8 +471,10 @@ public final class Compatibility {
         preferencesWrapper.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("SILK/8000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("SILK/12000/1", SipConfigManager.CODEC_WB, "0");
-        preferencesWrapper.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_WB, isHeavyCpu ? "0" : "220");
-        preferencesWrapper.setCodecPriority("SILK/24000/1", SipConfigManager.CODEC_WB, isHeavyCpu ? "220": "0");
+        preferencesWrapper.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_WB,
+                isHeavyCpu ? "0" : "220");
+        preferencesWrapper.setCodecPriority("SILK/24000/1", SipConfigManager.CODEC_WB,
+                isHeavyCpu ? "220" : "0");
         preferencesWrapper.setCodecPriority("CODEC2/8000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("G7221/16000/1", SipConfigManager.CODEC_WB, "0");
         preferencesWrapper.setCodecPriority("G7221/32000/1", SipConfigManager.CODEC_WB, "0");
@@ -549,23 +555,28 @@ public final class Compatibility {
                 needWebRTCImplementation());
         preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO,
                 shouldFocusAudio());
-        
+
         preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ALTERNATE_UNLOCKER,
                 isTabletScreen(preferencesWrapper.getContext()));
-        
+
         boolean usePriviledged = shouldUsePriviledgedIntegration(preferencesWrapper.getContext());
-        preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_TEL_PRIVILEGED, usePriviledged);
-        if(usePriviledged) {
-            preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_DIALER, !usePriviledged);
+        preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_TEL_PRIVILEGED,
+                usePriviledged);
+        if (usePriviledged) {
+            preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_DIALER,
+                    !usePriviledged);
         }
-        
-        if(android.os.Build.PRODUCT.startsWith("GoGear_Connect")) {
-            preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_CALLLOGS, false);
+
+        if (android.os.Build.PRODUCT.startsWith("GoGear_Connect")) {
+            preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_CALLLOGS,
+                    false);
         }
-        
-        preferencesWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION, Integer.toString(getDefaultAudioImplementation()));
-        preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.SETUP_AUDIO_BEFORE_INIT, shouldSetupAudioBeforeInit());
-        
+
+        preferencesWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION,
+                Integer.toString(getDefaultAudioImplementation()));
+        preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.SETUP_AUDIO_BEFORE_INIT,
+                shouldSetupAudioBeforeInit());
+
         preferencesWrapper.endEditing();
     }
 
@@ -577,10 +588,10 @@ public final class Compatibility {
         return true;
     }
 
-
     /**
-     * Check if we can make gsm calls from within the application
-     * It will check setting and capability of the device
+     * Check if we can make gsm calls from within the application It will check
+     * setting and capability of the device
+     * 
      * @param context
      * @return
      */
@@ -595,7 +606,6 @@ public final class Compatibility {
         }
         return true;
     }
-
 
     public static Intent getContactPhoneIntent() {
         Intent intent = new Intent(Intent.ACTION_PICK);
@@ -614,14 +624,14 @@ public final class Compatibility {
         return intent;
 
     }
-    
+
     private static boolean shouldUsePriviledgedIntegration(Context ctxt) {
         return !PhoneCapabilityTester.isPhone(ctxt);
     }
 
     public static void updateVersion(PreferencesWrapper prefWrapper, int lastSeenVersion,
             int runningVersion) {
-        
+
         prefWrapper.startEditing();
         if (lastSeenVersion < 14) {
 
@@ -774,7 +784,7 @@ public final class Compatibility {
             prefWrapper.setPreferenceStringValue(SipConfigManager.SND_CLOCK_RATE,
                     getDefaultFrequency());
         }
-        if(lastSeenVersion < 1109) {
+        if (lastSeenVersion < 1109) {
             prefWrapper.setPreferenceStringValue(SipConfigManager.TIMER_MIN_SE, "90");
             prefWrapper.setPreferenceStringValue(SipConfigManager.TIMER_SESS_EXPIRES, "1800");
             resetCodecsSettings(prefWrapper);
@@ -791,19 +801,21 @@ public final class Compatibility {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK,
                     needWebRTCImplementation());
         }
-        if(lastSeenVersion < 1634) {
-            if(android.os.Build.PRODUCT.toLowerCase().startsWith("gt-i9003")) {
-                prefWrapper.setPreferenceBooleanValue(SipConfigManager.SET_AUDIO_GENERATE_TONE, needToneWorkaround());
+        if (lastSeenVersion < 1634) {
+            if (android.os.Build.PRODUCT.toLowerCase().startsWith("gt-i9003")) {
+                prefWrapper.setPreferenceBooleanValue(SipConfigManager.SET_AUDIO_GENERATE_TONE,
+                        needToneWorkaround());
             }
         }
-        if(lastSeenVersion < 1653 && !PhoneCapabilityTester.isPhone(prefWrapper.getContext())) {
+        if (lastSeenVersion < 1653 && !PhoneCapabilityTester.isPhone(prefWrapper.getContext())) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_TEL_PRIVILEGED, true);
         }
-        if(lastSeenVersion < 1688) {
+        if (lastSeenVersion < 1688) {
             prefWrapper.setPreferenceStringValue(SipConfigManager.THREAD_COUNT, "0");
         }
         if (lastSeenVersion < 1729) {
-            prefWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION, Integer.toString(getDefaultAudioImplementation()));
+            prefWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION,
+                    Integer.toString(getDefaultAudioImplementation()));
             // Audio routing/mode api
             if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-S")
                     || android.os.Build.PRODUCT.equalsIgnoreCase("U8655")
@@ -814,40 +826,48 @@ public final class Compatibility {
                         shouldUseRoutingApi());
             }
         }
-        if(lastSeenVersion < 1752) {
+        if (lastSeenVersion < 1752) {
             boolean usePriv = shouldUsePriviledgedIntegration(prefWrapper.getContext());
-            if(usePriv) {
-                prefWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_TEL_PRIVILEGED, usePriv);
-                prefWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_DIALER, !usePriv);
+            if (usePriv) {
+                prefWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_TEL_PRIVILEGED,
+                        usePriv);
+                prefWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_WITH_DIALER,
+                        !usePriv);
             }
         }
-        if(lastSeenVersion < 1777 && android.os.Build.DEVICE.startsWith("one_touch_990")) {
+        if (lastSeenVersion < 1777 && android.os.Build.DEVICE.startsWith("one_touch_990")) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL,
                     needPspWorkaround());
         }
-        
-        if(lastSeenVersion < 1798 && android.os.Build.DEVICE.toLowerCase().startsWith("picasso")) {
-            prefWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION, Integer.toString(getDefaultAudioImplementation()));
+
+        if (lastSeenVersion < 1798 && android.os.Build.DEVICE.toLowerCase().startsWith("picasso")) {
+            prefWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION,
+                    Integer.toString(getDefaultAudioImplementation()));
         }
-        if (lastSeenVersion < 1834 && !shouldFocusAudio() ) {
-            prefWrapper.setPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO, shouldFocusAudio());
+        if (lastSeenVersion < 1834 && !shouldFocusAudio()) {
+            prefWrapper.setPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO,
+                    shouldFocusAudio());
         }
-        if(lastSeenVersion < 1931 && android.os.Build.DEVICE.equalsIgnoreCase("ST25i")) {
-            prefWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION, Integer.toString(getDefaultAudioImplementation()));
+        if (lastSeenVersion < 1931 && android.os.Build.DEVICE.equalsIgnoreCase("ST25i")) {
+            prefWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION,
+                    Integer.toString(getDefaultAudioImplementation()));
         }
-        if(lastSeenVersion < 1943) {
-            prefWrapper.setPreferenceBooleanValue(SipConfigManager.SETUP_AUDIO_BEFORE_INIT, shouldSetupAudioBeforeInit());
-            if( android.os.Build.DEVICE.toUpperCase().startsWith("GT-") ||
+        if (lastSeenVersion < 1943) {
+            prefWrapper.setPreferenceBooleanValue(SipConfigManager.SETUP_AUDIO_BEFORE_INIT,
+                    shouldSetupAudioBeforeInit());
+            if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-") ||
                     android.os.Build.PRODUCT.toUpperCase().startsWith("GT-")) {
                 prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
                         shouldUseModeApi());
             }
         }
-        if(lastSeenVersion < 2010) {
-            prefWrapper.setPreferenceStringValue(SipConfigManager.DTMF_PRESS_TONE_MODE, Integer.toString(SipConfigManager.GENERIC_TYPE_PREVENT));
+        if (lastSeenVersion < 2010) {
+            prefWrapper.setPreferenceStringValue(SipConfigManager.DTMF_PRESS_TONE_MODE,
+                    Integer.toString(SipConfigManager.GENERIC_TYPE_PREVENT));
         }
-        if(lastSeenVersion < 2015) {
-            // By default disable opus for now as seems that the 48kHz resampling doesn't play well on all devices
+        if (lastSeenVersion < 2015) {
+            // By default disable opus for now as seems that the 48kHz
+            // resampling doesn't play well on all devices
             prefWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_NB, "0");
             prefWrapper.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_WB, "0");
         }
@@ -859,7 +879,7 @@ public final class Compatibility {
                         shouldUseModeApi());
             }
         }
-        if(lastSeenVersion < 2052) {
+        if (lastSeenVersion < 2052) {
             if (android.os.Build.DEVICE.equalsIgnoreCase("u8510") && Compatibility.isCompatible(10)) {
                 prefWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION,
                         Integer.toString(getDefaultAudioImplementation()));
@@ -871,18 +891,18 @@ public final class Compatibility {
                         shouldUseModeApi());
             }
         }
-        if(lastSeenVersion < 2081) {
+        if (lastSeenVersion < 2081) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.DISABLE_RPORT, false);
         }
-        if(lastSeenVersion < 2105 && android.os.Build.DEVICE.toLowerCase().startsWith("cayman")) {
+        if (lastSeenVersion < 2105 && android.os.Build.DEVICE.toLowerCase().startsWith("cayman")) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
                     shouldUseModeApi());
         }
-        if(lastSeenVersion < 2111) {
+        if (lastSeenVersion < 2111) {
             prefWrapper.setPreferenceStringValue(SipConfigManager.MEDIA_THREAD_COUNT, "2");
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.HAS_IO_QUEUE, true);
         }
-        if(lastSeenVersion < 2147) {
+        if (lastSeenVersion < 2147) {
             prefWrapper.setPreferenceStringValue(SipConfigManager.DSCP_RTP_VAL, "48");
         }
 
@@ -896,9 +916,13 @@ public final class Compatibility {
             prefWrapper.setCodecPriority("AMR-WB/16000/1", SipConfigManager.CODEC_WB, "0");
             prefWrapper.setCodecPriority("AMR-WB/16000/1", SipConfigManager.CODEC_NB, "0");
         }
-        if(lastSeenVersion < 2195) {
+        if (lastSeenVersion < 2195) {
             prefWrapper.setPreferenceStringValue(SipConfigManager.MEDIA_THREAD_COUNT,
                     getNumCores() > 1 ? "2" : "1");
+        }
+        if (lastSeenVersion < 2202 && android.os.Build.DEVICE.equalsIgnoreCase("U8833")) {
+            prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK,
+                    needWebRTCImplementation());
         }
         prefWrapper.endEditing();
     }
@@ -931,7 +955,7 @@ public final class Compatibility {
         prefWrapper.setPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO, shouldFocusAudio());
 
         // }
-        
+
         prefWrapper.endEditing();
     }
 
@@ -963,7 +987,6 @@ public final class Compatibility {
         return 0x0102002c;
         // return android.R.id.home;
     }
-    
 
     public static boolean isInstalledOnSdCard(Context context) {
         // check for API level 8 and higher
@@ -972,7 +995,13 @@ public final class Compatibility {
             try {
                 PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
                 ApplicationInfo ai = pi.applicationInfo;
-                return (ai.flags & 0x00040000 /*ApplicationInfo.FLAG_EXTERNAL_STORAGE*/) == 0x00040000 /*ApplicationInfo.FLAG_EXTERNAL_STORAGE*/;
+                return (ai.flags & 0x00040000 /*
+                                               * ApplicationInfo.
+                                               * FLAG_EXTERNAL_STORAGE
+                                               */) == 0x00040000 /*
+                                                                  * ApplicationInfo.
+                                                                  * FLAG_EXTERNAL_STORAGE
+                                                                  */;
             } catch (NameNotFoundException e) {
                 // ignore
             }
