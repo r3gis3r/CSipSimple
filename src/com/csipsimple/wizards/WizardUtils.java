@@ -969,6 +969,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_clickphone, 9, 
                     new Locale[]{locale("ro_RO"), Locale.ITALY,  locale("el_GR"),  locale("bg_BG"), locale("es_ES"), Locale.UK, Locale.US, Locale.CANADA, Locale.GERMANY}, false, false, 
                     ClickPhone.class));
+            WIZARDS_DICT.put("BGCALL", new WizardInfo("BGCALL", "BG-call", 
+                    R.drawable.ic_wizard_bgcall, 10, 
+                    new Locale[]{ locale("bg_BG") }, false, false, 
+                    BgCall.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
