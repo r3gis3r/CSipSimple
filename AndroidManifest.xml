@@ -206,7 +206,7 @@
                 <action android:name="com.csipsimple.service.SipConfiguration" />
             </intent-filter>
         </service>
-        <service android:name=".service.Downloader" />
+        <service android:name="com.csipsimple.service.Downloader" />
 
         <receiver
             android:name="com.csipsimple.service.DeviceStateReceiver"
