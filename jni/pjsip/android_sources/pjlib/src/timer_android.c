@@ -19,6 +19,13 @@
 #define MAX_HEAPS 64
 #define MAX_ENTRY_PER_HEAP 128
 
+enum
+{
+    F_DONT_CALL = 1,
+    F_DONT_ASSERT = 2,
+    F_SET_ID = 4
+};
+
 // Forward def of wrapper
 int timer_schedule_wrapper(int entry, int entryId, int time);
 int timer_cancel_wrapper(int entry, int entryId);
@@ -110,7 +117,9 @@ static pj_status_t schedule_entry( pj_timer_heap_t *ht,
 }
 
 // Protected by timer heap lock
-static int cancel(pj_timer_heap_t *ht, pj_timer_entry *entry, int dont_call) {
+static int cancel(pj_timer_heap_t *ht,
+        pj_timer_entry *entry,
+        unsigned flags) {
 
 	PJ_CHECK_STACK();
 
@@ -125,13 +134,14 @@ static int cancel(pj_timer_heap_t *ht, pj_timer_entry *entry, int dont_call) {
 	PJ_LOG(5, (THIS_FILE, "Cancel timer %d", entry->_timer_id));
 
 	// This includes case where the entry is not linked to the heap anymore
-	/*
 	if (ht->entries[entry->_timer_id] != entry) {
-		PJ_LOG(1,
-				(THIS_FILE, "Cancelling something not linked to this heap : %d : %p vs %p", entry->_timer_id, entry, ht->entries[entry->_timer_id]));
+        if ((flags & F_DONT_ASSERT) == 0){
+            PJ_LOG(1,
+                (THIS_FILE, "Cancelling something not linked to this heap : %d : %p vs %p", entry->_timer_id, entry, ht->entries[entry->_timer_id]));
+          pj_assert(entry == ht->entries[entry->_timer_id]);
+        }
 		return 0;
 	}
-	*/
 
 	// Note -- due to the fact we rely on android alarm manager, nothing ensure here that cancelCount is actually valid.
 	// Previous checks should do the trick to be sure we have actually 1 cancelled timer here.
@@ -143,7 +153,7 @@ static int cancel(pj_timer_heap_t *ht, pj_timer_entry *entry, int dont_call) {
 		entry->_timer_id = -1;
 	}
 
-	if (dont_call == 0) {
+    if ((flags & F_DONT_CALL) == 0){
 		// Call the close hook.
 		(*ht->callback)(ht, entry);
 	}
@@ -285,7 +295,7 @@ static pj_status_t schedule_w_grp_lock(pj_timer_heap_t *ht,
     PJ_ASSERT_RETURN(entry->cb != NULL, PJ_EINVAL);
 
     /* Prevent same entry from being scheduled more than once */
-    PJ_ASSERT_RETURN(entry->_timer_id < 1, PJ_EINVALIDOP);
+    PJ_ASSERT_RETURN(entry->_timer_id < 0, PJ_EINVALIDOP);
 
     pj_gettickcount(&expires);
     PJ_TIME_VAL_ADD(expires, *delay);
@@ -323,7 +333,7 @@ PJ_DEF(pj_status_t) pj_timer_heap_schedule_w_grp_lock(pj_timer_heap_t *ht,
 
 static int cancel_timer(pj_timer_heap_t *ht,
             pj_timer_entry *entry,
-            pj_bool_t set_id,
+            unsigned flags,
             int id_val)
 {
     int count;
@@ -331,8 +341,8 @@ static int cancel_timer(pj_timer_heap_t *ht,
     PJ_ASSERT_RETURN(ht && entry, PJ_EINVAL);
 
     lock_timer_heap(ht);
-    count = cancel(ht, entry, 1);
-    if (set_id) {
+    count = cancel(ht, entry, flags | F_DONT_CALL);
+    if (flags & F_SET_ID) {
         entry->id = id_val;
      }
      if (entry->_grp_lock) {
@@ -349,14 +359,14 @@ static int cancel_timer(pj_timer_heap_t *ht,
 PJ_DEF(int) pj_timer_heap_cancel( pj_timer_heap_t *ht,
 				  pj_timer_entry *entry)
 {
-    return cancel_timer(ht, entry, PJ_FALSE, 0);
+    return cancel_timer(ht, entry, 0, 0);
 }
 
 PJ_DEF(int) pj_timer_heap_cancel_if_active(pj_timer_heap_t *ht,
         pj_timer_entry *entry,
         int id_val)
 {
-    return cancel_timer(ht, entry, PJ_TRUE, id_val);
+    return cancel_timer(ht, entry, F_SET_ID | F_DONT_ASSERT, id_val);
 }
 
 
