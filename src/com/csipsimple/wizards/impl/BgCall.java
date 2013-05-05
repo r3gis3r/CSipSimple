@@ -69,7 +69,7 @@ public class BgCall extends SimpleImplementation {
     private void updateAccountInfos(final SipProfile acc) {
         if (acc != null && acc.id != SipProfile.INVALID_ID) {
             customWizard.setVisibility(View.GONE);
-            accountBalanceHelper.launchRequest(acc);
+            //accountBalanceHelper.launchRequest(acc);
         }
     }
 	
