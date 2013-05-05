@@ -126,7 +126,7 @@ static int cancel(pj_timer_heap_t *ht,
 	// Check to see if the timer_id is out of range
 	if ( (entry->_timer_id < 0) || (entry->_timer_id > MAX_ENTRY_PER_HEAP) ) {
 		PJ_LOG(
-				4,
+				5,
 				(THIS_FILE, "Ask to cancel something already fired or cancelled : %d", entry->_timer_id));
 		return 0;
 	}
