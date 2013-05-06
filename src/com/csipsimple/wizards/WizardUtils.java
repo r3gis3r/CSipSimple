@@ -373,6 +373,14 @@ public class WizardUtils {
                     R.drawable.ic_wizard_enaknet, 45, 
                     new Locale[]{}, false, true, 
                     Enaknet.class));
+            WIZARDS_DICT.put("WORLDDIALPOINT", new WizardInfo("WORLDDIALPOINT", "WorldDialPoint", 
+                    R.drawable.ic_wizard_worlddialpoint, 45, 
+                    new Locale[]{}, false, true, 
+                    WorldDialPoint.class));
+            WIZARDS_DICT.put("PHONEPOWER", new WizardInfo("PHONEPOWER", "Phone Power", 
+                    R.drawable.ic_wizard_phonepower, 45, 
+                    new Locale[]{}, false, true, 
+                    PhonePower.class));
             
 			
 			//Locales
