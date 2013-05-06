@@ -373,10 +373,6 @@ public class WizardUtils {
                     R.drawable.ic_wizard_enaknet, 45, 
                     new Locale[]{}, false, true, 
                     Enaknet.class));
-            WIZARDS_DICT.put("WORLDDIALPOINT", new WizardInfo("WORLDDIALPOINT", "WorldDialPoint", 
-                    R.drawable.ic_wizard_worlddialpoint, 45, 
-                    new Locale[]{}, false, true, 
-                    WorldDialPoint.class));
             WIZARDS_DICT.put("PHONEPOWER", new WizardInfo("PHONEPOWER", "Phone Power", 
                     R.drawable.ic_wizard_phonepower, 45, 
                     new Locale[]{}, false, true, 
@@ -981,6 +977,11 @@ public class WizardUtils {
                     R.drawable.ic_wizard_bgcall, 10, 
                     new Locale[]{ locale("bg_BG") }, false, false, 
                     BgCall.class));
+            WIZARDS_DICT.put("WORLDDIALPOINT", new WizardInfo("WORLDDIALPOINT", "WorldDialPoint", 
+                    R.drawable.ic_wizard_worlddialpoint, 45, 
+                    new Locale[]{Locale.JAPAN,  locale("en_AU"), locale("en_NZ"), locale("en_SG"), locale("ms_MY"),
+                    locale("zh_CN"), locale("zh_TW"),}, false,false, 
+                    WorldDialPoint.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
