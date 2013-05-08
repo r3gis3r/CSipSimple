@@ -69,7 +69,7 @@ public class BgCall extends SimpleImplementation {
     private void updateAccountInfos(final SipProfile acc) {
         if (acc != null && acc.id != SipProfile.INVALID_ID) {
             customWizard.setVisibility(View.GONE);
-            //accountBalanceHelper.launchRequest(acc);
+            accountBalanceHelper.launchRequest(acc);
         }
     }
 	
@@ -136,7 +136,7 @@ public class BgCall extends SimpleImplementation {
          */
         @Override
         public HttpRequestBase getRequest(SipProfile acc) throws IOException {
-            String requestURL = "http://bg-call.com/mv/csipsimple.mv?"
+            String requestURL = "https://bill.itgbg.com/cgi-bin/bgcall.cgi?"
                     + "username=" + acc.username
                     + "&password=" + acc.data;
 
