@@ -118,7 +118,8 @@ public final class Compatibility {
         }
         // Samsung GT-S5360 GT-S5830 GT-S6102 ... probably all..
         if (android.os.Build.DEVICE.toUpperCase().startsWith("GT-") ||
-                android.os.Build.PRODUCT.toUpperCase().startsWith("GT-")) {
+                android.os.Build.PRODUCT.toUpperCase().startsWith("GT-") ||
+                android.os.Build.DEVICE.toUpperCase().startsWith("YP-")) {
             return true;
         }
 
