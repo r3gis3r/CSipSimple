@@ -51,7 +51,8 @@
   <string name="misc">Blandat</string>
   <string name="warning">VARNING</string>
   <string name="disconnect_and_incoming_explaination">Du är konfigurerad till att vara tillgängliga för det här nätverket! Genom att klicka på OK bekräftar du att du inte vill vara tillgängliga förrän nästa start av applikationen</string>
-  <string name="gadget_title">Kontobytare för SIP</string>
+  <string name="disconnect_and_future_incoming_explaination">Genom att stänga av appen kommer du inte vara tillgänglig på SIP förrän nästa start av programmet, oavsett dina nätverksinställningar</string>
+  <string name="gadget_title">SIP - Kontobytare</string>
   <string name="pickup_sip_uri">Välj SIP-kontakt</string>
   <string name="display_icon_in_status_bar_desc">Skall applikationen visa en ikon i statusfältet vid registrerad</string>
   <string name="display_icon_in_status_bar">Visa ikon i statusfält</string>
@@ -79,7 +80,7 @@
   <string name="invert_selection">Invertera urval</string>
   <string name="cant_write_file">Fel vid skrivning till fil</string>
   <string name="info">Information</string>
-  <string name="csipsimple_shortcut">Genväg till CSipSimple</string>
+  <string name="csipsimple_shortcut">SIP - genväg</string>
   <!--Presence stuff-->
   <string name="online">Uppkopplad</string>
   <string name="offline">Nedkopplad</string>

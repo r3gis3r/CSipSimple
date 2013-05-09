@@ -9,7 +9,6 @@
   <string name="starts_with">Починається з</string>
   <string name="ends_with">Закінчується на</string>
   <string name="contains">Містить</string>
-  <string name="all">Все</string>
   <string name="has_exactly_n_digits">Має точно N цифр</string>
   <string name="has_more_than_n_digits">Має більше ніж N цифр</string>
   <string name="is_exactly">Точно</string>

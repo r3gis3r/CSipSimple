@@ -1,6 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">回复</string>
+  <string name="ignore_call">忽略</string>
+  <string name="reject_call">拒接</string>
   <string name="clear_call">终止</string>
   <string name="touch_lock">双击解锁</string>
   <string name="dialpad">拨号盘</string>
@@ -18,6 +20,9 @@
   <string name="unlock">解锁</string>
   <string name="record">录音</string>
   <string name="stop_recording">停止录音</string>
+  <string name="xfer_uri">转换为号码</string>
   <string name="hold_call">保持</string>
   <string name="on_hold">正在保持</string>
+  <string name="resume_call">恢复</string>
+  <string name="send_dtmf">发送DTMF信息</string>
 </resources>

@@ -8,7 +8,6 @@
   <string name="starts_with">로 시작</string>
   <string name="ends_with">로 끝남</string>
   <string name="contains">포함</string>
-  <string name="all">전부</string>
   <string name="has_exactly_n_digits">(N)자리 숫자</string>
   <string name="has_more_than_n_digits">(N)자리 이상의 숫자</string>
   <string name="is_exactly">정확히 (  ) 입니다</string>

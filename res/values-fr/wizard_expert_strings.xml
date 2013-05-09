@@ -40,4 +40,6 @@
   <string name="w_expert_allow_via_rewrite">Autoriser la récriture du Via</string>
   <string name="w_expert_allow_via_rewrite_desc">Fixe le Via sent-by afin qu\'il utilise la même interface que celle utilisée pour la requête REGISTER</string>
   <string name="w_expert_ipv6_media_use">Utiliser l\'IPv6 pour le média</string>
+  <string name="w_expert_default_uri_scheme">Schéma d\'URI par défaut</string>
+  <string name="w_expert_default_uri_scheme_desc">Protocole à rajouté à l\'URI de l\'appelé si non spécifié</string>
 </resources>

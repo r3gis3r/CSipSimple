@@ -1,21 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="cant_call">Impossivel Ligar</string>
-    <string name="rewrite">Regravar</string>
-    <string name="stop_processing">Parar Processo</string>
-    <string name="direct_call">Ligar Diretamente</string>
-    <string name="auto_answer">Atendimento Automatico</string>
-    <string name="starts_with">Começa com</string>
-    <string name="ends_with">Termina com</string>
-    <string name="contains">Contém</string>
-    <string name="has_exactly_n_digits">Tem exactamente N dígitos</string>
-    <string name="has_more_than_n_digits">Tem mais de N dígitos</string>
-    <string name="is_exactly">É exactamente</string>
-    <string name="custom_regexp">RegExp personalizada</string>
-    <string name="prefix_by">Prefixo pro</string>
-    <string name="suffix_with">Fufixo com</string>
-    <string name="replace_match_by">Substituir correspondência por</string>
-    <string name="replace_all_by">Regravar todos por</string>
-
+  <string name="cant_call">Impossivel Ligar</string>
+  <string name="rewrite">Regravar</string>
+  <string name="stop_processing">Parar Processo</string>
+  <string name="direct_call">Ligar Diretamente</string>
+  <string name="auto_answer">Atendimento Automatico</string>
+  <string name="starts_with">Começa com</string>
+  <string name="ends_with">Termina com</string>
+  <string name="contains">Contém</string>
+  <string name="has_exactly_n_digits">Tem exactamente N dígitos</string>
+  <string name="has_more_than_n_digits">Tem mais de N dígitos</string>
+  <string name="is_exactly">É exactamente</string>
+  <string name="custom_regexp">RegExp personalizada</string>
+  <string name="prefix_by">Prefixo pro</string>
+  <string name="suffix_with">Fufixo com</string>
+  <string name="replace_match_by">Substituir correspondência por</string>
+  <string name="replace_all_by">Regravar todos por</string>
 </resources>

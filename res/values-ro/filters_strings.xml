@@ -8,7 +8,6 @@
   <string name="starts_with">Incepe cu</string>
   <string name="ends_with">Se termina cu</string>
   <string name="contains">Conține</string>
-  <string name="all">Tot</string>
   <string name="has_exactly_n_digits">Are exact N poziții</string>
   <string name="has_more_than_n_digits">Are mai mult de N poziții</string>
   <string name="is_exactly">Este fix</string>

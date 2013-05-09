@@ -26,7 +26,7 @@
   <string name="use_anyway">Använd ändå</string>
   <string name="use_anyway_desc">Strunta i Androids nätverksstatus. Bör inte användas för normala fall</string>
   <string name="use_3g">Använd 3G (och bättre)</string>
-  <string name="use_3g_disclamer">Din operatör MÅSTE tillåta dig att använda det här alternativet</string>
+  <string name="use_3g_disclamer">Din operatör MÅSTE tillåta dig att använda det här alternativet. Observera att mobiloperatör även kan fakturera extra kostnad för dataanvändning.</string>
   <string name="use_edge">Använd EDGE</string>
   <string name="use_gprs">Använd GPRS</string>
   <string name="lock_wifi">Lås Wi-Fi</string>
@@ -72,6 +72,7 @@
   <string name="enable_qos_desc">Aktivera QoS på paket</string>
   <string name="dscp_val">DSCP-värde</string>
   <string name="dscp_val_desc">DSCP-värde för SIP-trafik</string>
+  <string name="rtp_dscp_val_desc">DSCP-värde för RTP-trafik</string>
   <string name="udp_keep_alive_interval_wifi">WiFi UDP håller vaken</string>
   <string name="udp_keep_alive_interval_mobile">Mobil UDP håller vaken</string>
   <string name="tcp_keep_alive_interval_wifi">WiFi TCP håller vaken</string>
@@ -103,6 +104,8 @@
   <string name="network_route_polling_desc">Lösning för kontroll i Android 4.0 VPN. Låt vara 0 om inte i det här fallet för att inaktivera</string>
   <string name="disable_tcp_switch">Inaktivera omkoppling av TCP</string>
   <string name="disable_tcp_switch_desc">Om aktiverad, förhindra att stacken växlar till TCP för stora UDP-paket.</string>
+  <string name="disable_rport">Inaktivera rport i begäran</string>
+  <string name="disable_rport_desc">Aktivera enbart  för buggiga servrar. Inaktivera stöd för RFC 3581 genom att inte skicka rport.</string>
   <string name="add_bandwidth_tias_in_sdp">Lägg till bandbreddsmodifierare TIAS i SDP</string>
   <string name="add_bandwidth_tias_in_sdp_desc">Enligt RFC3890. Behövs för video på Avaya-servrar, men bryter felaktig tolkning för vissa SIP-servrar.</string>
   <!--Security-->
@@ -165,6 +168,10 @@
   <string name="codecs_desc">Prioritet (0 är inaktiverad)</string>
   <string name="sip_dtmf">Läge för DTMF</string>
   <string name="sip_dtmf_desc">Hur DTMF skall sändas</string>
+  <string name="dtmf_pause_time">Paustid för DTMF</string>
+  <string name="dtmf_pause_time_desc">Väntetid i ms för pausseparator (,)</string>
+  <string name="dtmf_wait_time">Väntetid för DTMF</string>
+  <string name="dtmf_wait_time_desc">Väntetid i ms för vänteseparator (;)</string>
   <string name="use_soft_volume">Använd volym från mjukvara</string>
   <string name="use_soft_volume_desc">Använd volym från mjukvara istället för Androids volym</string>
   <string name="use_routing_api">Använd routing API</string>
@@ -241,8 +248,16 @@
   <string name="ilbc_frame_per_packet">iLBC RTP frames per paket</string>
   <string name="codec_h264_profile">Profil för H264</string>
   <string name="codec_h264_level">Nivå för H264</string>
+  <string name="codec_h264_bitrate">H264 bithastighet</string>
+  <string name="codec_h264_bitrate_desc">Använd 0 för standard för vald nivå</string>
   <string name="thread_count">Antal trådar</string>
-  <string name="thread_count_desc">Antal trådar som allokeras för den ursprungliga stacken</string>
+  <string name="thread_count_desc">Antal trådar som allokeras till SIP-stack. 0 sparar batteri.</string>
+  <string name="media_thread_count">Antal trådar i media</string>
+  <string name="media_thread_count_desc">Antal trådar som allokeras för bearbetning av media</string>
+  <string name="setup_audio_before_init">Ställ in ljud innan initialisering</string>
+  <string name="setup_audio_before_init_desc">Sätt ljud i rätt läge innan initiering av ljudström</string>
+  <string name="video_capture_size">Storlek på videoinspelning</string>
+  <string name="video_capture_size_desc">Storlek på inspelade bildrutor</string>
   <!--UI-->
   <string name="general_ui">Allmänt användargränssnitt</string>
   <string name="native_dialer_integration">Ursprunglig integration med samtalshanterare</string>
@@ -255,6 +270,8 @@
   <string name="integrate_with_native_calllogs_desc">SIP-samtal kommer att slås samman (om möjligt) till ursprungliga samtalsloggar</string>
   <string name="dial_press_tone">Respons för kopplingston</string>
   <string name="dial_press_tone_desc">Spela tonval vid uppringning</string>
+  <string name="dtmf_press_tone">Respons för DTMF-ton</string>
+  <string name="dtmf_press_tone_desc">Spela tonval vid skickande av DTMF i samtal</string>
   <string name="dial_press_vibrate">Respons för vibrering</string>
   <string name="dial_press_vibrate_desc">Haptisk (vibration) respons vid uppringning</string>
   <string name="start_with_text_dialer">Textuppringare</string>
@@ -297,7 +314,7 @@
   <string name="never_available_desc">Aktivera SIP-klienten automatiskt när det behövs</string>
   <string name="availability_tg">Tillgänglighet för mobildata</string>
   <string name="tg_allowed">Jag får använda mobil</string>
-  <string name="tg_allowed_desc">Din operatör tillåter VoIP över din mobila dataanslutning</string>
+  <string name="tg_allowed_desc">Din operatör tillåter VoIP över din mobila dataanslutning. Observera att mobiloperatör även kan fakturera extra kostnad för dataanvändning.</string>
   <string name="codecs_availability_text">Bara tillgängligt om SIP för närvarande är registrerad</string>
   <!--Calls settings-->
   <string name="auto_record_calls">Spela in samtal automatiskt</string>

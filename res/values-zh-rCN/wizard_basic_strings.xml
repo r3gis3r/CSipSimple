@@ -1,6 +1,7 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_basic_username">账号</string>
+  <string name="w_basic_username_desc">帐号/登录信息(不包含@sip.server)</string>
   <string name="w_basic_password">密码</string>
   <string name="w_basic_password_desc">访问账号的密码</string>
 </resources>

@@ -1,22 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="optional_sip_code">Código SIP opcional</string>
-    <string name="cant_call">Non se pode chamar</string>
-    <string name="rewrite">Reescribir</string>
-    <string name="stop_processing">Deter o proceso</string>
-    <string name="direct_call">Chamar directamente</string>
-    <string name="auto_answer">Resposta automática</string>
-    <string name="starts_with">Comeza con</string>
-    <string name="ends_with">Remata en</string>
-    <string name="contains">Contén</string>
-    <string name="has_exactly_n_digits">Ten exactamente N díxitos</string>
-    <string name="has_more_than_n_digits">Ten máis de N díxitos</string>
-    <string name="is_exactly">É exactamente</string>
-    <string name="custom_regexp">RegExp personalizada</string>
-    <string name="prefix_by">Con prefixo</string>
-    <string name="suffix_with">Con sufixo</string>
-    <string name="replace_match_by">Substituír coincidencias por</string>
-    <string name="replace_all_by">Substituír todo por</string>
-
+  <string name="optional_sip_code">Código SIP opcional</string>
+  <string name="cant_call">Non se pode chamar</string>
+  <string name="rewrite">Reescribir</string>
+  <string name="stop_processing">Deter o proceso</string>
+  <string name="direct_call">Chamar directamente</string>
+  <string name="auto_answer">Resposta automática</string>
+  <string name="starts_with">Comeza con</string>
+  <string name="ends_with">Remata en</string>
+  <string name="contains">Contén</string>
+  <string name="has_exactly_n_digits">Ten exactamente N díxitos</string>
+  <string name="has_more_than_n_digits">Ten máis de N díxitos</string>
+  <string name="is_exactly">É exactamente</string>
+  <string name="custom_regexp">RegExp personalizada</string>
+  <string name="prefix_by">Con prefixo</string>
+  <string name="suffix_with">Con sufixo</string>
+  <string name="replace_match_by">Substituír coincidencias por</string>
+  <string name="replace_all_by">Substituír todo por</string>
 </resources>

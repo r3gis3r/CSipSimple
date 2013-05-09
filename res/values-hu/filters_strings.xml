@@ -9,7 +9,6 @@
   <string name="starts_with">A szám elején</string>
   <string name="ends_with">A szám végén</string>
   <string name="contains">A szám tartalmazza</string>
-  <string name="all">Mind</string>
   <string name="has_exactly_n_digits">Pontosan N számból áll</string>
   <string name="has_more_than_n_digits">Több mint N számból áll</string>
   <string name="is_exactly">Megegyezik</string>

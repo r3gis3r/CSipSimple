@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="optional_sip_code">可选SIP号码</string>
   <string name="cant_call">不能呼叫</string>
   <string name="rewrite">重写</string>
   <string name="stop_processing">停止处理</string>
@@ -8,7 +9,6 @@
   <string name="starts_with">起始</string>
   <string name="ends_with">结束</string>
   <string name="contains">包含</string>
-  <string name="all">全部</string>
   <string name="has_exactly_n_digits">有N个数字</string>
   <string name="has_more_than_n_digits">大于N个数字</string>
   <string name="is_exactly">全等于</string>

@@ -1,23 +1,21 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="optional_sip_code">Opcjonalny kod SIP</string>
-    <string name="cant_call">Nie można zrealizować połączenia</string>
-    <string name="rewrite">Przepisz</string>
-    <string name="stop_processing">Zatrzymaj przetwarzanie</string>
-    <string name="direct_call">Połączenie bezpośrednie</string>
-    <string name="auto_answer">Automatyczne odbieranie połączeń</string>
-    <string name="starts_with">Zaczyna się od</string>
-    <string name="ends_with">Kończy się na</string>
-    <string name="contains">Zawiera</string>
-    <string name="has_exactly_n_digits">Ma dokładnie N cyfr</string>
-    <string name="has_more_than_n_digits">Ma więcej niż N cyfr</string>
-    <string name="is_exactly">Ma dokładnie</string>
-    <string name="custom_regexp">Własne Wyrażenie regularne</string>
-    <string name="prefix_by">Prefiks od</string>
-    <string name="suffix_with">Przyrostek z</string>
-    <string name="replace_match_by">Wymień pasujące na</string>
-    <string name="replace_all_by">Wymień wszystkie na</string>
-    <string name="call_info_header">Zawiera informacje połączenia do natychmiastowej odpowiedzi</string>
-
+  <string name="optional_sip_code">Opcjonalny kod SIP</string>
+  <string name="cant_call">Nie można zrealizować połączenia</string>
+  <string name="rewrite">Przepisz</string>
+  <string name="stop_processing">Zatrzymaj przetwarzanie</string>
+  <string name="direct_call">Połączenie bezpośrednie</string>
+  <string name="auto_answer">Automatyczne odbieranie połączeń</string>
+  <string name="starts_with">Zaczyna się od</string>
+  <string name="ends_with">Kończy się na</string>
+  <string name="contains">Zawiera</string>
+  <string name="has_exactly_n_digits">Ma dokładnie N cyfr</string>
+  <string name="has_more_than_n_digits">Ma więcej niż N cyfr</string>
+  <string name="is_exactly">Ma dokładnie</string>
+  <string name="custom_regexp">Własne Wyrażenie regularne</string>
+  <string name="prefix_by">Prefiks od</string>
+  <string name="suffix_with">Przyrostek z</string>
+  <string name="replace_match_by">Wymień pasujące na</string>
+  <string name="replace_all_by">Wymień wszystkie na</string>
+  <string name="call_info_header">Zawiera informacje połączenia do natychmiastowej odpowiedzi</string>
 </resources>

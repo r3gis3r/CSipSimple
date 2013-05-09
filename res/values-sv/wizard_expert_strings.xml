@@ -39,4 +39,5 @@
   <string name="w_expert_mwi_enabled_desc">Få meddelanden från röstbrevlåda</string>
   <string name="w_expert_allow_via_rewrite">Tillåt via omskrivning</string>
   <string name="w_expert_allow_via_rewrite_desc">Ordna skicka Via att använda samma gränssnittsadress som den i begäran för REGISTRERING</string>
+  <string name="w_expert_ipv6_media_use">Använd IPV6 för media</string>
 </resources>

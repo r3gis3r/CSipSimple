@@ -1,23 +1,21 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="optional_sip_code">オプションSIPコード</string>
-    <string name="cant_call">電話しない</string>
-    <string name="rewrite">書き換え</string>
-    <string name="stop_processing">処理中止</string>
-    <string name="direct_call">直接呼び出し</string>
-    <string name="auto_answer">自動応答</string>
-    <string name="starts_with">次の数字で始まる番号</string>
-    <string name="ends_with">次の数字で終わる番号</string>
-    <string name="contains">次の数字を含む</string>
-    <string name="has_exactly_n_digits">N個の数字がある</string>
-    <string name="has_more_than_n_digits">N個以上の数字がある</string>
-    <string name="is_exactly">と同じである</string>
-    <string name="custom_regexp">カスタム正規表現</string>
-    <string name="prefix_by">で始まる</string>
-    <string name="suffix_with">が最後につく</string>
-    <string name="replace_match_by">一致したら置き換える</string>
-    <string name="replace_all_by">全て置き換える</string>
-    <string name="call_info_header">即時応答のためのダイアル情報を保持</string>
-
+  <string name="optional_sip_code">オプションSIPコード</string>
+  <string name="cant_call">通話不可</string>
+  <string name="rewrite">書き換え</string>
+  <string name="stop_processing">処理中止</string>
+  <string name="direct_call">直接呼び出し</string>
+  <string name="auto_answer">自動応答</string>
+  <string name="starts_with">次の数字で始まる番号</string>
+  <string name="ends_with">次の数字で終わる番号</string>
+  <string name="contains">次の数字を含む</string>
+  <string name="has_exactly_n_digits">N個の数字がある</string>
+  <string name="has_more_than_n_digits">N個以上の数字がある</string>
+  <string name="is_exactly">と同じ</string>
+  <string name="custom_regexp">カスタム正規表現</string>
+  <string name="prefix_by">で始まる</string>
+  <string name="suffix_with">が最後につく</string>
+  <string name="replace_match_by">一致したら置き換える</string>
+  <string name="replace_all_by">全て置き換える</string>
+  <string name="call_info_header">即時応答のためのダイアル情報を保持</string>
 </resources>

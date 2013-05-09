@@ -1,6 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="take_call">Svara</string>
+  <string name="ignore_call">Ignorera</string>
+  <string name="reject_call">Avvisa</string>
   <string name="clear_call">Avsluta</string>
   <string name="touch_lock">Dubbelknacka för att låsa upp</string>
   <string name="dialpad">Tonval</string>
@@ -24,4 +26,6 @@
   <string name="resume_call">Återta</string>
   <string name="transfer_to_call">Överför till samtal</string>
   <string name="send_dtmf">Skicka DTFM</string>
+  <string name="zrtp_trust_remote">Lita på fjärr-ZRTP</string>
+  <string name="zrtp_revoke_trusted_remote">Återkalla betrodd fjärr-ZRTP</string>
 </resources>
