@@ -377,6 +377,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_phonepower, 45, 
                     new Locale[]{}, false, true, 
                     PhonePower.class));
+            WIZARDS_DICT.put("CALLWITHUS", new WizardInfo("CALLWITHUS", "CallWithUs", 
+                    R.drawable.ic_wizard_callwithus, 8,
+                    new Locale[]{}, false, true, 
+                    CallWithUs.class));
             
 			
 			//Locales
