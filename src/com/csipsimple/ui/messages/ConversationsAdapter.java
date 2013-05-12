@@ -41,15 +41,18 @@ import com.csipsimple.models.CallerInfo;
 import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.widgets.contactbadge.QuickContactBadge;
 
-public class ConverstationsAdapter extends SimpleCursorAdapter {
+public class ConversationsAdapter extends SimpleCursorAdapter {
 
-    public ConverstationsAdapter(Context context, Cursor c) {
+	private Context mContext;
+	
+    public ConversationsAdapter(Context context, Cursor c) {
         super(context, R.layout.conversation_list_item, c, new String[] {
                 SipMessage.FIELD_BODY
         },
                 new int[] {
                         R.id.subject
                 }, 0);
+        mContext = context;
     }
 
     public static final class ConversationListItemViews {
@@ -152,7 +155,14 @@ public class ConverstationsAdapter extends SimpleCursorAdapter {
         }
         */
         String remoteContactFull = cursor.getString(cursor.getColumnIndex(SipMessage.FIELD_FROM_FULL));
-        buf.append(SipUri.getDisplayedSimpleContact(remoteContactFull));
+        CallerInfo callerInfo = CallerInfo.getCallerInfoFromSipUri(mContext, remoteContactFull);
+        if (callerInfo != null && callerInfo.contactExists) {
+        	buf.append(callerInfo.name);
+        	buf.append(" / ");
+            buf.append(SipUri.getDisplayedSimpleContact(remoteContactFull));
+        } else {
+            buf.append(SipUri.getDisplayedSimpleContact(remoteContactFull));
+        }
         
         int counter = cursor.getInt(cursor.getColumnIndex("counter"));
         if (counter > 1) {

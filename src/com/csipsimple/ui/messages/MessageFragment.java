@@ -59,6 +59,7 @@ import com.csipsimple.api.ISipService;
 import com.csipsimple.api.SipMessage;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipUri;
+import com.csipsimple.models.CallerInfo;
 import com.csipsimple.service.SipNotifications;
 import com.csipsimple.service.SipService;
 import com.csipsimple.ui.PickupSipUri;
@@ -246,7 +247,12 @@ public class MessageFragment extends SherlockListFragment implements LoaderManag
             if (remoteFrom != from) {
                 remoteFrom = from;
                 fromText.setText(remoteFrom);
-                fullFromText.setText(SipUri.getDisplayedSimpleContact(fullFrom));
+                CallerInfo callerInfo = CallerInfo.getCallerInfoFromSipUri(getActivity(), fullFrom);
+                if (callerInfo != null && callerInfo.contactExists) {
+                	fullFromText.setText(callerInfo.name);
+                } else {
+                	fullFromText.setText(SipUri.getDisplayedSimpleContact(fullFrom));
+                }
                 loadMessageContent();
                 notifications.setViewingMessageFrom(remoteFrom);
             }

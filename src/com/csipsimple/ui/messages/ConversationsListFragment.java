@@ -51,7 +51,7 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipMessage;
 import com.csipsimple.service.SipNotifications;
 import com.csipsimple.ui.SipHome.ViewPagerVisibilityListener;
-import com.csipsimple.ui.messages.ConverstationsAdapter.ConversationListItemViews;
+import com.csipsimple.ui.messages.ConversationsAdapter.ConversationListItemViews;
 import com.csipsimple.widgets.CSSListFragment;
 
 /**
@@ -70,7 +70,7 @@ public class ConversationsListFragment extends CSSListFragment implements ViewPa
 	
     private boolean mDualPane;
 
-    private ConverstationsAdapter mAdapter;
+    private ConversationsAdapter mAdapter;
     private View mHeaderView;
 
 
@@ -91,7 +91,7 @@ public class ConversationsListFragment extends CSSListFragment implements ViewPa
         // Header view add
         if(mAdapter == null) {
             // Adapter
-            mAdapter = new ConverstationsAdapter(getActivity(), null);
+            mAdapter = new ConversationsAdapter(getActivity(), null);
             setListAdapter(mAdapter);
         }
         
