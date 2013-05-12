@@ -301,12 +301,14 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
         builder.setSingleChoiceItems(choiceCursor, selectedIndex, ContactsWrapper.FIELD_GROUP_NAME, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                choiceCursor.moveToPosition(which);
-                String name = choiceCursor.getString(choiceCursor.getColumnIndex(ContactsWrapper.FIELD_GROUP_NAME));
-                ContentValues cv = new ContentValues();
-                cv.put(SipProfile.FIELD_ANDROID_GROUP, name);
-                context.getContentResolver().update(ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, profileId), cv, null, null);
-                choiceCursor.close();
+                if(choiceCursor != null) {
+                    choiceCursor.moveToPosition(which);
+                    String name = choiceCursor.getString(choiceCursor.getColumnIndex(ContactsWrapper.FIELD_GROUP_NAME));
+                    ContentValues cv = new ContentValues();
+                    cv.put(SipProfile.FIELD_ANDROID_GROUP, name);
+                    context.getContentResolver().update(ContentUris.withAppendedId(SipProfile.ACCOUNT_ID_URI_BASE, profileId), cv, null, null);
+                    choiceCursor.close();
+                }
                 dialog.dismiss();
             }
         });
@@ -315,14 +317,18 @@ public class FavAdapter extends ResourceCursorAdapter implements OnClickListener
         builder.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                choiceCursor.close();
+                if(choiceCursor != null) {
+                    choiceCursor.close();
+                }
                 dialog.dismiss();
             }
         });
         builder.setOnCancelListener(new OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                choiceCursor.close();
+                if(choiceCursor != null) {
+                    choiceCursor.close();
+                }
             }
         });
         final Dialog dialog = builder.create();
