@@ -46,6 +46,7 @@ import com.csipsimple.api.SipMessage;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipProfileState;
 import com.csipsimple.api.SipUri;
+import com.csipsimple.models.CallerInfo;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.CustomDistribution;
 import com.csipsimple.utils.Log;
@@ -63,7 +64,7 @@ public class SipNotifications {
 	private Builder missedCallNotification;
 	private Builder messageNotification;
 	private Builder messageVoicemail;
-	
+	private boolean resolveContacts = true;
 
 	public static final int REGISTER_NOTIF_ID = 1;
 	public static final int CALL_NOTIF_ID = REGISTER_NOTIF_ID + 1;
@@ -261,9 +262,47 @@ public class SipNotifications {
         }
 		startForegroundCompat(REGISTER_NOTIF_ID, notification);
 	}
+	
+	/**
+	 * Format the remote contact name for the call info
+	 * @param callInfo the callinfo to format
+	 * @return the name to display for the contact
+	 */
+	private String formatRemoteContactString(String remoteContact) {
+        String formattedRemoteContact = remoteContact;
+        if(resolveContacts) {
+            CallerInfo callerInfo = CallerInfo.getCallerInfoFromSipUri(context, formattedRemoteContact);
+            if (callerInfo != null && callerInfo.contactExists) {
+                StringBuilder remoteInfo = new StringBuilder();
+                remoteInfo.append(callerInfo.name);
+                remoteInfo.append(" <");
+                remoteInfo.append(SipUri.getCanonicalSipContact(remoteContact));
+                remoteInfo.append(">");
+                formattedRemoteContact = remoteInfo.toString();
+            }
+        }
+        return formattedRemoteContact;
+	}
+	
+	/**
+	 * Format the notification title for a call info
+	 * @param title
+	 * @param callInfo
+	 * @return
+	 */
+	private String formatNotificationTitle(int title, long accId) {
+        StringBuilder notifTitle = new StringBuilder(context.getText(title));
+        SipProfile acc = SipProfile.getProfileFromDbId(context, accId,
+                new String[] {SipProfile.FIELD_DISPLAY_NAME});
+        if ((acc != null) && !TextUtils.isEmpty(acc.display_name)) {
+            notifTitle.append(" - ");
+            notifTitle.append(acc.display_name);
+        }
+        return notifTitle.toString();
+	}
 
 	// Calls
-	public void showNotificationForCall(SipCallSession currentCallInfo2) {
+	public void showNotificationForCall(SipCallSession callInfo) {
 		// This is the pending call notification
 		// int icon = R.drawable.ic_incall_ongoing;
 		@SuppressWarnings("deprecation")
@@ -279,11 +318,11 @@ public class SipNotifications {
 		    inCallNotification.setOngoing(true);
 		}
         
-		Intent notificationIntent = SipService.buildCallUiIntent(context, currentCallInfo2);
+		Intent notificationIntent = SipService.buildCallUiIntent(context, callInfo);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		
-        inCallNotification.setContentTitle(context.getText(R.string.ongoing_call));
-        inCallNotification.setContentText(currentCallInfo2.getRemoteContact());
+        inCallNotification.setContentTitle(formatNotificationTitle(R.string.ongoing_call, callInfo.getAccId()));
+        inCallNotification.setContentText(formatRemoteContactString(callInfo.getRemoteContact()));
 		inCallNotification.setContentIntent(contentIntent);
 
 		Notification notification = inCallNotification.build();
@@ -310,8 +349,10 @@ public class SipNotifications {
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-		missedCallNotification.setContentTitle(context.getText(R.string.missed_call));
-		missedCallNotification.setContentText(callLog.getAsString(CallLog.Calls.NUMBER));
+		String remoteContact = callLog.getAsString(CallLog.Calls.NUMBER);
+		long accId = callLog.getAsLong(SipManager.CALLLOG_PROFILE_ID_FIELD);
+		missedCallNotification.setContentTitle(formatNotificationTitle(R.string.missed_call, accId));
+		missedCallNotification.setContentText(remoteContact);
 		missedCallNotification.setContentIntent(contentIntent);
 		
 		notificationManager.notify(CALLLOG_NOTIF_ID, missedCallNotification.build());
@@ -323,7 +364,10 @@ public class SipNotifications {
 		}
 		// CharSequence tickerText = context.getText(R.string.instance_message);
 		if (!msg.getFrom().equalsIgnoreCase(viewingRemoteFrom)) {
-			String from = msg.getDisplayName();
+			String from = formatRemoteContactString(msg.getFullFrom());
+			if(from.equalsIgnoreCase(msg.getFullFrom())) {
+			    from = msg.getDisplayName() + " " + from;
+			}
 			CharSequence tickerText = buildTickerMessage(context, from, msg.getBody());
 
 			if (messageNotification == null) {
