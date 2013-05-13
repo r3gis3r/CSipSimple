@@ -25,7 +25,7 @@
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="0px"
+        android:layout_height="wrap_content"
         android:layout_weight="1" >
 
         <ImageButton
@@ -49,7 +49,7 @@
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="0px"
+        android:layout_height="wrap_content"
         android:layout_weight="1" >
 
         <ImageButton
@@ -73,7 +73,7 @@
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="0px"
+        android:layout_height="wrap_content"
         android:layout_weight="1" >
 
         <ImageButton
@@ -97,7 +97,7 @@
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="0px"
+        android:layout_height="wrap_content"
         android:layout_weight="1" >
 
         <ImageButton

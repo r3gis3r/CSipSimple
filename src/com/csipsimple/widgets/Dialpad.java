@@ -99,10 +99,19 @@ public class Dialpad extends TableLayout implements OnClickListener {
 		void onTrigger(int keyCode, int dialTone);
 	}
 	
+	public Dialpad(Context context) {
+        super(context);
+        initLayout(context);
+    }
+	
 	public Dialpad(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		LayoutInflater inflater = LayoutInflater.from(context);
-		inflater.inflate(R.layout.dialpad, this, true);
+		initLayout(context);
+	}
+	
+	private void initLayout(Context context) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+        inflater.inflate(R.layout.dialpad, this, true);
 	}
 	
 	@Override
@@ -141,7 +150,7 @@ public class Dialpad extends TableLayout implements OnClickListener {
 		dispatchDialKeyEvent(v.getId());
 		
 	}
-	
+	/*
 	boolean mForceWidth = false;
 	public void setForceWidth(boolean forceWidth) {
 	    mForceWidth = forceWidth;
@@ -153,7 +162,7 @@ public class Dialpad extends TableLayout implements OnClickListener {
 	        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), getMeasuredHeight());
 	    }
 	};
-    
+    */
 	
 
 	public void applyTheme(Theme t) {
