@@ -352,7 +352,7 @@ public class SipNotifications {
 		String remoteContact = callLog.getAsString(CallLog.Calls.NUMBER);
 		long accId = callLog.getAsLong(SipManager.CALLLOG_PROFILE_ID_FIELD);
 		missedCallNotification.setContentTitle(formatNotificationTitle(R.string.missed_call, accId));
-		missedCallNotification.setContentText(remoteContact);
+		missedCallNotification.setContentText(formatRemoteContactString(remoteContact));
 		missedCallNotification.setContentIntent(contentIntent);
 		
 		notificationManager.notify(CALLLOG_NOTIF_ID, missedCallNotification.build());
