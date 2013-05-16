@@ -32,8 +32,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.TableLayout;
 
 import com.csipsimple.R;
 import com.csipsimple.utils.Log;
@@ -43,7 +43,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class Dialpad extends TableLayout implements OnClickListener {
+public class Dialpad extends FrameLayout implements OnClickListener {
 
 	private OnDialKeyListener onDialKeyListener;
 	
