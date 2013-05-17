@@ -45,7 +45,7 @@ public class ZrtpStateReceiver extends ZrtpCallback {
         String sasString = PjSipService.pjStrToString(sas);
         Log.d(THIS_FILE, "ZRTP show SAS " + sasString + " verified : " + verified);
         if(verified != 1) {
-            SipCallSession callInfo = pjService.getCallInfo(callId);
+            SipCallSession callInfo = pjService.getPublicCallInfo(callId);
             Intent zrtpIntent = new Intent(SipManager.ACTION_ZRTP_SHOW_SAS);
             zrtpIntent.putExtra(Intent.EXTRA_SUBJECT, sasString);
             zrtpIntent.putExtra(SipManager.EXTRA_CALL_INFO, callInfo);

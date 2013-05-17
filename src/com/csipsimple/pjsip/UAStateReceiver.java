@@ -856,9 +856,9 @@ public class UAStateReceiver extends Callback {
      * @param callInfo the new call state infos
      */
     private void onBroadcastCallState(final SipCallSession callInfo) {
-        // Internal event
+        SipCallSession publicCallInfo = new SipCallSession(callInfo);
         Intent callStateChangedIntent = new Intent(SipManager.ACTION_SIP_CALL_CHANGED);
-        callStateChangedIntent.putExtra(SipManager.EXTRA_CALL_INFO, callInfo);
+        callStateChangedIntent.putExtra(SipManager.EXTRA_CALL_INFO, publicCallInfo);
         pjService.service.sendBroadcast(callStateChangedIntent, SipManager.PERMISSION_USE_SIP);
 
     }

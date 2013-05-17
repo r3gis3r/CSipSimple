@@ -238,6 +238,33 @@ public class SipCallSession implements Parcelable {
      * @param in parcelable to build from
      */
     private SipCallSession(Parcel in) {
+        initFromParcel(in);
+    }
+
+    /**
+     * Constructor for a sip call session state object <br/>
+     * It will contains default values for all flags This class as no
+     * setter/getter for members flags <br/>
+     * It's aim is to allow to serialize/deserialize easily the state of a sip
+     * call, <n>not to modify it</b>
+     */
+    public SipCallSession() {
+        // Nothing to do in default constructor
+    }
+
+    /**
+     * Constructor by copy
+     * @param callInfo
+     */
+    public SipCallSession(SipCallSession callInfo) {
+         Parcel p = Parcel.obtain();
+         callInfo.writeToParcel(p, 0);
+         p.setDataPosition(0);
+         initFromParcel(p);
+         p.recycle();
+    }
+    
+    private void initFromParcel(Parcel in) {
         primaryKey = in.readInt();
         callId = in.readInt();
         callState = in.readInt();
@@ -260,23 +287,13 @@ public class SipCallSession implements Parcelable {
     }
 
     /**
-     * Constructor for a sip call session state object <br/>
-     * It will contains default values for all flags This class as no
-     * setter/getter for members flags <br/>
-     * It's aim is to allow to serialize/deserialize easily the state of a sip
-     * call, <n>not to modify it</b>
-     */
-    public SipCallSession() {
-        // Nothing to do in default constructor
-    }
-
-    /**
      * @see Parcelable#describeContents()
      */
     @Override
     public int describeContents() {
         return 0;
     }
+
 
     /**
      * @see Parcelable#writeToParcel(Parcel, int)

@@ -1522,6 +1522,14 @@ public class PjSipService {
         }
         return null;
     }
+    
+    public SipCallSession getPublicCallInfo(int callId) {
+        SipCallSession internalCallSession = getCallInfo(callId);
+        if( internalCallSession == null) {
+            return null;
+        }
+        return new SipCallSession(internalCallSession);
+    }
 
     public void setBluetoothOn(boolean on) throws SameThreadException {
         if (created && mediaManager != null) {
@@ -2093,7 +2101,7 @@ public class PjSipService {
             for (IRecorderHandler recoder : recoders) {
                 recoder.stopRecording();
                 // Broadcast to other apps the a new sip record has been done
-                SipCallSession callInfo = getCallInfo(callId);
+                SipCallSession callInfo = getPublicCallInfo(callId);
                 Intent it = new Intent(SipManager.ACTION_SIP_CALL_RECORDED);
                 it.putExtra(SipManager.EXTRA_CALL_INFO, callInfo);
                 recoder.fillBroadcastWithInfo(it);
