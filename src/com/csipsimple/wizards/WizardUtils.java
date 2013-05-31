@@ -986,6 +986,10 @@ public class WizardUtils {
                     new Locale[]{Locale.JAPAN,  locale("en_AU"), locale("en_NZ"), locale("en_SG"), locale("ms_MY"),
                     locale("zh_CN"), locale("zh_TW"),}, false,false, 
                     WorldDialPoint.class));
+            WIZARDS_DICT.put("ZOONTELECOM", new WizardInfo("ZOONTELECOM", "Zoon Suite", 
+                    R.drawable.ic_wizard_zoontelecom, 45, 
+                    new Locale[]{locale("es_ES")}, false,false, 
+                    ZoonTelecom.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
