@@ -56,6 +56,7 @@ public class Localphone extends SimpleImplementation {
 		SipProfile acc = super.buildAccount(account);
 		acc.proxies = new String[] {"sip:proxy.localphone.com"};
 		acc.transport = SipProfile.TRANSPORT_UDP;
+		acc.mwi_enabled = false;
 		return acc;
 	}
 	
