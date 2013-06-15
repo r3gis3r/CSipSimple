@@ -994,6 +994,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_zoontelecom, 45, 
                     new Locale[]{locale("es_ES")}, false,false, 
                     ZoonTelecom.class));
+            WIZARDS_DICT.put("FALAVIP", new WizardInfo("FALAVIP", "Falavip", 
+                    R.drawable.ic_wizard_falavip, 10, 
+                    new Locale[] {new Locale("PT", "br")}, false, false, 
+                    Falavip.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
