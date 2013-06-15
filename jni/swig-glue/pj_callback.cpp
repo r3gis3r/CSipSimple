@@ -6,6 +6,8 @@ static Callback* registeredCallbackObject = NULL;
 
 extern "C" {
 
+#include <pj/config_site.h>
+#include <pjsua-lib/pjsua_internal.h>
 
 void on_call_state_wrapper(pjsua_call_id call_id, pjsip_event *e) {
 	registeredCallbackObject->on_call_state(call_id, e);
@@ -180,6 +182,160 @@ void on_mwi_info_wrapper (pjsua_acc_id acc_id, pjsua_mwi_info *mwi_info) {
 	registeredCallbackObject->on_mwi_info(acc_id, &mime_type, &body);
 }
 
+
+#define MAX_COMPARE_LEN 64
+
+static unsigned max_common_substr_len(const pj_str_t* str1, const pj_str_t* str2)
+{
+    unsigned max_len = 0;
+    /* We compare only on first MAX_COMPARE_LEN char */
+    unsigned tree[MAX_COMPARE_LEN][MAX_COMPARE_LEN];
+    unsigned m1=0, m2=0;
+    int i=0, j=0;
+
+    if(str1->slen == 0 || str2->slen == 0)
+    {
+        return 0;
+    }
+
+    /* Init tree */
+    for(i=0;i < MAX_COMPARE_LEN;i++) {
+        pj_bzero(tree[i], PJ_ARRAY_SIZE( tree[i] ));
+    }
+
+    m1 = PJ_MIN(str1->slen, MAX_COMPARE_LEN);
+    m2 = PJ_MIN(str2->slen, MAX_COMPARE_LEN);
+
+    for (i = 0; i < m1; i++) {
+        for (j = 0; j < m2; j++) {
+            if (str1->ptr[i] != str2->ptr[j])
+            {
+                tree[i][j] = 0;
+            }
+            else
+            {
+                if ((i == 0) || (j == 0))
+                {
+                    tree[i][j] = 1;
+                }
+                else
+                {
+                    tree[i][j] = 1 + tree[i - 1][j - 1];
+                }
+
+                if (tree[i][j] > max_len)
+                {
+                    max_len = tree[i][j];
+                }
+            }
+        }
+    }
+    return max_len;
+}
+
+/*
+ * This is an internal function to find the most appropriate account to be
+ * used to handle incoming calls.
+ */
+void on_acc_find_for_incoming_wrapper(const pjsip_rx_data *rdata, pjsua_acc_id* out_acc_id)
+{
+    pjsip_uri *uri;
+    pjsip_sip_uri *sip_uri;
+    unsigned i;
+    int current_matching_score = 0;
+    int matching_scores[PJSUA_MAX_ACC];
+    pjsua_acc_id best_matching = pjsua_var.default_acc;
+
+    /* Check that there's at least one account configured */
+    PJ_ASSERT_RETURN(pjsua_var.acc_cnt!=0, pjsua_var.default_acc);
+
+    uri = rdata->msg_info.to->uri;
+
+    /* Just return if To URI is not SIP: */
+    if (!PJSIP_URI_SCHEME_IS_SIP(uri) &&
+    !PJSIP_URI_SCHEME_IS_SIPS(uri))
+    {
+    return;
+    }
+
+
+    PJSUA_LOCK();
+
+    sip_uri = (pjsip_sip_uri*)pjsip_uri_get_uri(uri);
+
+    /* Find account which has matching username and domain. */
+    for (i=0; i < pjsua_var.acc_cnt; ++i) {
+    unsigned acc_id = pjsua_var.acc_ids[i];
+    pjsua_acc *acc = &pjsua_var.acc[acc_id];
+
+    if (acc->valid && pj_stricmp(&acc->user_part, &sip_uri->user)==0 &&
+        pj_stricmp(&acc->srv_domain, &sip_uri->host)==0)
+    {
+        /* Match ! */
+        PJSUA_UNLOCK();
+        *out_acc_id = acc_id;
+        return;
+    }
+    }
+
+    /* No exact matching, try fuzzy matching */
+    pj_bzero(matching_scores, sizeof(matching_scores));
+
+    /* No matching account, try match domain part only. */
+    for (i=0; i < pjsua_var.acc_cnt; ++i) {
+    unsigned acc_id = pjsua_var.acc_ids[i];
+    pjsua_acc *acc = &pjsua_var.acc[acc_id];
+
+    if (acc->valid && pj_stricmp(&acc->srv_domain, &sip_uri->host)==0) {
+        /* Match ! */
+        /* We apply 100 weight if account has reg uri
+         * Because in pragmatic case we are more looking
+         * for these one than for the local acc
+         */
+        matching_scores[i] += (acc->cfg.reg_uri.slen > 0) ? (300 * sip_uri->host.slen) : 1;
+    }
+    }
+
+    /* No matching account, try match user part (and transport type) only. */
+    for (i=0; i < pjsua_var.acc_cnt; ++i) {
+    unsigned acc_id = pjsua_var.acc_ids[i];
+    pjsua_acc *acc = &pjsua_var.acc[acc_id];
+
+    if (acc->valid) {
+        /* We apply 100 weight if account has reg uri
+         * Because in pragmatic case we are more looking
+         * for these one than for the local acc
+         */
+        unsigned weight = (acc->cfg.reg_uri.slen > 0) ? 100 : 1;
+
+        if (acc->cfg.transport_id != PJSUA_INVALID_ID) {
+        pjsip_transport_type_e type;
+        type = pjsip_transport_get_type_from_name(&sip_uri->transport_param);
+        if (type == PJSIP_TRANSPORT_UNSPECIFIED)
+            type = PJSIP_TRANSPORT_UDP;
+
+        if (pjsua_var.tpdata[acc->cfg.transport_id].type != type)
+            continue;
+        }
+        /* Match ! */
+        matching_scores[i] += (max_common_substr_len(&acc->user_part, &sip_uri->user) * weight);
+    }
+    }
+
+    /* Still no match, use default account */
+    PJSUA_UNLOCK();
+    for(i=0; i<pjsua_var.acc_cnt; i++) {
+        if(current_matching_score < matching_scores[i])
+        {
+            best_matching = pjsua_var.acc_ids[i];
+            current_matching_score = matching_scores[i];
+        }
+    }
+    *out_acc_id = best_matching;
+}
+
+
+
 pj_status_t on_validate_audio_clock_rate_wrapper (int clock_rate) {
 	return registeredCallbackObject->on_validate_audio_clock_rate(clock_rate);
 }
@@ -242,7 +398,8 @@ struct pjsua_callback wrapper_callback_struct = {
 	NULL, //on_ice_transport_error
 	NULL, //on_snd_dev_operation
 	NULL, //on_call_media_event
-	NULL //on_create_media_transport
+	NULL, //on_create_media_transport
+	&on_acc_find_for_incoming_wrapper
 };
 
 void setCallbackObject(Callback* callback) {
