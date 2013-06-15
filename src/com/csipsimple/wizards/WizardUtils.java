@@ -381,6 +381,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_callwithus, 8,
                     new Locale[]{}, false, true, 
                     CallWithUs.class));
+            WIZARDS_DICT.put("OSTEL", new WizardInfo("OSTEL", "OSTel", 
+                    R.drawable.ic_wizard_ostel, 8,
+                    new Locale[]{}, false, true, 
+                    OSTel.class));
             
 			
 			//Locales
