@@ -126,6 +126,7 @@ public class PjSipAccount {
 		cfg.setAllow_contact_rewrite(profile.allow_contact_rewrite ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
 		cfg.setContact_rewrite_method(profile.contact_rewrite_method);
         cfg.setAllow_via_rewrite(profile.allow_via_rewrite ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
+        cfg.setAllow_sdp_nat_rewrite(profile.allow_sdp_nat_rewrite ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE);
 		
 		
 		if(profile.use_srtp != -1) {

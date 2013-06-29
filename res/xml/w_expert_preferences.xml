@@ -246,6 +246,11 @@
             android:title="RFC5626 Reg id" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/nat_traversal" >
+        <CheckBoxPreference
+            android:key="allow_sdp_nat_rewrite"
+            android:summary="@string/w_expert_allow_sdp_nat_rewrite_desc"
+            android:title="@string/w_expert_allow_sdp_nat_rewrite" />
+
         <ListPreference
             android:defaultValue="-1"
             android:entries="@array/acc_stun_use_choices"

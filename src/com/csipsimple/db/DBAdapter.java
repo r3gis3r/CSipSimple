@@ -46,7 +46,7 @@ public class DBAdapter {
 
 	public static class DatabaseHelper extends SQLiteOpenHelper {
 		
-		private static final int DATABASE_VERSION = 39;
+		private static final int DATABASE_VERSION = 40;
 
 		// Creation sql command
 		private static final String TABLE_ACCOUNT_CREATE = "CREATE TABLE IF NOT EXISTS "
@@ -113,6 +113,7 @@ public class DBAdapter {
                 + SipProfile.FIELD_RTP_PUBLIC_ADDR           + " TEXT,"
                 + SipProfile.FIELD_ANDROID_GROUP             + " TEXT,"
                 + SipProfile.FIELD_ALLOW_VIA_REWRITE         + " INTEGER DEFAULT 0,"
+                + SipProfile.FIELD_ALLOW_SDP_NAT_REWRITE + " INTEGER  DEFAULT 0,"
                 + SipProfile.FIELD_SIP_STUN_USE              + " INTEGER DEFAULT -1,"
                 + SipProfile.FIELD_MEDIA_STUN_USE            + " INTEGER DEFAULT -1,"
                 + SipProfile.FIELD_ICE_CFG_USE               + " INTEGER DEFAULT -1,"
@@ -435,6 +436,15 @@ public class DBAdapter {
                     Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
                 }
                 
+            }
+            if(oldVersion < 40) {
+                try {
+                    addColumn(db, SipProfile.ACCOUNTS_TABLE_NAME, SipProfile.FIELD_ALLOW_SDP_NAT_REWRITE, "INTEGER DEFAULT 0");
+                    db.execSQL("UPDATE " + SipProfile.ACCOUNTS_TABLE_NAME + " SET " + SipProfile.FIELD_ALLOW_SDP_NAT_REWRITE + "=0");
+                    Log.d(THIS_FILE, "Upgrade done");
+                }catch(SQLiteException e) {
+                    Log.e(THIS_FILE, "Upgrade fail... maybe a crappy rom...", e);
+                }
             }
 			onCreate(db);
 		}

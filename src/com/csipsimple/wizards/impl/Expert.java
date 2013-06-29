@@ -54,6 +54,7 @@ public class Expert extends BaseImplementation {
 	private EditTextPreference accountForceContact;
 	private CheckBoxPreference accountAllowContactRewrite;
     private CheckBoxPreference accountAllowViaRewrite;
+    private CheckBoxPreference accountAllowSdpNatRewrite;
 	private ListPreference accountContactRewriteMethod;
 	private EditTextPreference accountProxy;
 	private ListPreference accountUseSrtp;
@@ -96,6 +97,7 @@ public class Expert extends BaseImplementation {
 		accountForceContact = (EditTextPreference) findPreference(SipProfile.FIELD_FORCE_CONTACT);
 		accountAllowContactRewrite = (CheckBoxPreference) findPreference(SipProfile.FIELD_ALLOW_CONTACT_REWRITE);
 		accountAllowViaRewrite = (CheckBoxPreference) findPreference(SipProfile.FIELD_ALLOW_VIA_REWRITE);
+        accountAllowSdpNatRewrite = (CheckBoxPreference) findPreference(SipProfile.FIELD_ALLOW_SDP_NAT_REWRITE);
 		accountContactRewriteMethod = (ListPreference) findPreference(SipProfile.FIELD_CONTACT_REWRITE_METHOD);
 		accountProxy = (EditTextPreference) findPreference(SipProfile.FIELD_PROXY);
 		accountVm = (EditTextPreference) findPreference(SipProfile.FIELD_VOICE_MAIL_NBR);
@@ -173,6 +175,7 @@ public class Expert extends BaseImplementation {
 		accountForceContact.setText(account.force_contact);
 		accountAllowContactRewrite.setChecked(account.allow_contact_rewrite);
         accountAllowViaRewrite.setChecked(account.allow_via_rewrite);
+        accountAllowSdpNatRewrite.setChecked(account.allow_sdp_nat_rewrite);
 		accountContactRewriteMethod.setValue(Integer.toString(account.contact_rewrite_method));
 		if(account.proxies != null) {
 			accountProxy.setText(TextUtils.join(SipProfile.PROXIES_SEPARATOR, account.proxies));
@@ -336,6 +339,7 @@ public class Expert extends BaseImplementation {
 		
 		account.allow_contact_rewrite = accountAllowContactRewrite.isChecked();
         account.allow_via_rewrite = accountAllowViaRewrite.isChecked();
+        account.allow_sdp_nat_rewrite = accountAllowSdpNatRewrite.isChecked();
 		String forceContact = getText(accountForceContact);
 		if(!TextUtils.isEmpty(forceContact)) {
 			account.force_contact = forceContact;
