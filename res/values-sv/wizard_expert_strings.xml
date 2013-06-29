@@ -39,6 +39,7 @@
   <string name="w_expert_mwi_enabled_desc">Få meddelanden från röstbrevlåda</string>
   <string name="w_expert_allow_via_rewrite">Tillåt via omskrivning</string>
   <string name="w_expert_allow_via_rewrite_desc">Ordna skicka Via att använda samma gränssnittsadress som den i begäran för REGISTRERING</string>
+  <string name="w_expert_allow_sdp_nat_rewrite">Tillåt omskrivning av SDP vid NAT</string>
   <string name="w_expert_ipv6_media_use">Använd IPV6 för media</string>
   <string name="w_expert_default_uri_scheme">Förvalt URI-schema</string>
   <string name="w_expert_default_uri_scheme_desc">URI-schema att lägga till om det saknas i uppringd URI</string>
