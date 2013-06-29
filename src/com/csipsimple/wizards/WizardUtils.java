@@ -917,6 +917,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_zentc, 10, 
                     new Locale[]{ locale("zh_TW") }, false, false, 
                     Zentc.class));
+            WIZARDS_DICT.put("EHA", new WizardInfo("EHA", "e-ha", 
+                    R.drawable.ic_wizard_eha, 10, 
+                    new Locale[]{ locale("zh_TW") }, false, false, 
+                    EHa.class));
             WIZARDS_DICT.put("TELEMEGA", new WizardInfo("TELEMEGA", "Telemega", 
                     R.drawable.ic_wizard_telemega, 10, 
                     new Locale[]{ Locale.US }, false, false, 
