@@ -998,6 +998,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_falavip, 10, 
                     new Locale[] {new Locale("PT", "br")}, false, false, 
                     Falavip.class));
+            WIZARDS_DICT.put("ABATEL", new WizardInfo("ABATEL", "ABA Tel", 
+                    R.drawable.ic_wizard_abatel, 10, 
+                    new Locale[] {new Locale("sr")}, false, false, 
+                    AbaTel.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
