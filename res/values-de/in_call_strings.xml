@@ -2,6 +2,7 @@
 <resources>
   <string name="take_call">Annehmen</string>
   <string name="ignore_call">Abweisen</string>
+  <string name="reject_call">Ablehnen</string>
   <string name="clear_call">Auflegen</string>
   <string name="touch_lock">Doppelklicken zum Entsperren</string>
   <string name="dialpad">Wähltasten</string>
@@ -25,4 +26,8 @@
   <string name="resume_call">Wiederherstellen</string>
   <string name="transfer_to_call">Transferiere zu Anruf</string>
   <string name="send_dtmf">Sende DTMF</string>
+  <string name="zrtp_trust_remote">Vertraue entfernten ZRTP</string>
+  <string name="zrtp_revoke_trusted_remote">Widerrufe vertrauen entfernten ZRTP</string>
+  <string name="transport_secure_to_server">TLS Transport wird zum nächstgelegenen Knoten verwendet</string>
+  <string name="transport_secure_full">Das Signal soll von Anfang bis Ende sicher sein</string>
 </resources>

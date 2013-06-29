@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_ecs_display_name">Hesap adı</string>
   <string name="w_ecs_display_name_desc">Bu hesap için görünen ad</string>
@@ -10,4 +10,5 @@
   <string name="w_ecs_password_desc">Hesabınız için parola</string>
   <string name="w_ecs_server_domain">SIP alanı</string>
   <string name="w_ecs_server_domain_desc">SIP hesabı için alan adı</string>
+  <string name="w_ecs_server_ip_desc">ECS erişmek için alan adı veya IP (SIP hesabı ile aynı ise boş bırakın)</string>
 </resources>

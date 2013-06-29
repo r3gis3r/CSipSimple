@@ -1,12 +1,10 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-
-    <string name="unknown">不明</string>
-    <string name="type_incoming">撥入</string>
-    <string name="type_outgoing">撥出</string>
-    <string name="type_missed">未接</string>
-    <string name="callBack">撥回</string>
-    <string name="callAgain">重撥</string>
-    <string name="returnCall">回撥</string>
-
+  <string name="unknown">不明</string>
+  <string name="type_incoming">撥入</string>
+  <string name="type_outgoing">撥出</string>
+  <string name="type_missed">未接</string>
+  <string name="callBack">回撥</string>
+  <string name="callAgain">重撥</string>
+  <string name="returnCall">回撥</string>
 </resources>

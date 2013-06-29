@@ -71,7 +71,8 @@
   <string name="enable_qos">Aktiviere QoS</string>
   <string name="enable_qos_desc">Pakete mit QoS-Werten markieren</string>
   <string name="dscp_val">DSCP-Wert</string>
-  <string name="dscp_val_desc">DSCP-Wert für SIP-Daten</string>
+  <string name="dscp_val_desc">DSCP-Wert für SIP-Datenverkehr</string>
+  <string name="rtp_dscp_val_desc">DSCP-Wert für RTP-Datenverkehr</string>
   <string name="udp_keep_alive_interval_wifi">Keep-Alive bei UDP-WLAN-Verbindung</string>
   <string name="udp_keep_alive_interval_mobile"> Keep-Alive bei UDP-Mobilfunkdatenverbindung</string>
   <string name="tcp_keep_alive_interval_wifi">Keep-Alive bei TCP-WLAN-Verbindung</string>
@@ -103,6 +104,8 @@
   <string name="network_route_polling_desc">Umgehungslösung für VPN-Prüfung unter Android 4.0. Zum Deaktivieren auf 0 lassen, wenn dies nicht der Fall ist.</string>
   <string name="disable_tcp_switch">TCP switch deaktivieren</string>
   <string name="disable_tcp_switch_desc">Falls aktiviert, hindere den Stack daran, für große UDP-Pakete auf TCP umzuschalten</string>
+  <string name="disable_rport">Deaktiviere rport in der Anfrage</string>
+  <string name="disable_rport_desc">Nur bei fehlerhaften Servern aktivieren. Deaktiviere die RFC 3581 Unterstützung durch das Senden von rport.</string>
   <string name="add_bandwidth_tias_in_sdp">Füge Bandbreiten-Modifizierwert TIAS in SDP hinzu</string>
   <string name="add_bandwidth_tias_in_sdp_desc">Gemäß RFC 3890. Für Video auf Avaya-Servern benötigt, stört jedoch fehlerhaftes Parsing auf manchen SIP-Servern</string>
   <!--Security-->
@@ -165,6 +168,10 @@
   <string name="codecs_desc">Priorität (0=deaktiviert)</string>
   <string name="sip_dtmf">DTMF Modus</string>
   <string name="sip_dtmf_desc">Wie sollen DTMF-Eingaben übertragen werden</string>
+  <string name="dtmf_pause_time">Dauer der DTMF Pause</string>
+  <string name="dtmf_pause_time_desc">Pause (,) als Trennzeichen der Wartezeit in ms</string>
+  <string name="dtmf_wait_time">DTMF Wartezeit</string>
+  <string name="dtmf_wait_time_desc">Wartezeit (;) als Trennzeichen der Wartezeit in ms</string>
   <string name="use_soft_volume">Verwende eigene Lautstärke</string>
   <string name="use_soft_volume_desc">Verwendet eigene Lautstärke anstatt der Android-Lautstärke</string>
   <string name="use_routing_api">Verwende Routing API</string>
@@ -241,8 +248,16 @@
   <string name="ilbc_frame_per_packet">iLBC: Frames pro RTP-Paket</string>
   <string name="codec_h264_profile">H264 Profil</string>
   <string name="codec_h264_level">H264 Level</string>
+  <string name="codec_h264_bitrate">H264 Bitrate</string>
+  <string name="codec_h264_bitrate_desc">Benutze 0 als Standardwert für einen ausgewählten Pegel</string>
   <string name="thread_count">Anzahl von Threads</string>
   <string name="thread_count_desc">Anzahl von zugewiesenen Threads für den Stack</string>
+  <string name="media_thread_count">Medien-Thread Anzahl</string>
+  <string name="media_thread_count_desc">Anzahl der Threads, die für Medienverarbeitung zugewiesen sind</string>
+  <string name="setup_audio_before_init">Konfiguriere die Audioausgabe vor ihrer Initialisierung</string>
+  <string name="setup_audio_before_init_desc">Stelle die Audioausgabe in den richtigen Modus vor der Audiostream Initialisierung</string>
+  <string name="video_capture_size">Größe der Videoaufnahme</string>
+  <string name="video_capture_size_desc">Größe der aufgenommenen Bilder</string>
   <!--UI-->
   <string name="general_ui">Standard-Benutzeroberfläche</string>
   <string name="native_dialer_integration">In Standard-Wählprogramm einbinden</string>
@@ -255,6 +270,8 @@
   <string name="integrate_with_native_calllogs_desc">SIP-Anrufe werden (wenn möglich) in die Anruflisten der Standardanwendung eingeplegt</string>
   <string name="dial_press_tone">Wählton beim Wählen</string>
   <string name="dial_press_tone_desc">Wahltöne beim Wählen abspielen</string>
+  <string name="dtmf_press_tone">DTMF Ton-Feedback</string>
+  <string name="dtmf_press_tone_desc">Spiele Tastentöne beim Senden von DTMF während des Anrufs</string>
   <string name="dial_press_vibrate">Feedback durch Vibration</string>
   <string name="dial_press_vibrate_desc">Haptisches Feedback (Vibrieren) beim Wählen</string>
   <string name="start_with_text_dialer">Start mit Textwähler</string>

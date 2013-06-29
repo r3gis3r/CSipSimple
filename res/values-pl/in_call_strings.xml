@@ -28,4 +28,6 @@
   <string name="send_dtmf">Wyślij DTMF</string>
   <string name="zrtp_trust_remote">Zaufaj zdalnemu ZRTP</string>
   <string name="zrtp_revoke_trusted_remote">Odwołaj zdalnego zaufanego ZRTP</string>
+  <string name="transport_secure_to_server">Transport TLS używany jest dla najbliższego węzła</string>
+  <string name="transport_secure_full">Sygnał powinien być bezpieczny od początku do końca</string>
 </resources>

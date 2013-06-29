@@ -3,6 +3,7 @@
   <string name="next">下一頁</string>
   <string name="init">初始化中…</string>
   <string name="unable_to_download_file">無法下載檔案</string>
+  <string name="connection_not_valid">您的設定不允許你所選定的網路</string>
   <string name="invalid_sip_uri">呼叫不正確的 SIP uri</string>
   <string name="accounts">帳戶</string>
   <string name="other_accounts">其他帳戶</string>
@@ -34,6 +35,7 @@
   <string name="dial_tab_name_text">撥號</string>
   <string name="calllog_tab_name_text">通話紀錄</string>
   <string name="messages_tab_name_text">訊息</string>
+  <string name="favorites_tab_name_text">最愛</string>
   <string name="menu_disconnect">中斷連線</string>
   <string name="service_ticker_registered_text">SIP 已註冊</string>
   <string name="outgoing_call_chooser_call_text">通話</string>
@@ -60,5 +62,21 @@
   <string name="this_codec_is_not_free">**這個編解碼器不是免費的 !!!**\n請確認某人 (不管是你的網路電話提供商或您本人) 已購買使用許可, 您才可以使用這個編解碼器!  我們 (軟體提供者) 不對您非法使用這個編解碼器負任何責任.\n再次提醒您確認您擁有這個編解碼器的使用權.\n購買連結 :</string>
   <string name="voice_mail">語音信箱</string>
   <string name="type_sip_uri_or_autocomplete">SIP uri 位址或自動填入</string>
+  <string name="legal_information">合法資訊</string>
+  <string name="reconnect">重新連接</string>
+  <string name="switch_to_text">轉換為文字模式</string>
+  <string name="switch_to_digit">轉換成數字模式</string>
+  <string name="no_accounts">沒有任何帳戶</string>
+  <string name="activate">啟用</string>
+  <string name="deactivate">停用</string>
+  <string name="audio">音訊</string>
+  <string name="video">視訊</string>
+  <string name="cant_write_file">寫入錯誤</string>
+  <string name="info">資訊</string>
   <!--Presence stuff-->
+  <string name="online">上縣</string>
+  <string name="offline">離線</string>
+  <string name="away">離開</string>
+  <string name="busy">忙碌</string>
+  <string name="uri_sip">網路電話</string>
 </resources>

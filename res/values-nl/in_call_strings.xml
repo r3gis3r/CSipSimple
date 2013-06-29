@@ -28,4 +28,6 @@
   <string name="send_dtmf">Stuur DTMF</string>
   <string name="zrtp_trust_remote">Vertrouw ZRTP gesprekspartner</string>
   <string name="zrtp_revoke_trusted_remote">ZRTP vertrouwen gesprekspartner intrekken</string>
+  <string name="transport_secure_to_server">TLS transport wordt gebruikt voor de  directe hop</string>
+  <string name="transport_secure_full">Eindpunt-tot-eindpunt signalering wordt als veilig gezien</string>
 </resources>

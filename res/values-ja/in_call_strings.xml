@@ -28,4 +28,6 @@
   <string name="send_dtmf">DTMF送信</string>
   <string name="zrtp_trust_remote">ZRTPの通信先を信認</string>
   <string name="zrtp_revoke_trusted_remote">信認しているZRTPの通信先を取り消し</string>
+  <string name="transport_secure_to_server">TLS暗号通信は、直接接続しているサーバーの間に対して行われます。</string>
+  <string name="transport_secure_full">末端間の通信のやりとりは、安全だと考えられています。</string>
 </resources>

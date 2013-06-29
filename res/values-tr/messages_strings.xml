@@ -1,35 +1,104 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--The name of the SMS/MMS app as it appears to the user in the Home screen, task switcher, etc.-->
   <string name="app_label">Mesajlaşma</string>
+  <!--Command name to open a Compose screen; displays in conversation list-->
   <string name="new_message">Yeni Mesaj</string>
+  <!--Summary text under "New Message" command; displays in conversation list-->
   <string name="create_new_message">Yeni mesaj oluşturma</string>
+  <!--Menu item for starting a new conversation-->
+  <string name="menu_compose_new">Oluştur</string>
+  <!--Menu item to call the recipient of the conversation on the phone (imperative verb)-->
   <string name="menu_call">Çağrı</string>
+  <!--Menu item for deleting all conversations-->
   <string name="menu_delete_all">Konuları sil</string>
+  <!--Context menu item on an individual conversation for deleting that conversation-->
   <string name="menu_delete">Konu sil</string>
+  <!--Context menu item on an individual conversation for viewing that conversation-->
+  <string name="menu_view">Konu göster</string>
+  <!--Name to use when we have an unspecified sender-->
   <string name="anonymous_recipient">Anonim</string>
+  <!--Name of the local user when displaying sender of an outgoing message (personal pronoun)-->
   <string name="messagelist_sender_self">Ben</string>
   <string name="delete_message">Mesajı sil</string>
+  <!--Abbreviation for "kilobyte"-->
   <string name="kilobyte">KB</string>
+  <!--Dialog box title brought up when warning the user that a message could not be delivered-->
   <string name="undelivered_msg_dialog_title">Teslim edilmemiş mesaj</string>
+  <!--Dialog box message indicating that a message could not be delivered-->
+  <!--Menu item for deleting the entire conversation currently being viewed-->
+  <string name="delete_thread">Konu sil</string>
+  <!--Text of a button appearing for MMS messages that have not yet been downloaded, causing the message
+         to be downloaded (imperative verb)-->
   <string name="download">İndirme</string>
+  <!--Message displayed in place of the "download message" button once it has been pressed,
+         indicating that the download is in progress-->
   <string name="downloading">İndiriliyor</string>
+  <!--Individual message context menu item-->
+  <!--Header for context menu on an individual message-->
   <string name="message_options">Mesaj seçenekleri</string>
+  <!--Button text on edit slide screen indicating the user wants to finish editing that slide-->
   <string name="done">Bitti</string>
+  <!--Title bar displayed in compose message activity before a recipient has been selected-->
+  <string name="compose_title">Oluştur</string>
+  <!--Menu item in conversation screen for attaching something to the message being composed-->
   <string name="add_attachment">Ekle</string>
+  <!--Button next to an attachment during message composition to view the attachment (imperative verb)-->
   <string name="view">Göster</string>
+  <!--Button in conversation screen for sending the SMS message currently being composed (imperative verb)-->
   <string name="send">Gönder</string>
+  <!--Menu item in conversation screen for returning to the conversation list-->
   <string name="all_threads">Bütün konular</string>
+  <!--Hint text in message body field when keyboard is exposed-->
+  <!--Hint text in message body field when keyboard is hidden-->
   <string name="open_keyboard_to_compose_message">Mesaj oluşturmak için klavye aç</string>
+  <!--Dialog title for warning the user that the picture they are trying to attach is too large-->
   <string name="image_too_large">Resim çok büyük</string>
+  <!--Dialog message text asking the user if he wants to resize the picture being attached-->
+  <string name="ask_for_automatically_resize">Resim gönderilmeden önce kendiliğinden boyutlandırılsın mı?</string>
+  <!--Toast message while an image is being resized-->
+  <string name="compressing">Resim çok büyük. Sıkıştırılıyor...</string>
+  <!--Context menu item on a message recipient for viewing their contact info-->
+  <!--Context menu item on a message recipient for adding them to the user's
+         contacts (used if the recipient is not already in the address book)-->
+  <!--Sender to be used if the sender address has been hidden-->
+  <!--Text to be used for affirmative response button in dialog boxes-->
   <string name="yes">TAMAM</string>
+  <!--Text to be used for negative response button in dialog boxes-->
   <string name="no">İptal</string>
+  <!--Button text used for editing a slideshow (imperative verb)-->
   <string name="edit">Düzenle</string>
+  <!--Settings screen menu item for restoring all settings to default-->
+  <!--Confirm Delete-->
+  <!--Delete confirmation dialog title-->
   <string name="confirm_dialog_title">Sil</string>
+  <!--Delete entire thread confirmation dialog message-->
+  <!--Delete all threads confirmation dialog message-->
+  <string name="confirm_delete_all_conversations">Bütün konular silinecektir.</string>
+  <!--Delete message confirmation dialog message-->
+  <string name="confirm_delete_message">Mesaj silinecektir.</string>
+  <!--Delete message confirmation dialog message for a locked message-->
+  <string name="confirm_delete_locked_message">Bu kilitli mesajı silmek istediğinizden emin misiniz?</string>
+  <!--Delete entire thread confirmation dialog message-->
+  <!--Delete button title-->
   <string name="delete">Sil</string>
+  <!--Status in "Report" window-->
   <string name="status_none">(Hiçbiri)</string>
+  <!--Status in "Report" window-->
   <string name="status_pending">Beklemede</string>
+  <!--Status in "Report" window-->
   <string name="status_received">Alındı</string>
+  <!--Status in "Report" window-->
   <string name="status_failed">Başarısız</string>
+  <!--Status in "Report" window-->
   <string name="status_unread">Okunmadı</string>
+  <!--Status in "Report" window-->
   <string name="status_rejected">Reddedildi</string>
+  <!--Label in "Report" window-->
+  <!--Label in "Report" window-->
+  <string name="status_label">Durum:</string>
+  <!--Menu item-->
+  <!--Label for the "Me" number of this phone.-->
+  <!--Brief small label shown to right of message when it is being sent.-->
+  <string name="sending_message">Gönderiliyor...</string>
 </resources>

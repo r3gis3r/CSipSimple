@@ -2,6 +2,7 @@
 <resources>
   <string name="take_call">Yanıtla</string>
   <string name="clear_call">Bitir</string>
+  <string name="touch_lock">Kilidi açmak için iki kez dokun</string>
   <string name="dialpad">Tuş takımı</string>
   <string name="bluetooth">Bluetooth</string>
   <string name="speaker">hopârlör</string>

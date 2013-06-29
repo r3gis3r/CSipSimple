@@ -40,4 +40,6 @@
   <string name="w_expert_allow_via_rewrite">Zezwól na zmianę Via</string>
   <string name="w_expert_allow_via_rewrite_desc">Napraw wysłanie przez Via aby używac tego samego adresu interfejsu jakiego w żądaniu REJESTRU</string>
   <string name="w_expert_ipv6_media_use">Używaj IPv6 dla mediów</string>
+  <string name="w_expert_default_uri_scheme">Domyślny schemat uri</string>
+  <string name="w_expert_default_uri_scheme_desc">Dołączy schemat do wywoływanego uri jeśli nie został określony</string>
 </resources>

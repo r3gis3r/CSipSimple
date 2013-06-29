@@ -17,4 +17,5 @@
   <string name="suffix_with">Tiene como sufijo</string>
   <string name="replace_match_by">Sustituir la palabra que corresponda por</string>
   <string name="replace_all_by">Sustituir todo por</string>
+  <string name="call_info_header">Tiene Call-Info para respuesta inmediata</string>
 </resources>

@@ -40,4 +40,6 @@
   <string name="w_expert_allow_via_rewrite">Toestaan via rewrite</string>
   <string name="w_expert_allow_via_rewrite_desc">Stel de \'Via sent-by\' in om hetzelfde interface adres te gebruiken als bij het REGISTER verzoek</string>
   <string name="w_expert_ipv6_media_use">Gebruik IPV6 voor media</string>
+  <string name="w_expert_default_uri_scheme">Standaar URI schema</string>
+  <string name="w_expert_default_uri_scheme_desc">Wat vooraf moet gaan aan het belleradres wanneer niet gespecificeerd</string>
 </resources>

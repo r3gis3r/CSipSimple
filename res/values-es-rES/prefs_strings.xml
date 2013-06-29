@@ -64,12 +64,14 @@
   <string name="turn_password_desc">Contaseña para la autentificación TURN</string>
   <string name="enable_stun">Habilitar STUN</string>
   <string name="enable_stun_desc">Activar la funcionalidad STUN</string>
+  <string name="enable_stun2">Use nuevo formato STUN</string>
   <string name="stun_server">Servidor STUN</string>
   <string name="stun_server_desc">Servidores STUN (HOST[:PUERTO], ...)</string>
   <string name="enable_qos">Habilitar QoS</string>
   <string name="enable_qos_desc">Habilitar QoS sobre paquetes</string>
   <string name="dscp_val">Valor DSCP</string>
   <string name="dscp_val_desc">Valor DSCP para el protocolo SIP</string>
+  <string name="rtp_dscp_val_desc">Valor DSCP para tráfico RTP</string>
   <string name="udp_keep_alive_interval_wifi">Wifi UDP keep alive</string>
   <string name="udp_keep_alive_interval_mobile">Móvil UDP keep alive</string>
   <string name="tcp_keep_alive_interval_wifi">Wifi TCP keep alive</string>
@@ -95,11 +97,14 @@
   <string name="tsx_t1_timeout">Tiempo de de expiración T1 de la transacción</string>
   <string name="tsx_t2_timeout">Tiempo de de expiración T2 de la transacción</string>
   <string name="tsx_t4_timeout">Tiempo de de expiración T4 de la transacción</string>
+  <string name="tsx_td_timeout">Transacción completó temporizador para INVITE</string>
   <string name="tsx_timeout_desc">Deja -1 para los valores RCF 3261 por defecto</string>
   <string name="network_route_polling">Comprobar cambios de red cada (x minutos)</string>
   <string name="network_route_polling_desc">Solución para la comprobación de VPN con Android 4.0. Dejar 0 si no es el caso para desabilitar.</string>
   <string name="disable_tcp_switch">Deshabilitar el cambio a TCP</string>
   <string name="disable_tcp_switch_desc">Si está activado, previene el cambio a TCP para paquetes UDP demasiado grandes</string>
+  <string name="disable_rport">Deshabilitar rport en solicitud</string>
+  <string name="disable_rport_desc">Solamente activar para servidores con errores. Deshabilita soporte RFC 3581 por no enviar rport.</string>
   <!--Security-->
   <string name="tls">Cifrado TLS</string>
   <string name="secure_transport">Protocolo seguro</string>
@@ -135,6 +140,8 @@
   <string name="echo_cancellation_desc">Activar la anulación de eco</string>
   <string name="enable_vad">Deteccion de voz</string>
   <string name="enable_vad_desc">Activar la detección de voz (reduce el ancho de banda utilizado)</string>
+  <string name="enable_ns">Reducción de ruido</string>
+  <string name="enable_ns_desc">Funciona si la cancelación de eco está activada y el cancelador de eco del backend WebRTC es usado</string>
   <string name="snd_mic_level">Amplificación del micrófono</string>
   <string name="snd_mic_level_desc">Ajustar el nivel de señal del micrófono (1 no hace nada)</string>
   <string name="snd_speaker_level">Amplificación del altavoz</string>
@@ -158,6 +165,10 @@
   <string name="codecs_desc">Prioridad (0 = desactivado)</string>
   <string name="sip_dtmf">Modo DTMF</string>
   <string name="sip_dtmf_desc">Como enviar la señal DTMF</string>
+  <string name="dtmf_pause_time">Tiempo de pausa para DTMF</string>
+  <string name="dtmf_pause_time_desc">Separador de pausa (,) demora el tiempo en ms</string>
+  <string name="dtmf_wait_time">Tiempo de espera para DTMF</string>
+  <string name="dtmf_wait_time_desc">Separador de espera (,) demora el tiempo en ms</string>
   <string name="use_soft_volume">Utilizar el volumen del programa</string>
   <string name="use_soft_volume_desc">Utilizar el volumen del programa en lugar del volumen de Android</string>
   <string name="use_routing_api">Utilizar el API de enrutado</string>
@@ -232,8 +243,17 @@
   <string name="frames_per_rtp_packet">Frames por paquete RTP</string>
   <string name="g729_frame_per_packet">Frames G729 RTP por paquete</string>
   <string name="ilbc_frame_per_packet">Frames iLBC RTP por paquete</string>
+  <string name="codec_h264_profile">Perfil H264</string>
+  <string name="codec_h264_level">Nivel H264</string>
+  <string name="codec_h264_bitrate">H264 bitrate</string>
   <string name="thread_count">Número de subprocesos</string>
   <string name="thread_count_desc">Número de subprocesos asignados a la pila SIP. Si es mayor que 0 la batería se gasta más rápido.</string>
+  <string name="media_thread_count">Contador de tareas para Medios</string>
+  <string name="media_thread_count_desc">Número de tareas ubicada para procesamiento de medios</string>
+  <string name="setup_audio_before_init">Configurar audio antes de inicializar</string>
+  <string name="setup_audio_before_init_desc">Poner audio en modo correcto antes de la inicialización del flujo de audio</string>
+  <string name="video_capture_size">Tamaño de la captura de video</string>
+  <string name="video_capture_size_desc">Tamaño de los marcos capturados</string>
   <!--UI-->
   <string name="general_ui">Interfaz de usuario general</string>
   <string name="native_dialer_integration">Integración del marcador telefónico de Android</string>
@@ -246,6 +266,7 @@
   <string name="integrate_with_native_calllogs_desc">Las llamadas SIP serán incluidas (si es posible) en el registro de llamadas de Android</string>
   <string name="dial_press_tone">Reacción sonora del marcador telefónico</string>
   <string name="dial_press_tone_desc">Reproducir un sonido cuando se pulsa un número</string>
+  <string name="dtmf_press_tone">Retroalimentación de tono DTMF</string>
   <string name="dial_press_vibrate">Reacción de vibración del marcador telefónico</string>
   <string name="dial_press_vibrate_desc">Vibrar al pulsar un número</string>
   <string name="start_with_text_dialer">Marcador telefónico en modo texto</string>

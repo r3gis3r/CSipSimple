@@ -10,7 +10,8 @@
   <string name="w_common_password_desc">Passwort für dieses Konto</string>
   <string name="w_common_server">SIP Server</string>
   <string name="w_common_server_desc">SIP Server Domainname IP[:Port]</string>
-  <string name="create_account">Erstelle Account</string>
+  <string name="create_account">Erstelle Konto</string>
+  <string name="already_have_account">Ich habe bereits ein Konto</string>
   <string name="first_name">Vorname</string>
   <string name="last_name">Nachname</string>
   <string name="email_address">E-Mail</string>

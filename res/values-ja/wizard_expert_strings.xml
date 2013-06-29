@@ -40,4 +40,6 @@
   <string name="w_expert_allow_via_rewrite">Viaの書き換え許可</string>
   <string name="w_expert_allow_via_rewrite_desc">登録リクエストの中で同じインターフェースのアドレスの一つとして使うようにVia sent-byを修正</string>
   <string name="w_expert_ipv6_media_use">IPv6を通信に利用</string>
+  <string name="w_expert_default_uri_scheme">デフォルトURI識別子</string>
+  <string name="w_expert_default_uri_scheme_desc">通話先URIで特に指定されなかった場合に先頭につけるURI識別子</string>
 </resources>

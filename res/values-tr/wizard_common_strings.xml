@@ -9,4 +9,11 @@
   <string name="w_common_password_desc">Hesabınız için parola</string>
   <string name="w_common_server">Sunucu</string>
   <string name="w_common_server_desc">SIP sunucu alanı/IP[:port]</string>
+  <string name="create_account">Hesap oluştur</string>
+  <string name="already_have_account">Zaten bir hesabım var</string>
+  <string name="first_name">A</string>
+  <string name="last_name">Soyad</string>
+  <string name="email_address">E-posta adresi</string>
+  <string name="captcha">Captcha</string>
+  <string name="country_code">Ülke kodu</string>
 </resources>

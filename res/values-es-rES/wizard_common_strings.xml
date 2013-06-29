@@ -11,6 +11,7 @@
   <string name="w_common_server">Servidor</string>
   <string name="w_common_server_desc">Dominio/IP del servidor SIP[:puerto]</string>
   <string name="create_account">Crear una cuenta</string>
+  <string name="already_have_account">Ya tengo una cuenta</string>
   <string name="first_name">Nombre</string>
   <string name="last_name">Apellidos</string>
   <string name="email_address">Dirección de correo electrónico</string>

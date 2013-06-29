@@ -28,4 +28,6 @@
   <string name="send_dtmf">Skicka DTFM</string>
   <string name="zrtp_trust_remote">Lita på fjärr-ZRTP</string>
   <string name="zrtp_revoke_trusted_remote">Återkalla betrodd fjärr-ZRTP</string>
+  <string name="transport_secure_to_server">TLS transport används för omedelbar hoppning</string>
+  <string name="transport_secure_full">Ände-till-ände-signalering är påstådd säker</string>
 </resources>

@@ -2,6 +2,7 @@
 <resources>
   <string name="take_call">Contestar</string>
   <string name="ignore_call">Ignorar</string>
+  <string name="reject_call">Rechazado</string>
   <string name="clear_call">Finalizar</string>
   <string name="touch_lock">Doble clic para desbloquear</string>
   <string name="dialpad">Teclado</string>
@@ -19,8 +20,14 @@
   <string name="unlock">Desbloquear</string>
   <string name="record">Grabar</string>
   <string name="stop_recording">Detener la grabación</string>
+  <string name="xfer_uri">Transferir a número</string>
   <string name="hold_call">Retener</string>
   <string name="on_hold">En espera</string>
   <string name="resume_call">Reanudar</string>
+  <string name="transfer_to_call">Transferir a llamada</string>
   <string name="send_dtmf">Enviar DTMF</string>
+  <string name="zrtp_trust_remote">Confiar en ZRTP remoto</string>
+  <string name="zrtp_revoke_trusted_remote">Revocar confianza en ZRTP remoto</string>
+  <string name="transport_secure_to_server">Transporte TLS es usado para salto inmediato</string>
+  <string name="transport_secure_full">Señalización Fin-Fin es supuesto seguro</string>
 </resources>

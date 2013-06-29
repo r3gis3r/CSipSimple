@@ -1,4 +1,5 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="w_ovh_phone_number_desc">"Telefon numarası 0033XXXXXX  gibi bir biçimde olmalıdır"</string>
+  <string name="w_ovh_phone_number_desc">Telefon numarası 0033XXXXXX  gibi bir biçimde olmalıdır</string>
+  <string name="w_sapo_phone_number_desc">Telefon numarası +35130xxxxxx gibi bir biçimde olmalıdır</string>
 </resources>

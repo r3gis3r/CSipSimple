@@ -2,6 +2,7 @@
 <resources>
   <string name="prefs">Ayarlar</string>
   <string name="prefs_fast">Basit konfigürasyon</string>
+  <string name="prefs_fast_desc">SIP nasıl çalıştığını bilmiyorsanız, hızlı seçeneği kullanın</string>
   <string name="prefs_network">Ağ</string>
   <string name="prefs_media">Medya</string>
   <string name="prefs_ui">Kullanıcı arayüzü</string>
@@ -31,7 +32,13 @@
   <string name="use_ipv6">IPv6 kullan</string>
   <string name="override_nameserver">Özel bir DNS kullan</string>
   <string name="enable_ice">ICE etkinleştirin</string>
+  <string name="enable_turn">TURN etkinleştir</string>
+  <string name="turn_server">Turn sunucu</string>
+  <string name="turn_server_desc">TURN sunucu (HOST:PORT)</string>
+  <string name="turn_password">TURN parola</string>
+  <string name="turn_password_desc">TURN kimlik doğrulaması için parola</string>
   <string name="enable_stun">STUN etkinleştirin</string>
+  <string name="enable_qos">QoS etkinleştir</string>
   <string name="dscp_val">DSCP değeri</string>
   <!--<string name="ka_use_wake">Keep alive awake</string>
     <string name="ka_use_wake_desc">If activated keep alive will awake phone</string>-->
@@ -46,6 +53,7 @@
   <string name="verify_server">Sunucu kontrol</string>
   <string name="verify_server_desc">Sunucu sertifikası doğrulama</string>
   <string name="verify_client">İstemci kontrol</string>
+  <string name="verify_client_desc">İstemci sertifikası doğrulama</string>
   <string name="tls_method">TLS Yöntemi</string>
   <string name="tls_method_desc">TLS için taşıma metodu</string>
   <string name="use_srtp">SRTP modu</string>

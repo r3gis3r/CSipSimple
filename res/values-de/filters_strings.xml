@@ -17,4 +17,5 @@
   <string name="suffix_with">Suffix </string>
   <string name="replace_match_by">Ersetze Übereinstimmung durch</string>
   <string name="replace_all_by">Ersetze alle durch</string>
+  <string name="call_info_header">Besitzt Anruf-Info für einen sofortigen Rückruf</string>
 </resources>

@@ -12,6 +12,8 @@
   <string name="w_expert_username_desc">認證用戶名</string>
   <string name="w_expert_data">密碼</string>
   <string name="w_expert_data_desc">密碼 (或其他訊息) 用於認證</string>
+  <string name="w_expert_datatype">資料形勢</string>
+  <string name="w_expert_datatype_desc">資料種類</string>
   <string name="w_expert_t_proxy">代理伺服器</string>
   <string name="w_expert_proxy">代理器 URI</string>
   <string name="w_expert_proxy_desc">格式 : sip:proxy.net[:port]</string>
