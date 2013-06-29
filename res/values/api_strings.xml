@@ -9,8 +9,8 @@
 
     <string name="app_name">CSipSimple</string>
     <string name="permlab_useSip">Use sip</string>
-    <string name="permdesc_useSip">Place SIP calls, send SIP messages and control SIP communications</string>
-    <string name="permlab_configureSip">Use sip</string>
-    <string name="permdesc_configureSip">Place SIP calls, send SIP messages and control SIP communications</string>
+    <string name="permdesc_useSip">Place SIP calls, send SIP messages</string>
+    <string name="permlab_configureSip">Extend sip application</string>
+    <string name="permdesc_configureSip">Configure SIP accounts and settings, extends and hook SIP flow, access to SIP contents (call logs, messages...)</string>
 
 </resources>
