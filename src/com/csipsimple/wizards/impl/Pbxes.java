@@ -42,7 +42,7 @@ public class Pbxes extends SimpleImplementation {
 	@Override
 	public SipProfile buildAccount(SipProfile account) {
 		SipProfile acc = super.buildAccount(account);
-		acc.vm_nbr = "*43";
+		acc.vm_nbr = "*97";
 		return acc;
 	}
 	
