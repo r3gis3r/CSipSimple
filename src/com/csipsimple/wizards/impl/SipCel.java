@@ -21,11 +21,6 @@
 
 package com.csipsimple.wizards.impl;
 
-import android.preference.CheckBoxPreference;
-import android.preference.ListPreference;
-import android.text.TextUtils;
-
-import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.models.Filter;
@@ -38,84 +33,14 @@ import java.util.regex.Pattern;
 
 public class SipCel extends SimpleImplementation {
 
-	ListPreference accountState;
-	CheckBoxPreference useSafePort;
-    CheckBoxPreference useStun;
-    
-    private final static String KEY_SAFE_PORT = "safe_port";
-    private final static String KEY_STUN = "stun";
-    private final static String KEY_SERVER_CHOICE  = "server_choice";
-
 	@Override
 	protected String getDomain() {
-		return "sip.sipcel.com";
+		return "sip.sipcel.mobi";
 	}
 	
 	@Override
 	protected String getDefaultName() {
 		return "SipCel";
-	}
-	
-	@Override
-	public void fillLayout(SipProfile account) {
-		super.fillLayout(account);
-		
-
-		CharSequence[] states = new CharSequence[] {"com", "eu", "mobi", "tel"};
-		
-		boolean recycle = true;
-		accountState = (ListPreference) findPreference(KEY_SERVER_CHOICE);
-		useSafePort = (CheckBoxPreference) findPreference(KEY_SAFE_PORT);
-		useStun = (CheckBoxPreference) findPreference(KEY_STUN);
-		if(accountState == null) {
-		    recycle = false;
-	        
-	        accountState = new ListPreference(parent);
-	        useSafePort = new CheckBoxPreference(parent);
-	        useStun = new CheckBoxPreference(parent);
-
-	        useSafePort.setTitle("Change port (if can't connect)");
-	        useSafePort.setSummary("Connect to port 443 instead of 5060");
-	        useStun.setTitle("Enable stun (if not media)");
-	        useStun.setSummary("Enable stun for nat traversal");
-		}
-        
-        accountState.setEntries(states);
-        accountState.setEntryValues(states);
-        accountState.setKey("server");
-        accountState.setDialogTitle(R.string.w_common_server);
-        accountState.setTitle(R.string.w_common_server);
-        accountState.setDefaultValue("com");
-
-        
-        String domain = account.reg_uri;
-        boolean useSafe = false;
-        if( domain != null ) {
-	        for(CharSequence state : states) {
-	        	String currentComp = "sip:sip.sipcel."+state;
-	        	if( domain.startsWith(currentComp) ) {
-	        		accountState.setValue((String) state);
-	        		break;
-	        	}
-	        }
-        }
-        if (account.proxies != null) {
-            for (String proxy : account.proxies) {
-                if(proxy.endsWith(":443")) {
-                    useSafe = true;
-                }
-            }
-        }
-        
-        if(!recycle) {
-            addPreference(accountState);
-            addPreference(useStun);
-            addPreference(useSafePort);
-        
-        }
-        useSafePort.setChecked(useSafe);
-
-        useStun.setChecked(account.sip_stun_use == 1);
 	}
 	
 	@Override
@@ -132,26 +57,17 @@ public class SipCel extends SimpleImplementation {
 	@Override
 	public SipProfile buildAccount(SipProfile account) {
 		SipProfile acc = super.buildAccount(account);
-		String remoteServerUri = "sip:sip.sipcel.";
-		String ext = "com";
+		String remoteServerUri = getDomain();
 		
-		if(!TextUtils.isEmpty(accountState.getValue())){
-			ext = accountState.getValue();
-		}
-
         String proxyPort = "";
-		if(useSafePort.isChecked()) {
+		if(acc.transport == SipProfile.TRANSPORT_UDP) {
 		    proxyPort = ":443";
 		}
 		
-		
-		remoteServerUri += ext;
-		acc.reg_uri = remoteServerUri;
 		acc.proxies = new String[] { remoteServerUri + proxyPort };
 		acc.publish_enabled = 1;
-		acc.reg_timeout = 120;
-		acc.sip_stun_use = useStun.isChecked() ? 1 : 0;
-		acc.media_stun_use = useStun.isChecked() ? 1 : 0;
+		acc.sip_stun_use = 1;
+		acc.media_stun_use = 1;
 		
 		return acc;
 	}
@@ -161,20 +77,18 @@ public class SipCel extends SimpleImplementation {
 	@Override
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
-		if(useStun.isChecked()) {
-		    prefs.addStunServer("stun.sipcel.com");
-		}
 		
 		prefs.setPreferenceBooleanValue(SipConfigManager.ECHO_CANCELLATION, true);
 		prefs.setPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM, true);
+        prefs.setPreferenceBooleanValue(SipConfigManager.SUPPORT_MULTIPLE_CALLS, true);
         prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_QOS, true);
         prefs.setPreferenceStringValue(SipConfigManager.SND_CLOCK_RATE, "8000");
 		prefs.setPreferenceStringValue(SipConfigManager.DTMF_MODE, Integer.toString(SipConfigManager.DTMF_MODE_AUTO));
 
-        prefs.setPreferenceStringValue(SipConfigManager.KEEP_ALIVE_INTERVAL_MOBILE, "900");
-        prefs.setPreferenceStringValue(SipConfigManager.KEEP_ALIVE_INTERVAL_WIFI, "1800");
-        prefs.setPreferenceStringValue(SipConfigManager.TCP_KEEP_ALIVE_INTERVAL_MOBILE, "1200");
-        prefs.setPreferenceStringValue(SipConfigManager.TCP_KEEP_ALIVE_INTERVAL_WIFI, "3600");
+        prefs.setPreferenceStringValue(SipConfigManager.KEEP_ALIVE_INTERVAL_MOBILE, "800");
+        prefs.setPreferenceStringValue(SipConfigManager.KEEP_ALIVE_INTERVAL_WIFI, "1200");
+        prefs.setPreferenceStringValue(SipConfigManager.TCP_KEEP_ALIVE_INTERVAL_MOBILE, "800");
+        prefs.setPreferenceStringValue(SipConfigManager.TCP_KEEP_ALIVE_INTERVAL_WIFI, "1200");
 
 		//For Wifi: Speex 32Khz, speex 16, g729, gsm.
 		prefs.setCodecPriority("G729/8000/1", SipConfigManager.CODEC_WB,"242");
