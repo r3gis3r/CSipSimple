@@ -3,7 +3,7 @@
   <string name="w_expert_display_name">Nom du compte</string>
   <string name="w_expert_display_name_desc">Nom d\'affichage pour ce compte</string>
   <string name="w_expert_acc_id">Identifiant pour le compte</string>
-  <string name="w_expert_acc_id_desc">Format : NomDAffichage &lt;sip:login\@registrar&gt;</string>
+  <string name="w_expert_acc_id_desc">Format : NomDAffichage &lt;sip:login@registrar&gt;</string>
   <string name="w_expert_reg_uri">URI du registrar</string>
   <string name="w_expert_reg_uri_desc">Format : sip:registrar.net[:port]</string>
   <string name="w_expert_realm">Realm</string>
@@ -37,8 +37,10 @@
   <string name="w_expert_media_transport">Transport média</string>
   <string name="w_expert_mwi_enabled">Notifications boite vocale</string>
   <string name="w_expert_mwi_enabled_desc">S\'enregistrer aux notifications de la boite vocale.</string>
-  <string name="w_expert_allow_via_rewrite">Autoriser la récriture du Via</string>
+  <string name="w_expert_allow_via_rewrite">Autoriser la réécriture du Via</string>
   <string name="w_expert_allow_via_rewrite_desc">Fixe le Via sent-by afin qu\'il utilise la même interface que celle utilisée pour la requête REGISTER</string>
+  <string name="w_expert_allow_sdp_nat_rewrite">Autoriser réécriture du SDP NAT</string>
+  <string name="w_expert_allow_sdp_nat_rewrite_desc">Fixe l\'adresse envoyé dans le SDP à celle de l\'interface utilisée pour la requête REGISTER (Seulement lorsque STUN et ICE ne sont pas utilisés)</string>
   <string name="w_expert_ipv6_media_use">Utiliser l\'IPv6 pour le média</string>
   <string name="w_expert_default_uri_scheme">Schéma d\'URI par défaut</string>
   <string name="w_expert_default_uri_scheme_desc">Protocole à rajouté à l\'URI de l\'appelé si non spécifié</string>

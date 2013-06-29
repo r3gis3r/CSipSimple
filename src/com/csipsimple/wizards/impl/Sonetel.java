@@ -42,9 +42,8 @@ public class Sonetel extends SimpleImplementation {
 	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
 		
-		accountUsername.setTitle(R.string.w_sonetel_email);
-		accountUsername.setDialogTitle(R.string.w_sonetel_email);
-		accountUsername.setDialogMessage(R.string.w_sonetel_email_desc);
+		accountUsername.setTitle(R.string.email_address);
+		accountUsername.setDialogTitle(R.string.email_address);
 		if( ! TextUtils.isEmpty(account.username) && !TextUtils.isEmpty(account.getSipDomain()) ){
 			accountUsername.setText(account.username+"@"+account.getSipDomain());
 		}
@@ -53,7 +52,7 @@ public class Sonetel extends SimpleImplementation {
 	@Override
 	public String getDefaultFieldSummary(String fieldName) {
 		if(fieldName.equals(USER_NAME)) {
-			return parent.getString(R.string.w_sonetel_email_desc);
+			return parent.getString(R.string.email_address);
 		}
 		return super.getDefaultFieldSummary(fieldName);
 	}

@@ -73,11 +73,6 @@ file_filter = res/values-<lang>/wizard_cryptel_strings.xml
 source_file = res/values/wizard_cryptel_strings.xml
 source_lang = en
 
-[csipsimple.wizard_ecs_strings]
-file_filter = res/values-<lang>/wizard_ecs_strings.xml
-source_file = res/values/wizard_ecs_strings.xml
-source_lang = en
-
 [csipsimple.wizard_expert_strings]
 file_filter = res/values-<lang>/wizard_expert_strings.xml
 source_file = res/values/wizard_expert_strings.xml
@@ -101,11 +96,6 @@ source_lang = en
 [csipsimple.wizard_sipgate_strings]
 file_filter = res/values-<lang>/wizard_sipgate_strings.xml
 source_file = res/values/wizard_sipgate_strings.xml
-source_lang = en
-
-[csipsimple.wizard_sonetel_strings]
-file_filter = res/values-<lang>/wizard_sonetel_strings.xml
-source_file = res/values/wizard_sonetel_strings.xml
 source_lang = en
 
 [csipsimple.wizard_sipme_strings]
