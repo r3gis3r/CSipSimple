@@ -2,7 +2,7 @@
 zrtp4pj_repo := git://github.com/r3gis3r/ZRTP4PJ.git
 zrtp4pj_tag := V3.1.0_1
 zrtpcpp_repo := git://github.com/r3gis3r/ZRTPCPP.git
-zrtpcpp_tag := V3.1.0_1
+zrtpcpp_tag := V3.2.0
 
 
 git_update=git fetch --tags; \
