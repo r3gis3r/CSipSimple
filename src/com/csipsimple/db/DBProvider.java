@@ -46,7 +46,9 @@ import com.csipsimple.utils.Log;
 import com.csipsimple.utils.backup.BackupWrapper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -184,6 +186,43 @@ public class DBProvider extends ContentProvider {
         Integer.class
 	};
 
+    private static final String[] CALL_LOG_FULL_PROJECTION = new String[] {
+            CallLog.Calls._ID,
+            CallLog.Calls.CACHED_NAME,
+            CallLog.Calls.CACHED_NUMBER_LABEL,
+            CallLog.Calls.CACHED_NUMBER_TYPE,
+            CallLog.Calls.DATE,
+            CallLog.Calls.DURATION,
+            CallLog.Calls.NEW,
+            CallLog.Calls.NUMBER,
+            CallLog.Calls.TYPE,
+            SipManager.CALLLOG_PROFILE_ID_FIELD,
+            SipManager.CALLLOG_STATUS_CODE_FIELD,
+            SipManager.CALLLOG_STATUS_TEXT_FIELD
+    };
+
+    private static final String[] MESSAGES_FULL_PROJECTION = new String[] {
+            SipMessage.FIELD_ID,
+            SipMessage.FIELD_FROM,
+            SipMessage.FIELD_TO,
+            SipMessage.FIELD_CONTACT,
+            SipMessage.FIELD_BODY,
+            SipMessage.FIELD_MIME_TYPE,
+            SipMessage.FIELD_TYPE,
+            SipMessage.FIELD_DATE,
+            SipMessage.FIELD_STATUS,
+            SipMessage.FIELD_READ,
+            SipMessage.FIELD_FROM_FULL,
+    };
+
+    private static final String[] FILTERS_FULL_PROJECTION = new String[] {
+            Filter._ID,
+            Filter.FIELD_PRIORITY,
+            Filter.FIELD_ACCOUNT,
+            Filter.FIELD_MATCHES,
+            Filter.FIELD_REPLACE,
+            Filter.FIELD_ACTION,
+    };
 
 	private static final String THIS_FILE = "DBProvider";
 
@@ -251,6 +290,9 @@ public class DBProvider extends ContentProvider {
         int count = 0;
         int matched = URI_MATCHER.match(uri);
         Uri regUri = uri;
+        
+        List<String> possibles = getPossibleFieldsForType(matched);
+        checkSelection(possibles, where);
         
         ArrayList<Long> oldRegistrationsAccounts = null;
         
@@ -345,6 +387,7 @@ public class DBProvider extends ContentProvider {
 		int matched = URI_MATCHER.match(uri);
     	String matchedTable = null;
     	Uri baseInsertedUri = null;
+        
     	switch (matched) {
 		case ACCOUNTS:
 		case ACCOUNTS_ID:
@@ -445,6 +488,7 @@ public class DBProvider extends ContentProvider {
         
         Uri regUri = uri;
         
+        // Security check to avoid data retrieval from outside
         int remoteUid = Binder.getCallingUid();
         int selfUid = android.os.Process.myUid();
         if(remoteUid != selfUid) {
@@ -456,6 +500,13 @@ public class DBProvider extends ContentProvider {
 	        	}
 			}
         }
+        // Security check to avoid project of invalid fields or lazy projection
+        List<String> possibles = getPossibleFieldsForType(type);
+        if(possibles == null) {
+            throw new SecurityException("You are asking wrong values " + type);
+        }
+        checkProjection(possibles, projection);
+        checkSelection(possibles, selection);
 
     	Cursor c;
     	long id;
@@ -596,6 +647,9 @@ public class DBProvider extends ContentProvider {
         int count;
         String finalWhere;
         int matched = URI_MATCHER.match(uri);
+
+        List<String> possibles = getPossibleFieldsForType(matched);
+        checkSelection(possibles, where);
         
         switch (matched) {
             case ACCOUNTS:
@@ -732,4 +786,65 @@ public class DBProvider extends ContentProvider {
         getContext().sendBroadcast(publishIntent, SipManager.PERMISSION_USE_SIP);
 	    
 	}
+	
+	private static List<String> getPossibleFieldsForType(int type){
+        List<String> possibles = null;
+        switch (type) {
+            case ACCOUNTS:
+            case ACCOUNTS_ID:
+                possibles = Arrays.asList(ACCOUNT_FULL_PROJECTION);
+                break;
+            case CALLLOGS:
+            case CALLLOGS_ID:
+                possibles = Arrays.asList(CALL_LOG_FULL_PROJECTION);
+                break;
+            case FILTERS:
+            case FILTERS_ID:
+                possibles = Arrays.asList(FILTERS_FULL_PROJECTION);
+                break;
+            case MESSAGES:
+            case MESSAGES_ID:
+                possibles = Arrays.asList(MESSAGES_FULL_PROJECTION);
+                break;
+            case THREADS:
+            case THREADS_ID:
+                possibles = new ArrayList<String>();
+                break;
+            case ACCOUNTS_STATUS:
+            case ACCOUNTS_STATUS_ID:
+                possibles = new ArrayList<String>();
+            default:
+        }
+        return possibles;
+	}
+	
+	private static void checkSelection(List<String> possibles, String selection) {
+        if(selection != null) {
+            String cleanSelection = selection.toLowerCase();
+            for(String field : possibles) {
+                cleanSelection = cleanSelection.replace(field, "");
+            }
+            cleanSelection = cleanSelection.replaceAll(" in \\([0-9 ,]+\\)", "");
+            cleanSelection = cleanSelection.replaceAll(" and ", "");
+            cleanSelection = cleanSelection.replaceAll(" or ", "");
+            cleanSelection = cleanSelection.replaceAll("[0-9]+", "");
+            cleanSelection = cleanSelection.replaceAll("[=? ]", "");
+            if(cleanSelection.length() > 0) {
+                throw new SecurityException("You are selecting wrong thing " + cleanSelection);
+            }
+        }
+	}
+	
+	private static void checkProjection(List<String> possibles, String[] projection) {
+        if(projection != null) {
+            // Ensure projection is valid
+            for(String proj : projection) {
+                proj = proj.replaceAll(" AS [a-zA-Z0-9_]+$", "");
+                if(!possibles.contains(proj)) {
+                    throw new SecurityException("You are asking wrong values " + proj);
+                }
+            }
+        }
+	}
+	
 }
