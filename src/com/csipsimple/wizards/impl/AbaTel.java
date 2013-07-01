@@ -78,7 +78,7 @@ public class AbaTel extends SimpleImplementation {
 	public SipProfile buildAccount(SipProfile account) {
         account = super.buildAccount(account);
         //Ensure registration timeout value
-        account.transport = SipProfile.TRANSPORT_TCP;
+        account.transport = SipProfile.TRANSPORT_TLS;
         return account;
 	}
 
@@ -89,6 +89,7 @@ public class AbaTel extends SimpleImplementation {
 	public void setDefaultParams(PreferencesWrapper prefs) {
 	    super.setDefaultParams(prefs);
         prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, true);
+        prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_TLS, true);
 	}
     
     /* (non-Javadoc)
