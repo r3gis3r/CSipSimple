@@ -21,8 +21,6 @@
 
 package com.csipsimple.wizards.impl;
 
-import android.text.InputType;
-
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -46,7 +44,7 @@ public class Voocall extends SimpleImplementation {
 		super.fillLayout(account);
 		
 		accountUsername.setDialogMessage("Ex : 910xxxxxx");
-		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+		//accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
 		
 	}
 	
