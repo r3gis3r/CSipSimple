@@ -87,13 +87,14 @@ public class CallLogHelper {
 		if(call.isIncoming()) {
 			type = CallLog.Calls.MISSED_TYPE;
 			nonAcknowledge = 1;
-			Log.d("CallLogHelper", "Last status code is "+call.getLastStatusCode());
 			if(callStart > 0) {
 				// Has started on the remote side, so not missed call
 				type = CallLog.Calls.INCOMING_TYPE;
 				nonAcknowledge = 0;
-			}else if(call.getLastStatusCode() == SipCallSession.StatusCode.DECLINE) {
-				// We have intentionally declined this call
+			}else if(call.getLastStatusCode() == SipCallSession.StatusCode.DECLINE ||
+			        call.getLastStatusCode() == SipCallSession.StatusCode.BUSY_HERE ||
+			        call.getLastReasonCode() == 200) {
+				// We have intentionally declined this call or replied elsewhere
 				type = CallLog.Calls.INCOMING_TYPE;
 				nonAcknowledge = 0;
 			}

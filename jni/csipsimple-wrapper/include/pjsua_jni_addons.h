@@ -166,6 +166,7 @@ PJ_DECL(pj_str_t) call_secure_media_info(pjsua_call_id call_id);
 PJ_DECL(int)  call_secure_sig_level(pjsua_call_id call_id);
 PJ_DECL(pj_str_t) get_error_message(int status);
 PJ_DECL(int) get_event_status_code(pjsip_event *e);
+PJ_DECL(int) get_event_reason_code(pjsip_event *e);
 
 PJ_DECL(void) csipsimple_config_default(csipsimple_config *css_cfg);
 PJ_DECL(void) csipsimple_acc_config_default(csipsimple_acc_config* css_acc_cfg);

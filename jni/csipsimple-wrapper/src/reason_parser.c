@@ -1,5 +1,6 @@
 /**
- * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+ * Copyright (C) 2010-2013 Regis Montoya (aka r3gis - www.r3gis.fr)
+ * Copyright (C) 2010-2013 Joachim Breuer - www.jmbreuer.net
  * This file is part of pjsip_android.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -89,12 +90,23 @@ int lookup_q850_cause(const char *cause) {
 }
 
 /**
- * Get Q.850 reason code from pjsip_event
+ * Utility to extract code from SIP cause
  */
-int get_q850_reason_code(pjsip_event *e) {
-	int cause = 0;
+int lookup_sip_cause(const char *cause) {
+       if (pj_ansi_stricmp(cause, "cause=200") == 0) {
+               return 200; // only useful reason code for now
+       } else {
+               return 0;
+       }
+}
+
+/**
+ * Get TAG reason code from pjsip_event
+ */
+int get_reason_code(pjsip_event *e, char* tag, int (*code_parser)(const char*)) {
+	int code = 0;
 	const pj_str_t HDR = { "Reason", 6 };
-	pj_bool_t is_q850 = PJ_FALSE;
+	pj_bool_t has_tag = PJ_FALSE;
 
 	if (e->body.tsx_state.type == PJSIP_EVENT_RX_MSG) {
 
@@ -107,17 +119,17 @@ int get_q850_reason_code(pjsip_event *e) {
 		if (hdr) {
 			char *token = strtok(hdr->hvalue.ptr, ";");
 			while (token != NULL) {
-				if (!is_q850 && pj_ansi_stricmp(token, "Q.850") == 0) {
-					is_q850 = PJ_TRUE;
-				} else if (cause == 0) {
-					cause = lookup_q850_cause(token);
+				if (!has_tag && pj_ansi_stricmp(token, tag) == 0) {
+				    has_tag = PJ_TRUE;
+				} else if (code == 0) {
+				    code = code_parser(token);
 				}
 				token = strtok(NULL, ";");
 			}
 		}
 	}
 
-	return (is_q850) ? cause : 0;
+	return (has_tag) ? code : 0;
 }
 
 
@@ -129,11 +141,19 @@ PJ_DECL(int) get_event_status_code(pjsip_event *e) {
 		return 0;
 	}
 
-	int retval = get_q850_reason_code(e);
+	int retval = get_reason_code(e, "Q.850", &lookup_q850_cause);
 	if (retval > 0) {
 		return retval;
 	} else {
 		return e->body.tsx_state.tsx->status_code;
 	}
 }
-
+/**
+ * Get status code out of the Reason: header of an event.
+ */
+PJ_DECL(int) get_event_reason_code(pjsip_event *e) {
+       if (!e || e->type != PJSIP_EVENT_TSX_STATE) {
+               return 0;
+       }
+       return get_reason_code(e, "SIP", &lookup_sip_cause);
+}

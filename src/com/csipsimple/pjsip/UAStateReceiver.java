@@ -42,6 +42,7 @@ import android.util.SparseArray;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
+import com.csipsimple.api.SipCallSession.StatusCode;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipManager.PresenceStatus;
@@ -131,7 +132,7 @@ public class UAStateReceiver extends Callback {
                             // If there is an ongoing call and we do not support
                             // multiple calls
                             // Send busy here
-                            pjsua.call_hangup(callId, 486, null, null);
+                            pjsua.call_hangup(callId, StatusCode.BUSY_HERE, null, null);
                             unlockCpu();
                             return;
                         } else {
@@ -712,7 +713,7 @@ public class UAStateReceiver extends Callback {
                             }
 
                             // If the call goes out in error...
-                            if (callInfo.getLastStatusCode() != 200) {
+                            if (callInfo.getLastStatusCode() != 200 && callInfo.getLastReasonCode() != 200) {
                                 // We notify the user with toaster
                                 stateReceiver.pjService.service.notifyUserOfMessage(callInfo
                                         .getLastStatusCode()

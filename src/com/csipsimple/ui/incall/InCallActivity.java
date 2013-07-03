@@ -57,6 +57,7 @@ import com.csipsimple.R;
 import com.csipsimple.api.ISipService;
 import com.csipsimple.api.MediaState;
 import com.csipsimple.api.SipCallSession;
+import com.csipsimple.api.SipCallSession.StatusCode;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
@@ -878,7 +879,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                 }
                 case DONT_TAKE_CALL: {
                     if (service != null) {
-                        service.hangup(call.getCallId(), 486);
+                        service.hangup(call.getCallId(), StatusCode.BUSY_HERE);
                     }
                     break;
                 }

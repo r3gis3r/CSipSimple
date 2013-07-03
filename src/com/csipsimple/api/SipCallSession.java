@@ -158,6 +158,7 @@ public class SipCallSession implements Parcelable {
         public static final int METHOD_NOT_ALLOWED = 405;
         public static final int NOT_ACCEPTABLE = 406;
         public static final int INTERVAL_TOO_BRIEF = 423;
+        public static final int BUSY_HERE = 486;
         public static final int INTERNAL_SERVER_ERROR = 500;
         public static final int DECLINE = 603;
         /*
@@ -225,6 +226,7 @@ public class SipCallSession implements Parcelable {
     protected long connectStart = 0;
     protected int lastStatusCode = 0;
     protected String lastStatusComment = "";
+    protected int lastReasonCode = 0;
     protected String mediaSecureInfo = "";
     protected boolean canRecord = false;
     protected boolean isRecording = false;
@@ -284,6 +286,7 @@ public class SipCallSession implements Parcelable {
         hasZrtp = (in.readInt() == 1);
         zrtpSASVerified = (in.readInt() == 1);
         transportSecure = (in.readInt());
+        lastReasonCode = in.readInt();
     }
 
     /**
@@ -319,6 +322,7 @@ public class SipCallSession implements Parcelable {
         dest.writeInt(hasZrtp ? 1 : 0);
         dest.writeInt(zrtpSASVerified ? 1 : 0);
         dest.writeInt(transportSecure);
+        dest.writeInt(lastReasonCode);
     }
 
     /**
@@ -540,6 +544,16 @@ public class SipCallSession implements Parcelable {
         return lastStatusComment;
     }
 
+    /**
+     * Get the latest SIP reason code if any. 
+     * For now only supports 200 (if SIP reason is set to 200) or 0 in other cases (no SIP reason / sip reason set to something different).
+     * 
+     * @return the status code
+     */
+    public int getLastReasonCode() {
+        return lastReasonCode;
+    }
+    
     /**
      * Get whether the call has a video media stream connected
      * 

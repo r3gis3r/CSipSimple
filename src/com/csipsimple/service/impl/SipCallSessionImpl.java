@@ -109,6 +109,15 @@ public class SipCallSessionImpl extends SipCallSession {
     public void setLastStatusComment(String lastStatusComment) {
         this.lastStatusComment = lastStatusComment;
     }
+    
+    /**
+     * Set the last status comment for this call
+     * 
+     * @param lastReasonCode the lastReasonCode to set
+     */
+    public void setLastReasonCode(int lastReasonCode) {
+        this.lastReasonCode = lastReasonCode;
+    }
 
     /**
      * Set the remote contact of this serializable holder
@@ -213,4 +222,5 @@ public class SipCallSessionImpl extends SipCallSession {
         zrtpSASVerified = false;
         hasZrtp = false;
     }
+
 }
