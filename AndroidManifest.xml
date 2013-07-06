@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.csipsimple"
     android:installLocation="auto"
-    android:versionCode="2220"
-    android:versionName="1.00.00" >
+    android:versionCode="2269"
+    android:versionName="1.01.00" >
 
     <supports-screens
         android:anyDensity="true"
