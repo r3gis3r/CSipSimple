@@ -1,5 +1,5 @@
 # This makefile aim is only for now to address source checkout and patch
-opus_tag := v1.0.1
+opus_tag := v1.0.2
 
 all :
 	# For now we do nothing to build - it's made by android_toolchain
