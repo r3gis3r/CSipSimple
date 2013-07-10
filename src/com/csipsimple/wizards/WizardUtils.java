@@ -1010,6 +1010,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_abatel, 10, 
                     new Locale[] {new Locale("sr")}, false, false, 
                     AbaTel.class));
+            WIZARDS_DICT.put("INOVENT", new WizardInfo("INOVENT", "Inovent", 
+                    R.drawable.ic_wizard_inovent, 10, 
+                    new Locale[]{ locale("bg_BG") }, false, false, 
+                    Inovent.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
