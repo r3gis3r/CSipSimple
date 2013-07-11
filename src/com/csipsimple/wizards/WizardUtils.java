@@ -389,6 +389,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_nibtel, 40, 
                     new Locale[]{ }, false, true, 
                     NibTel.class));
+            WIZARDS_DICT.put("SECURECALL", new WizardInfo("SECURECALL", "SecureCall", 
+                    R.drawable.ic_wizard_securecall, 30, 
+                    new Locale[]{ }, false, true, 
+                    SecureCall.class));
             
 			
 			//Locales
