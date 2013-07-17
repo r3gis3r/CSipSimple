@@ -521,7 +521,7 @@ public class WizardUtils {
 						Locale.UK
 					}, false, false, 
 					Ovh.class));
-			WIZARDS_DICT.put("FAYN", new WizardInfo("FAYN", "Fayn", 
+			WIZARDS_DICT.put("FAYN", new WizardInfo("FAYN", "FAYN", 
 					R.drawable.ic_wizard_fayn, 30, 
 					new Locale[]{
 						new Locale("CS", "cz"),
