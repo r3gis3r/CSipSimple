@@ -1018,6 +1018,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_inovent, 10, 
                     new Locale[]{ locale("bg_BG") }, false, false, 
                     Inovent.class));
+            WIZARDS_DICT.put("ADIPTEL", new WizardInfo("ADIPTEL", "ADIPTEL", 
+                    R.drawable.ic_wizard_adiptel, 8, 
+                    new Locale[]{ locale("es") }, false, false, 
+                    AdipTel.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();

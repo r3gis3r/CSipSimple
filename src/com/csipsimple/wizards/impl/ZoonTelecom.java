@@ -51,6 +51,7 @@ public class ZoonTelecom extends SimpleImplementation {
         account.transport = SipProfile.TRANSPORT_TLS;
         account.reg_timeout = 900;
         account.default_uri_scheme = "sips";
+        account.use_srtp = 0;
         return account;
     }
 
