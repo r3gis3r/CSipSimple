@@ -61,16 +61,22 @@ public class MultifonRu extends SimpleImplementation {
 
     }
     
+    /* (non-Javadoc)
+     * @see com.csipsimple.wizards.impl.SimpleImplementation#canTcp()
+     */
+    @Override
+    protected boolean canTcp() {
+        return true;
+    }
+    
     @Override
     public SipProfile buildAccount(SipProfile account) {
         account = super.buildAccount(account);
         account.contact_rewrite_method = 1;
         account.try_clean_registers = 0;
         account.proxies = new String[] {
-                "sbc.multifon.ru;hide"
+                "sip:sbc.multifon.ru;hide"
         };
-        // Apparently they also support tcp to be checked
-        account.transport = SipProfile.TRANSPORT_UDP;
         return account;
     }
 
