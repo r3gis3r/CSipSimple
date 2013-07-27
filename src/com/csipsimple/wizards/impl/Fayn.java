@@ -30,7 +30,7 @@ public class Fayn extends SimpleImplementation {
 
 	@Override
 	protected String getDomain() {
-		return "sip3.fayn.cz";
+		return "sip.fayn.cz";
 	}
 	
 	@Override
