@@ -1030,6 +1030,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_indonix, 8, 
                     new Locale[]{ locale("id") }, false, false, 
                     Indonix.class));
+            WIZARDS_DICT.put("VIPTEL", new WizardInfo("VIPTEL", "VIPTel", 
+                    R.drawable.ic_wizard_viptel, 10, 
+                    new Locale[]{ locale("sk") }, false, false, 
+                    VIPTel.class));
             
             
 		}else {
