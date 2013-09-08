@@ -1034,6 +1034,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_viptel, 10, 
                     new Locale[]{ locale("sk") }, false, false, 
                     VIPTel.class));
+            WIZARDS_DICT.put("SOHO66", new WizardInfo("SOHO66", "Soho66", 
+                    R.drawable.ic_wizard_soho66, 10, 
+                    new Locale[]{ Locale.UK }, false, false, 
+                    Soho66.class));
             
             
 		}else {
