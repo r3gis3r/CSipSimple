@@ -87,7 +87,9 @@ public final class PjSipCalls {
                 
                 // Reason code
                 int reason_code = pjsua.get_event_reason_code(e);
-                session.setLastReasonCode(reason_code);
+                if (reason_code != 0) {
+                    session.setLastReasonCode(reason_code);
+                }
             }
             
             // And now, about secure information

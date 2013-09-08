@@ -237,6 +237,22 @@ public class UAStateReceiver extends Callback {
     }
 
     @Override
+    public void on_call_tsx_state(int call_id, org.pjsip.pjsua.SWIGTYPE_p_pjsip_transaction tsx, pjsip_event e) {
+        lockCpu();
+
+        Log.d(THIS_FILE, "Call TSX state <<");
+        try {
+            updateCallInfoFromStack(call_id, e);
+            Log.d(THIS_FILE, "Call TSX state >>");
+        } catch (SameThreadException ex) {
+            // We don't care about that we are at least in a pjsua thread
+        } finally {
+            // Unlock CPU anyway
+            unlockCpu();
+        }
+    }
+
+    @Override
     public void on_buddy_state(int buddyId) {
         lockCpu();
 

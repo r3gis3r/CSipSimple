@@ -115,9 +115,9 @@ int get_reason_code(pjsip_event *e, char* tag, int (*code_parser)(const char*)) 
 						e->body.tsx_state.src.rdata->msg_info.msg, &HDR, NULL);
 
 		// TODO : check if the header should not be parsed here? -- I don't see how it could work without parsing.
-
 		if (hdr) {
-			char *token = strtok(hdr->hvalue.ptr, ";");
+	        char *reason_header = strdup(hdr->hvalue.ptr);
+			char *token = strtok(reason_header, ";");
 			while (token != NULL) {
 				if (!has_tag && pj_ansi_stricmp(token, tag) == 0) {
 				    has_tag = PJ_TRUE;
@@ -126,6 +126,7 @@ int get_reason_code(pjsip_event *e, char* tag, int (*code_parser)(const char*)) 
 				}
 				token = strtok(NULL, ";");
 			}
+			free(reason_header);
 		}
 	}
 
