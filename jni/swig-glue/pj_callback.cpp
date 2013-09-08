@@ -182,6 +182,12 @@ void on_mwi_info_wrapper (pjsua_acc_id acc_id, pjsua_mwi_info *mwi_info) {
 	registeredCallbackObject->on_mwi_info(acc_id, &mime_type, &body);
 }
 
+pj_status_t on_call_media_transport_state(pjsua_call_id call_id,
+        const pjsua_med_tp_state_info *info)
+{
+    registeredCallbackObject->on_call_media_transport_state(call_id,  info);
+    return PJ_SUCCESS;
+}
 
 #define MAX_COMPARE_LEN 64
 
@@ -393,8 +399,8 @@ struct pjsua_callback wrapper_callback_struct = {
 	&on_call_redirected_wrapper,
 	NULL, //on_mwi_state
 	&on_mwi_info_wrapper,
-	NULL, //on_call_media_transport_state
-	NULL, //on_transport_state
+    NULL, //on_transport_state
+	&on_call_media_transport_state,
 	NULL, //on_ice_transport_error
 	NULL, //on_snd_dev_operation
 	NULL, //on_call_media_event

@@ -322,7 +322,7 @@ zrtp_state_info jzrtp_getInfoFromContext(struct jzrtp_allContext ac){
 	info.cipher.ptr = "";
 	info.secure = PJ_FALSE;
 	info.call_id = PJSUA_INVALID_ID;
-	PJ_LOG(4, (THIS_FILE, "jzrtp_getInfoFromContext : user data %x", ac.cbUserData));
+	//PJ_LOG(4, (THIS_FILE, "jzrtp_getInfoFromContext : user data %x", ac.cbUserData));
 	if(ac.zrtpContext != NULL){
 		int32_t state = zrtp_inState(ac.zrtpContext, SecureState);
 		info.secure = state ? PJ_TRUE : PJ_FALSE;

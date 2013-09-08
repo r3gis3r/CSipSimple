@@ -66,6 +66,8 @@ public:
 	virtual void on_nat_detect (const pj_stun_nat_detect_result *res) {}
 	virtual pjsip_redirect_op on_call_redirected (pjsua_call_id call_id, const pj_str_t *target) {}
 	virtual void on_mwi_info (pjsua_acc_id acc_id, const pj_str_t *mime_type, const pj_str_t *body) {}
+	virtual void on_call_media_transport_state(pjsua_call_id call_id, const pjsua_med_tp_state_info *info) {}
+
 
 	virtual pj_status_t on_validate_audio_clock_rate (int clock_rate) {}
 	virtual void on_setup_audio (pj_bool_t before_init) {}
