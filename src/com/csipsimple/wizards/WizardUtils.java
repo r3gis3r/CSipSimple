@@ -1038,6 +1038,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_soho66, 10, 
                     new Locale[]{ Locale.UK }, false, false, 
                     Soho66.class));
+            WIZARDS_DICT.put("HIBRITEL", new WizardInfo("HIBRITEL", "Hibritel", 
+                    R.drawable.ic_wizard_hibritel, 10, 
+                    new Locale[]{ locale("es_ES") }, false, false, 
+                    Hibritel.class));
             
             
 		}else {
