@@ -48,6 +48,7 @@ import android.os.RemoteException;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.view.SurfaceView;
 import android.widget.Toast;
 
 import com.csipsimple.R;
@@ -77,8 +78,6 @@ import com.csipsimple.utils.ExtraPlugins.DynActivityPlugin;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.PreferencesWrapper;
-
-import org.pjsip.pjsua.pjsua;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -769,7 +768,7 @@ public class SipService extends Service {
 				
 				@Override
 				protected void doRun() throws SameThreadException {
-					pjsua.conf_connect(0, 0);
+				    pjService.startLoopbackTest();
 				}
 			};
 			
@@ -789,7 +788,7 @@ public class SipService extends Service {
 				
 				@Override
 				protected void doRun() throws SameThreadException {
-					pjsua.conf_disconnect(0, 0);
+				    pjService.stopLoopbackTest();
 				}
 			};
 			
@@ -1978,7 +1977,7 @@ public class SipService extends Service {
     }
     
     
-    public static void setVideoWindow(int callId, Object window, boolean local) {
+    public static void setVideoWindow(int callId, SurfaceView window, boolean local) {
         if(singleton != null) {
             if(local) {
                 singleton.setCaptureVideoWindow(window);
@@ -1988,19 +1987,19 @@ public class SipService extends Service {
         }
     }
 
-    private void setRenderVideoWindow(final int callId, final Object window) {
+    private void setRenderVideoWindow(final int callId, final SurfaceView window) {
         getExecutor().execute(new SipRunnable() {
             @Override
             protected void doRun() throws SameThreadException {
-                pjsua.vid_set_android_renderer(callId, window);
+                pjService.setVideoAndroidRenderer(callId, window);
             }
         });
     }
-    private void setCaptureVideoWindow(final Object window) {
+    private void setCaptureVideoWindow(final SurfaceView window) {
         getExecutor().execute(new SipRunnable() {
             @Override
             protected void doRun() throws SameThreadException {
-                pjsua.vid_set_android_capturer(window);
+                pjService.setVideoAndroidCapturer(window);
             }
         });
     }

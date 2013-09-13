@@ -36,6 +36,7 @@ import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
+import android.view.SurfaceView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
@@ -2250,6 +2251,11 @@ public class PjSipService {
         return "";
     }
 
+    /**
+     * Get the signal level
+     * @param port The pjsip port to get signal from
+     * @return an encoded long with rx level on higher byte and tx level on lower byte
+     */
     public long getRxTxLevel(int port) {
         long[] rx_level = new long[1];
         long[] tx_level = new long[1];
@@ -2257,6 +2263,23 @@ public class PjSipService {
         return (rx_level[0] << 8 | tx_level[0]);
     }
 
+    /**
+     * Connect mic source to speaker output.
+     * Usefull for tests.
+     */
+    public void startLoopbackTest() {
+        pjsua.conf_connect(0, 0);
+    }
+    
+    /**
+     * Stop connection between mic source to speaker output.
+     * @see startLoopbackTest
+     */
+    public void stopLoopbackTest() {
+        pjsua.conf_disconnect(0, 0);
+    }
+    
+    
     private Map<String, PjsipModule> pjsipModules = new HashMap<String, PjsipModule>();
 
     private void initModules() {
@@ -2298,5 +2321,23 @@ public class PjSipService {
          */
         void onBeforeAccountStartRegistration(int pjId, SipProfile acc);
     }
+
+    /**
+     * Provide video render surface to native code.  
+     * @param callId The call id for this video surface
+     * @param window The video surface object
+     */
+    public void setVideoAndroidRenderer(int callId, SurfaceView window) {
+        pjsua.vid_set_android_renderer(callId, (Object) window);
+    }
+
+    /**
+     * Provide video capturer surface view (the one binded to camera).
+     * @param window The surface view object
+     */
+    public void setVideoAndroidCapturer(SurfaceView window) {
+        pjsua.vid_set_android_capturer((Object) window);
+    }
+
 
 }
