@@ -402,9 +402,12 @@ public class UAStateReceiver extends Callback {
              * Connect ports appropriately when media status is ACTIVE or REMOTE
              * HOLD, otherwise we should NOT connect the ports.
              */
+            boolean connectToOtherCalls = false;
+            int callConfSlot = callInfo.getConfPort();
             if (callInfo.getMediaStatus() == SipCallSession.MediaState.ACTIVE ||
                     callInfo.getMediaStatus() == SipCallSession.MediaState.REMOTE_HOLD) {
-                int callConfSlot = callInfo.getConfPort();
+                
+                connectToOtherCalls = true;
                 pjsua.conf_connect(callConfSlot, 0);
                 pjsua.conf_connect(0, callConfSlot);
 
@@ -419,7 +422,32 @@ public class UAStateReceiver extends Callback {
                     pjService
                             .startRecording(callId, SipManager.BITMASK_IN | SipManager.BITMASK_OUT);
                 }
+            }
+            
 
+            // Connects/disconnnect to other active calls (for conferencing).
+            synchronized (callsList) {
+                if (callsList != null) {
+                    for (int i = 0; i < callsList.size(); i++) {
+                        SipCallSessionImpl otherCallInfo = getCallInfo(i);
+                        if (otherCallInfo != null && otherCallInfo != callInfo) {
+                            int otherMediaStatus = otherCallInfo.getMediaStatus();
+                            if(otherCallInfo.isActive() && otherMediaStatus !=  SipCallSession.MediaState.NONE) {
+                                boolean connect = connectToOtherCalls && (otherMediaStatus == SipCallSession.MediaState.ACTIVE ||
+                                                                                                                    otherMediaStatus == SipCallSession.MediaState.REMOTE_HOLD);
+                                int otherCallConfSlot = otherCallInfo.getConfPort();
+                                if(connect) {
+                                    pjsua.conf_connect(callConfSlot, otherCallConfSlot);
+                                    pjsua.conf_connect(otherCallConfSlot, callConfSlot);
+                                }else {
+                                    pjsua.conf_disconnect(callConfSlot, otherCallConfSlot);
+                                    pjsua.conf_disconnect(otherCallConfSlot, callConfSlot);
+                                }
+                            }
+                            
+                        }
+                    }
+                }
             }
 
             msgHandler.sendMessage(msgHandler.obtainMessage(ON_MEDIA_STATE, callInfo));
