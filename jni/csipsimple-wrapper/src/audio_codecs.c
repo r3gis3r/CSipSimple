@@ -16,6 +16,7 @@
  */
 
 #include "csipsimple_internal.h"
+#include "pjsip_opus_sdp_rewriter.h"
 
 #include <pjmedia-codec.h>
 #include <pjmedia/g711.h>
@@ -145,6 +146,10 @@ PJ_DEF(pj_status_t) pjmedia_codec_register_audio_codecs(pjmedia_endpt *endpt,
 			}
     	}
 	}
+
+	// Register opus sdp rewriter
+	// TODO -- get info from registrations made previously + only when opus detected
+	pjsip_opus_sdp_rewriter_init(16000);
 
 	return PJ_SUCCESS;
 }

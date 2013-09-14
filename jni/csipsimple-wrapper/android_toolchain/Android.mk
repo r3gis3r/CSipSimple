@@ -39,6 +39,7 @@ JNI_SRC_DIR := src
 LOCAL_SRC_FILES := $(JNI_SRC_DIR)/pjsua_jni_addons.c \
 	$(JNI_SRC_DIR)/reason_parser.c \
 	$(JNI_SRC_DIR)/zrtp_android.c $(JNI_SRC_DIR)/zrtp_android_callback.cpp \
+	$(JNI_SRC_DIR)/pjsip_opus_sdp_rewriter.c \
 	$(JNI_SRC_DIR)/ringback_tone.c \
 	$(JNI_SRC_DIR)/android_logger.c $(JNI_SRC_DIR)/audio_codecs.c \
 	$(JNI_SRC_DIR)/csipsimple_codecs_utils.c 

@@ -89,6 +89,7 @@ static struct opus_factory {
 	pj_pool_t *pool;
 	pj_mutex_t *mutex;
 	pjmedia_codec codec_list;
+	unsigned internal_clock_rate;
 } opus_factory;
 
 /* OPUS codec private data. */
@@ -193,6 +194,9 @@ PJ_DEF(pj_status_t) pjmedia_codec_opus_init(pjmedia_endpt *endpt) {
 	opus_factory.base.op = &opus_factory_op;
 	opus_factory.base.factory_data = NULL;
 	opus_factory.endpt = endpt;
+	if(opus_factory.internal_clock_rate == 0){
+	    opus_factory.internal_clock_rate = 16000;
+	}
 
 	/* Create pool */
 	opus_factory.pool = pjmedia_endpt_create_pool(endpt, "opus codecs", 4000,
@@ -236,6 +240,17 @@ PJ_DEF(pj_status_t) pjmedia_codec_opus_init(pjmedia_endpt *endpt) {
 	}
 
 	return status;
+}
+
+
+/*
+ * Change the internal clock rate for opus codec.
+ * This should ideally be the same than audio device clock rate
+ */
+PJ_DEF(pj_status_t) pjmedia_codec_opus_set_internal_clock_rate(unsigned clock_rate)
+{
+    opus_factory.internal_clock_rate = clock_rate;
+    return PJ_SUCCESS;
 }
 
 /*
@@ -328,17 +343,7 @@ static pj_status_t opus_default_attr(pjmedia_codec_factory *factory,
 	 +-------+---------+-----------+
 	 */
 	attr->info.channel_cnt = 1;
-	/*
-	 * TODO : would like to use 16kHz as internal clock rate in our case
-	 * pjmedia seems to have no support of different clock rate for RTP
-	 * and for associated port. Keeping 48kHz for RTP is needed (we just have
-	 * to transform timestamps) but to feed codec with 16kHz frames seems requires
-	 * some extra work in pjmedia.
-	 * For now we are obliged to use pjmedia resampler while would be
-	 * more efficient to use the Opus feature instead.
-	 * Using g722 hack was tried but seems useless.
-	 */
-	attr->info.clock_rate = 48000;
+	attr->info.clock_rate = opus_factory.internal_clock_rate;
 	attr->info.avg_bps = 20000;
 	attr->info.max_bps = 32000;
 	attr->info.frm_ptime = FRAME_LENGTH_MS;
@@ -388,7 +393,7 @@ static pj_status_t opus_enum_codecs(pjmedia_codec_factory *factory,
 	codecs[*count].encoding_name = pj_str("opus");
 	codecs[*count].pt = PJMEDIA_RTP_PT_OPUS;
 	codecs[*count].type = PJMEDIA_TYPE_AUDIO;
-	codecs[*count].clock_rate = 48000;
+	codecs[*count].clock_rate = opus_factory.internal_clock_rate;
 	codecs[*count].channel_cnt = 1;
 
 	++*count;
