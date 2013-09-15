@@ -34,4 +34,6 @@
         <item>@null</item>
     </array>
 
+    <dimen name="incall_bottom_bar_height">80dip</dimen>
+
 </resources>

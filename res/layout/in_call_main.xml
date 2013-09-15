@@ -86,7 +86,8 @@
         <com.csipsimple.ui.incall.InCallControls
             android:id="@+id/inCallControls"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@drawable/incall_bottom_bar_bg" />
     </LinearLayout>
 
     <com.csipsimple.ui.incall.locker.ScreenLocker

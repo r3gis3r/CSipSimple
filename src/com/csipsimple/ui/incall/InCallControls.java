@@ -74,7 +74,7 @@ public class InCallControls extends FrameLayout implements Callback {
         }
         
         final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.WRAP_CONTENT);
+                (int) getResources().getDimension(R.dimen.incall_bottom_bar_height));
         ActionMenuPresenter mActionMenuPresenter = new ActionMenuPresenter(getContext()) {
             public void bindItemView(MenuItemImpl item, MenuView.ItemView itemView) {
                 super.bindItemView(item, itemView);
