@@ -33,8 +33,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 
-import com.csipsimple.utils.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -187,7 +185,6 @@ public class TargetDrawable {
                 d.setState(possState);
                 Drawable childDrawable = d.getCurrent();
                 if(childDrawable != null) {
-                    Log.w("TD", "Set for child : " + maxHeight + "x"+maxWidth);
                     maxWidth = Math.max(maxWidth, childDrawable.getIntrinsicWidth());
                     maxHeight = Math.max(maxHeight, childDrawable.getIntrinsicHeight());
                 }

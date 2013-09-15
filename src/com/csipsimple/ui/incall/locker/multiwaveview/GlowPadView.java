@@ -283,10 +283,10 @@ public class GlowPadView extends View implements IOnLeftRightProvider {
 
     }
 
-    private int getResourceId(TypedArray a, int id) {
-        TypedValue tv = a.peekValue(id);
-        return tv == null ? 0 : tv.resourceId;
-    }
+//    private int getResourceId(TypedArray a, int id) {
+//        TypedValue tv = a.peekValue(id);
+//        return tv == null ? 0 : tv.resourceId;
+//    }
 
     public void suspendAnimations() {
         mWaveAnimations.setSuspended(true);

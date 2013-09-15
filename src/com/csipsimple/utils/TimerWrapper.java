@@ -62,6 +62,7 @@ public class TimerWrapper extends BroadcastReceiver {
 	private boolean serviceRegistered = false;
 	
 	private final List<Integer> scheduleEntries = new ArrayList<Integer>();
+    private final List<Long> scheduleTimes = new ArrayList<Long>();
 
     private SipTimersExecutor mExecutor;
 	
@@ -121,6 +122,7 @@ public class TimerWrapper extends BroadcastReceiver {
 			}
 		}
 		scheduleEntries.clear();
+		scheduleTimes.clear();
 //		hashOffset ++;
 //		hashOffset = hashOffset % 10;
 	}
@@ -135,18 +137,34 @@ public class TimerWrapper extends BroadcastReceiver {
 	}
 	*/
 
-	private PendingIntent getPendingIntentForTimer(int entryId) {
+    private PendingIntent getPendingIntentForTimer(int entryId) {
+        return getPendingIntentForTimer(entryId, null);
+    }
+    
+	private PendingIntent getPendingIntentForTimer(int entryId, Long expires) {
 		Intent intent = new Intent(TIMER_ACTION);
 		String toSend = EXTRA_TIMER_SCHEME + "://" + Integer.toString(entryId);
 		intent.setData(Uri.parse(toSend));
 		intent.putExtra(EXTRA_TIMER_ENTRY, entryId);
+		if(expires != null) {
+	        intent.putExtra(EXTRA_TIMER_EXPIRATION, expires);
+		}
 		return PendingIntent.getBroadcast(service, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 	}
 	
 	
 	private synchronized int doSchedule(int entryId, int intervalMs) {
 		//Log.d(THIS_FILE, "SCHED add " + entryId + " in " + intervalMs);
-		PendingIntent pendingIntent = getPendingIntentForTimer(entryId);
+        long firstTime = SystemClock.elapsedRealtime();
+        // Clamp min
+        if(intervalMs < 10) {
+            firstTime +=  10;
+        }else {
+            firstTime += intervalMs;
+        }
+        
+		PendingIntent pendingIntent = getPendingIntentForTimer(entryId, firstTime);
+		
 		
 		// If less than 1 sec, do not wake up -- that's probably stun check so useless to wake up about that
 		//int alarmType = (intervalMs < 1000) ? AlarmManager.ELAPSED_REALTIME : AlarmManager.ELAPSED_REALTIME_WAKEUP;
@@ -154,52 +172,51 @@ public class TimerWrapper extends BroadcastReceiver {
 		
 		// Cancel previous reg anyway
 		alarmManager.cancel(pendingIntent);
-		scheduleEntries.remove((Integer) entryId);
-		
-		
-		long firstTime = SystemClock.elapsedRealtime();
-		// Clamp min
-		if(intervalMs < 10) {
-			firstTime +=  10;
-		}else {
-			firstTime += intervalMs;
+		int existingReg = scheduleEntries.indexOf((Integer) entryId);
+		if(existingReg != -1) {
+		    scheduleEntries.remove(existingReg);
+		    scheduleTimes.remove(existingReg);
 		}
 		
 		// Push next
-        Log.v(THIS_FILE, "Schedule " + entryId + " in " + intervalMs + "ms");
+        Log.v(THIS_FILE, "Schedule TIMER " + entryId + " in " + intervalMs + "ms @ " + firstTime);
 		alarmManager.set(alarmType, firstTime, pendingIntent);
 		scheduleEntries.add((Integer) entryId);
+        scheduleTimes.add((Long) firstTime);
 		return 1;
 	}
 	
 	private synchronized int doCancel(int entryId) {
-        Log.v(THIS_FILE, "Cancel " + entryId );
+        Log.v(THIS_FILE, "Cancel TIMER" + entryId );
 		alarmManager.cancel(getPendingIntentForTimer(entryId));
-		scheduleEntries.remove((Integer) entryId);
+        int existingReg = scheduleEntries.indexOf((Integer) entryId);
+        if(existingReg != -1) {
+            scheduleEntries.remove(existingReg);
+            scheduleTimes.remove(existingReg);
+        }
 		return 1;
 	}
 	
 	
 	private final static String EXTRA_TIMER_ENTRY = "entry";
+    private final static String EXTRA_TIMER_EXPIRATION = "expires";
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		
 		if(TIMER_ACTION.equalsIgnoreCase(intent.getAction())) {
-			Log.v(THIS_FILE, "FIRE Received...");
 			if(singleton == null) {
 				Log.w(THIS_FILE, "Not found singleton");
 				return;
 			}
 			int timerEntry = intent.getIntExtra(EXTRA_TIMER_ENTRY, -1);
-
-            Log.v(THIS_FILE, "Treat " + timerEntry);
-			singleton.treatAlarm(timerEntry);
+            Log.v(THIS_FILE, "FIRE Received TIMER " + timerEntry + " " + intent.getLongExtra(EXTRA_TIMER_EXPIRATION, 0) + " vs " + SystemClock.elapsedRealtime());
+			singleton.treatAlarm(timerEntry, intent.getLongExtra(EXTRA_TIMER_EXPIRATION, 0));
 		}
 	}
 	
-	public void treatAlarm(int entry) {
-		getExecutor().execute(new TimerJob(entry));
+	public void treatAlarm(int entry, long fireTime) {
+		getExecutor().execute(new TimerJob(entry, fireTime));
 	}
 	
 	//private final Handler handler = new Handler();
@@ -288,9 +305,11 @@ public class TimerWrapper extends BroadcastReceiver {
 
 	private class TimerJob implements Runnable {
 		private final int entryId;
+		private final long fireTime;
 		
-		public TimerJob(int anEntry) {
+		public TimerJob(int anEntry, long aFireTime) {
 			entryId = anEntry;
+			fireTime = aFireTime;
 			wakeLock.acquire(this);
 		}
 		
@@ -301,10 +320,14 @@ public class TimerWrapper extends BroadcastReceiver {
 			try {
 			    boolean doFire = false;
 			    synchronized (TimerWrapper.this) {
-	                if(scheduleEntries.contains(entryId)) {
-	                    scheduleEntries.remove((Integer) entryId);
-	                    doFire = true;
-	                }
+			        int existingReg = scheduleEntries.indexOf((Integer) entryId);
+			        if(existingReg != -1) {
+			            if(scheduleTimes.get(existingReg) == fireTime) {
+			                doFire = true;
+			            }
+			            scheduleEntries.remove(existingReg);
+			            scheduleTimes.remove(existingReg);
+			        }
                 }
 			    if(doFire) {
 			        pjsua.pj_timer_fire(entryId);
