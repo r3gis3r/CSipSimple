@@ -286,6 +286,9 @@
     <string name="start_with_text_dialer_desc">Start with text dialer</string>
     <string name="use_alternate_unlocker">Don\'t use slide answer</string>
     <string name="use_alternate_unlocker_desc">Use buttons instead of slide to take incoming calls</string>
+    <string name="slider">Slider</string>
+    <string name="buttons">Buttons</string>
+    <string name="glowpad">GlowPad</string>
     <string name="keep_awake_incall">Keep awake while on call</string>
     <string name="keep_awake_incall_desc">Fixes if you get choppy sound when screen turn off while in WIFI call</string>
     <string name="use_partial_wake_lock">Use partial wake lock</string>

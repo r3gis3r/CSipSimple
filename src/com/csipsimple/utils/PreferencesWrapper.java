@@ -129,6 +129,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.DIAL_PRESS_TONE_MODE, Integer.toString(SipConfigManager.GENERIC_TYPE_AUTO));
 		put(SipConfigManager.DIAL_PRESS_VIBRATE_MODE, Integer.toString(SipConfigManager.GENERIC_TYPE_AUTO));
         put(SipConfigManager.DTMF_PRESS_TONE_MODE, Integer.toString(SipConfigManager.GENERIC_TYPE_PREVENT));
+        put(SipConfigManager.UNLOCKER_TYPE, Integer.toString(SipConfigManager.GENERIC_TYPE_AUTO));
 		
 		put(SipConfigManager.DEFAULT_CALLER_ID, "");
 		put(SipConfigManager.THEME, "");
@@ -204,7 +205,6 @@ public class PreferencesWrapper {
 		put(SipConfigManager.INTEGRATE_WITH_CALLLOGS, true);
 		put(SipConfigManager.INTEGRATE_WITH_DIALER, true);
 		put(SipConfigManager.INTEGRATE_TEL_PRIVILEGED, false);
-		put(SipConfigManager.USE_ALTERNATE_UNLOCKER, false);
 		put(HAS_BEEN_QUIT, false);
 		put(HAS_ALREADY_SETUP_SERVICE, false);
 		put(SipConfigManager.LOG_USE_DIRECT_FILE, false);

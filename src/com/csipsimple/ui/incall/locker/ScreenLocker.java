@@ -19,7 +19,7 @@
  *  along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.csipsimple.widgets;
+package com.csipsimple.ui.incall.locker;
 
 import android.app.Activity;
 import android.content.Context;
@@ -34,6 +34,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.csipsimple.R;
+import com.csipsimple.ui.incall.locker.slidingtab.SlidingTab;
 
 import java.lang.ref.WeakReference;
 import java.util.Timer;

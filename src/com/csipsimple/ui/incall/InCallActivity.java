@@ -65,14 +65,15 @@ import com.csipsimple.service.SipService;
 import com.csipsimple.ui.PickupSipUri;
 import com.csipsimple.ui.incall.CallProximityManager.ProximityDirector;
 import com.csipsimple.ui.incall.DtmfDialogFragment.OnDtmfListener;
+import com.csipsimple.ui.incall.locker.IOnLeftRightChoice;
+import com.csipsimple.ui.incall.locker.InCallAnswerControls;
+import com.csipsimple.ui.incall.locker.ScreenLocker;
 import com.csipsimple.utils.CallsUtils;
 import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 import com.csipsimple.utils.Theme;
 import com.csipsimple.utils.keyguard.KeyguardWrapper;
-import com.csipsimple.widgets.IOnLeftRightChoice;
-import com.csipsimple.widgets.ScreenLocker;
 
 import org.webrtc.videoengine.ViERenderer;
 

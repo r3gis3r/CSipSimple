@@ -1,0 +1,44 @@
+<!--
+    Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+    Copyright (C) 2009 The Android Open Source Project 
+
+    This file is part of CSipSimple. CSipSimple is free software: you can
+    redistribute it and/or modify it under the terms of the GNU General
+    Public License as published by the Free Software Foundation, either
+    version 3 of the License, or (at your option) any later version.
+
+    CSipSimple is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    General Public License for more details. You should have received a
+    copy of the GNU General Public License along with CSipSimple. If not,
+    see <http://www.gnu.org/licenses/>.
+-->
+<resources>
+
+    <!-- Size of lockscreen outerring on unsecure unlock LockScreen -->
+    <dimen name="keyguard_lockscreen_outerring_diameter">270dp</dimen>
+
+    <!-- Default target placement radius for GlowPadView. Should be 1/2 of outerring diameter. -->
+    <dimen name="glowpadview_target_placement_radius">135dip</dimen>
+
+    <!-- Default glow radius for GlowPadView -->
+    <dimen name="glowpadview_glow_radius">75dip</dimen>
+
+    <!-- Default distance beyond which GlowPadView snaps to the matching target -->
+    <dimen name="glowpadview_snap_margin">40dip</dimen>
+
+    <!-- Default distance from each snap target that GlowPadView considers a "hit" -->
+    <dimen name="glowpadview_inner_radius">15dip</dimen>
+
+    <!-- Circle size for incoming call widget's each item. -->
+    <dimen name="incoming_call_widget_circle_size">94dp</dimen>
+    <!--
+Margin used for incoming call widget's icon for each item.
+This should be same as "(incoming_call_widget_circle_size - icon_size)/2".
+Right now answer/decline/reject icons have 38dp width/height.
+So, (94 - 38)/2 ==> 28dp
+    -->
+    <dimen name="incoming_call_widget_asset_margin">28dp</dimen>
+
+</resources>

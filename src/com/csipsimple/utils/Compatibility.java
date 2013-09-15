@@ -569,9 +569,6 @@ public final class Compatibility {
         preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.DO_FOCUS_AUDIO,
                 shouldFocusAudio());
 
-        preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ALTERNATE_UNLOCKER,
-                isTabletScreen(preferencesWrapper.getContext()));
-
         boolean usePriviledged = shouldUsePriviledgedIntegration(preferencesWrapper.getContext());
         preferencesWrapper.setPreferenceBooleanValue(SipConfigManager.INTEGRATE_TEL_PRIVILEGED,
                 usePriviledged);
@@ -802,10 +799,6 @@ public final class Compatibility {
             prefWrapper.setPreferenceStringValue(SipConfigManager.TIMER_SESS_EXPIRES, "1800");
             resetCodecsSettings(prefWrapper);
         }
-        if (lastSeenVersion < 1142) {
-            prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_ALTERNATE_UNLOCKER,
-                    isTabletScreen(prefWrapper.getContext()));
-        }
         if (lastSeenVersion < 1581 && needWebRTCImplementation()) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_WEBRTC_HACK,
                     needWebRTCImplementation());
@@ -930,6 +923,9 @@ public final class Compatibility {
         if (lastSeenVersion < 2254 && android.os.Build.MODEL.equalsIgnoreCase("XT320")) {
             prefWrapper.setPreferenceBooleanValue(SipConfigManager.KEEP_AWAKE_IN_CALL,
                     needPspWorkaround());
+        }
+        if (lastSeenVersion < 2297) {
+            prefWrapper.setPreferenceStringValue(SipConfigManager.UNLOCKER_TYPE, Integer.toString(SipConfigManager.GENERIC_TYPE_AUTO));
         }
         prefWrapper.endEditing();
     }

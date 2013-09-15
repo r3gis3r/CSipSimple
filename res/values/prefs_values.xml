@@ -173,6 +173,18 @@
         <item>@string/force</item>
         <item>@string/prevent</item>
     </string-array>
+    <string-array name="unlocker_type_values">
+        <item>0</item> <!-- Auto -->
+        <item>1</item> <!-- Slider -->
+        <item>2</item> <!-- Buttons -->
+        <item>3</item> <!-- GlowPad -->
+    </string-array>
+    <string-array name="unlocker_type_choices">
+        <item>@string/use_android_setting</item>
+        <item>@string/slider</item>
+        <item>@string/buttons</item>
+        <item>@string/glowpad</item>
+    </string-array>
     <string-array name="band_types">
         <item>nb</item>
         <item>wb</item>

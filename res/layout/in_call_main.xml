@@ -74,7 +74,7 @@
 
         <!-- Answer slider/buttons -->
 
-        <com.csipsimple.ui.incall.InCallAnswerControls
+        <com.csipsimple.ui.incall.locker.InCallAnswerControls
             android:id="@+id/inCallAnswerControls"
             android:layout_width="match_parent"
             android:layout_height="0dip"
@@ -89,7 +89,7 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <com.csipsimple.widgets.ScreenLocker
+    <com.csipsimple.ui.incall.locker.ScreenLocker
         android:id="@+id/lockerOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -104,6 +104,6 @@
 			android:text="@string/touch_lock" android:textAppearance="?android:attr/textAppearanceLarge"
 			android:background="@drawable/dialpad_lock" />
         -->
-    </com.csipsimple.widgets.ScreenLocker>
+    </com.csipsimple.ui.incall.locker.ScreenLocker>
 
 </RelativeLayout>

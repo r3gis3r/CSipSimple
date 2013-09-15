@@ -23,7 +23,7 @@
  * Copyright (C) 2008-2009 The Android Open Source Project
  */
 
-package com.csipsimple.widgets;
+package com.csipsimple.ui.incall.locker.buttons;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -31,9 +31,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.csipsimple.R;
-import com.csipsimple.widgets.IOnLeftRightChoice.IOnLeftRightProvider;
+import com.csipsimple.ui.incall.locker.IOnLeftRightChoice;
+import com.csipsimple.ui.incall.locker.IOnLeftRightChoice.IOnLeftRightProvider;
+import com.csipsimple.ui.incall.locker.IOnLeftRightChoice.TypeOfLock;
+import com.csipsimple.ui.incall.locker.LeftRightChooserUtils;
+
+import java.util.ArrayList;
 
 public class AlternateUnlocker extends LinearLayout implements IOnLeftRightProvider, OnClickListener {
 
@@ -81,6 +87,51 @@ public class AlternateUnlocker extends LinearLayout implements IOnLeftRightProvi
                 onTriggerListener.onLeftRightChoice(IOnLeftRightChoice.RIGHT_HANDLE);
             }
         }
+    }
+
+    /* (non-Javadoc)
+     * @see com.csipsimple.ui.incall.locker.IOnLeftRightChoice.IOnLeftRightProvider#applyTargetTitles(int)
+     */
+    @Override
+    public void applyTargetTitles(int resArrayTitles) {
+        ArrayList<String> strings = LeftRightChooserUtils.loadTargetsDescriptions(getContext(),
+                resArrayTitles);
+        ((TextView) findViewById(R.id.dontTakeCallButtonTxt)).setText(strings.get(0));
+        ((TextView) findViewById(R.id.takeCallButtonTxt)).setText(strings.get(1));
+        
+    }
+
+    /* (non-Javadoc)
+     * @see com.csipsimple.ui.incall.locker.IOnLeftRightChoice.IOnLeftRightProvider#setTypeOfLock(com.csipsimple.ui.incall.locker.IOnLeftRightChoice.TypeOfLock)
+     */
+    @Override
+    public void setTypeOfLock(TypeOfLock lock) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    /* (non-Javadoc)
+     * @see com.csipsimple.ui.incall.locker.IOnLeftRightChoice.IOnLeftRightProvider#getLayoutingHeight()
+     */
+    @Override
+    public int getLayoutingHeight() {
+        return LayoutParams.MATCH_PARENT;
+    }
+
+    /* (non-Javadoc)
+     * @see com.csipsimple.ui.incall.locker.IOnLeftRightChoice.IOnLeftRightProvider#getLayoutingHeight()
+     */
+    @Override
+    public int getLayoutingWidth() {
+        return LayoutParams.MATCH_PARENT;
+    }
+
+    /* (non-Javadoc)
+     * @see com.csipsimple.ui.incall.locker.IOnLeftRightChoice.IOnLeftRightProvider#resetView()
+     */
+    @Override
+    public void resetView() {
+        // Nothing to do for this widget
     }
 
 

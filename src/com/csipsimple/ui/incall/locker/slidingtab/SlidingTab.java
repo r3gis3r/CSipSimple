@@ -23,7 +23,7 @@
  * Copyright (C) 2008-2009 The Android Open Source Project
  */
 
-package com.csipsimple.widgets;
+package com.csipsimple.ui.incall.locker.slidingtab;
 
 import android.content.Context;
 import android.graphics.Rect;
@@ -40,8 +40,14 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.internal.utils.UtilityWrapper;
 import com.csipsimple.R;
+import com.csipsimple.ui.incall.locker.IOnLeftRightChoice;
+import com.csipsimple.ui.incall.locker.IOnLeftRightChoice.IOnLeftRightProvider;
+import com.csipsimple.ui.incall.locker.IOnLeftRightChoice.TypeOfLock;
+import com.csipsimple.ui.incall.locker.LeftRightChooserUtils;
+import com.csipsimple.ui.incall.locker.multiwaveview.GlowPadView.OnTriggerListener;
 import com.csipsimple.utils.Log;
-import com.csipsimple.widgets.IOnLeftRightChoice.IOnLeftRightProvider;
+
+import java.util.ArrayList;
 
 /**
  * A special widget containing two Sliders and a threshold for each. Moving
@@ -168,6 +174,10 @@ public class SlidingTab extends ViewGroup implements IOnLeftRightProvider {
 		private void setHintText(int resId) {
 			text.setText(resId);
 		}
+		
+        private void setHintText(String str) {
+            text.setText(str);
+        }
 
 		private void hide() {
 			text.setVisibility(View.INVISIBLE);
@@ -441,6 +451,15 @@ public class SlidingTab extends ViewGroup implements IOnLeftRightProvider {
 	public void setLeftHintText(int resId) {
 		leftSlider.setHintText(resId);
 	}
+	
+    /**
+     * Sets the left handle hint text to a given string.
+     * 
+     * @param str
+     */
+    public void setLeftHintText(String str) {
+        leftSlider.setHintText(str);
+    }
 
 	/**
 	 * Sets the right handle icon to a given resource.
@@ -472,6 +491,14 @@ public class SlidingTab extends ViewGroup implements IOnLeftRightProvider {
 	public void setRightHintText(int resId) {
 		rightSlider.setHintText(resId);
 	}
+	
+    /**
+     * Sets the left handle hint text to a given string.
+     * @param str
+     */
+    public void setRightHintText(String str) {
+        rightSlider.setHintText(str);
+    }
 
 	/**
 	 * Triggers haptic feedback.
@@ -509,6 +536,57 @@ public class SlidingTab extends ViewGroup implements IOnLeftRightProvider {
     @Override
     public void setOnLeftRightListener(IOnLeftRightChoice l) {
         onTriggerListener = l;
+    }
+
+    /* (non-Javadoc)
+     * @see com.csipsimple.ui.incall.locker.IOnLeftRightChoice.IOnLeftRightProvider#applyTargetTitles(int)
+     */
+    @Override
+    public void applyTargetTitles(int resArrayTitles) {
+        ArrayList<String> strings = LeftRightChooserUtils.loadTargetsDescriptions(getContext(),
+                resArrayTitles);
+        // setRightHintText(R.string.ignore_call);
+        // setLeftHintText(R.string.take_call);
+        setRightHintText(strings.get(0));
+        setLeftHintText(strings.get(1));
+    }
+
+    /* (non-Javadoc)
+     * @see com.csipsimple.ui.incall.locker.IOnLeftRightChoice.IOnLeftRightProvider#setTypeOfLock(com.csipsimple.ui.incall.locker.IOnLeftRightChoice.TypeOfLock)
+     */
+    @Override
+    public void setTypeOfLock(TypeOfLock lock) {
+        // TODO Theme
+        if(lock == TypeOfLock.CALL) {
+
+            // To sliding tab
+            setLeftTabDrawables(getContext().getResources().getDrawable(R.drawable.ic_jog_dial_answer), 
+                    getContext().getResources().getDrawable(R.drawable.jog_tab_target_green), 
+                    getContext().getResources().getDrawable(R.drawable.jog_tab_bar_left_answer), 
+                    getContext().getResources().getDrawable(R.drawable.jog_tab_left_answer));
+            
+            setRightTabDrawables(
+                    getContext().getResources().getDrawable(R.drawable.ic_jog_dial_decline), 
+                    getContext().getResources().getDrawable(R.drawable.jog_tab_target_red), 
+                    getContext().getResources().getDrawable(R.drawable.jog_tab_bar_right_decline), 
+                    getContext().getResources().getDrawable(R.drawable.jog_tab_right_decline));
+        }
+    }
+
+    /* (non-Javadoc)
+     * @see com.csipsimple.ui.incall.locker.IOnLeftRightChoice.IOnLeftRightProvider#getLayoutingHeight()
+     */
+    @Override
+    public int getLayoutingHeight() {
+        return LayoutParams.WRAP_CONTENT;
+    }
+
+    /* (non-Javadoc)
+     * @see com.csipsimple.ui.incall.locker.IOnLeftRightChoice.IOnLeftRightProvider#getLayoutingWidth()
+     */
+    @Override
+    public int getLayoutingWidth() {
+        return LayoutParams.MATCH_PARENT;
     }
 
 

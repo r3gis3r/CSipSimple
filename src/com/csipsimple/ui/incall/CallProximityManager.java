@@ -34,9 +34,9 @@ import android.os.PowerManager.WakeLock;
 
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.ui.incall.AccelerometerListener.OrientationListener;
+import com.csipsimple.ui.incall.locker.ScreenLocker;
 import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
-import com.csipsimple.widgets.ScreenLocker;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

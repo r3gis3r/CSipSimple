@@ -93,11 +93,15 @@
             android:key="start_with_text_dialer"
             android:summary="@string/start_with_text_dialer_desc"
             android:title="@string/start_with_text_dialer" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="use_alternate_unlocker"
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/unlocker_type_choices"
+            android:entryValues="@array/unlocker_type_values"
+            android:key="unlocker_type"
             android:summary="@string/use_alternate_unlocker_desc"
             android:title="@string/use_alternate_unlocker" />
+
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="prevent_screen_rotation"
