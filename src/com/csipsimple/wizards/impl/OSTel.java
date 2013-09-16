@@ -38,7 +38,7 @@ public class OSTel extends SimpleImplementation {
 
     private LinearLayout customWizard;
     private TextView customWizardText;
-    private final static String webCreationPage = "https://ostel.me/users/sign_in";
+    private final static String webCreationPage = "https://ostel.co/users/sign_in";
 
     @Override
     protected String getDomain() {
