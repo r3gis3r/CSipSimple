@@ -146,6 +146,7 @@ public final class Compatibility {
                 android.os.Build.DEVICE.equalsIgnoreCase("U8110") ||
                 android.os.Build.DEVICE.equalsIgnoreCase("U8120") ||
                 android.os.Build.DEVICE.equalsIgnoreCase("U8100") ||
+                android.os.Build.DEVICE.toUpperCase().startsWith("U8836") ||
                 android.os.Build.PRODUCT.equalsIgnoreCase("U8655")) {
             return true;
         }
@@ -926,6 +927,12 @@ public final class Compatibility {
         }
         if (lastSeenVersion < 2297) {
             prefWrapper.setPreferenceStringValue(SipConfigManager.UNLOCKER_TYPE, Integer.toString(SipConfigManager.GENERIC_TYPE_AUTO));
+        }
+        if (lastSeenVersion < 2302) {
+            if (android.os.Build.DEVICE.toUpperCase().startsWith("U8836")) {
+                prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
+                        shouldUseModeApi());
+            }
         }
         prefWrapper.endEditing();
     }
