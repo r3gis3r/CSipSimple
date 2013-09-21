@@ -393,6 +393,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_securecall, 30, 
                     new Locale[]{ }, false, true, 
                     SecureCall.class));
+            WIZARDS_DICT.put("UKRCALL", new WizardInfo("UKRCALL", "UkrCall.net", 
+                    R.drawable.ic_wizard_ukrcall, 30, 
+                    new Locale[]{ }, false, true, 
+                    UkrCall.class));
             
 			
 			//Locales
@@ -1018,6 +1022,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_abatel, 10, 
                     new Locale[] {new Locale("sr")}, false, false, 
                     AbaTel.class));
+            WIZARDS_DICT.put("ABAGLOBAL", new WizardInfo("ABAGLOBAL", "ABAglobal", 
+                    R.drawable.ic_wizard_abaglobal, 10, 
+                    new Locale[] {new Locale("sr")}, false, false, 
+                    AbaGlobal.class));
             WIZARDS_DICT.put("INOVENT", new WizardInfo("INOVENT", "Inovent", 
                     R.drawable.ic_wizard_inovent, 10, 
                     new Locale[]{ locale("bg_BG") }, false, false, 
