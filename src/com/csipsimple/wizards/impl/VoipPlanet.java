@@ -28,7 +28,7 @@ public class VoipPlanet extends SimpleImplementation {
 
 	@Override
 	protected String getDomain() {
-		return "nl.voipplanet.nl";
+		return "sip3.voipplanet.nl";
 	}
 
 	@Override
