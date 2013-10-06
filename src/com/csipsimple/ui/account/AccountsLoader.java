@@ -144,16 +144,12 @@ public class AccountsLoader extends AsyncTaskLoader<Cursor> {
             }
         }else {
             // If there is a number to call, add only those callable, and flag must call entries
-            // If one must call entry is found per group, just stop looping, and don't add other from the group.
-            // Note that we keep processing external call handlers voluntarily cause we may encounter a sip account that doesn't register
+            // Note that we keep processing all call handlers voluntarily cause we may encounter a sip account that doesn't register
             // But is in force call mode
             for(SipProfile acc : accounts) {
                 if(Filter.isCallableNumber(getContext(), acc.id, numberToCall)) {
                     boolean forceCall = Filter.isMustCallNumber(getContext(), acc.id, numberToCall);
                     prefinalAccounts.add(new FilteredProfile(acc, forceCall));
-                    if(forceCall) {
-                        break;
-                    }
                 }
             }
             for(Entry<String, String> extEnt : externalHandlers.entrySet() ) {
