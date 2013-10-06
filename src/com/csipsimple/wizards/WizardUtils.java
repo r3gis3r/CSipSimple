@@ -397,6 +397,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_ukrcall, 30, 
                     new Locale[]{ }, false, true, 
                     UkrCall.class));
+            WIZARDS_DICT.put("SPOUT", new WizardInfo("SPOUT", "thespout.ca", 
+                    R.drawable.ic_wizard_spout, 30, 
+                    new Locale[]{ }, false, true, 
+                    Spout.class));
             
 			
 			//Locales
