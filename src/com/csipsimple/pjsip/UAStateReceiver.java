@@ -62,6 +62,7 @@ import com.csipsimple.utils.Threading;
 import com.csipsimple.utils.TimerWrapper;
 
 import org.pjsip.pjsua.Callback;
+import org.pjsip.pjsua.SWIGTYPE_p_int;
 import org.pjsip.pjsua.SWIGTYPE_p_pjsip_rx_data;
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pj_stun_nat_detect_result;
@@ -524,6 +525,20 @@ public class UAStateReceiver extends Callback {
         unlockCpu();
     }
 
+    /* (non-Javadoc)
+     * @see org.pjsip.pjsua.Callback#on_call_transfer_status(int, int, org.pjsip.pjsua.pj_str_t, int, org.pjsip.pjsua.SWIGTYPE_p_int)
+     */
+    @Override
+    public void on_call_transfer_status(int callId, int st_code, pj_str_t st_text, int final_,
+            SWIGTYPE_p_int p_cont) {
+        lockCpu();
+        if((st_code / 100) == 2) {
+            pjsua.call_hangup(callId, 0, null, null);
+        }
+        unlockCpu();
+    }
+    
+    
     // public String sasString = "";
     // public boolean zrtpOn = false;
 
