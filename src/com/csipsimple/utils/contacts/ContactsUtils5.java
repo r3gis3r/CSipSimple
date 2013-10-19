@@ -31,6 +31,7 @@ import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.database.SQLException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -324,8 +325,12 @@ public class ContactsUtils5 extends ContactsWrapper {
                     PhoneLookup.LOOKUP_KEY
             };
         }
-
-        Cursor cursor = ctxt.getContentResolver().query(searchUri, projection, null, null, null);
+        Cursor cursor = null;
+        try {
+            cursor = ctxt.getContentResolver().query(searchUri, projection, null, null, null);
+        }catch(SQLException e) {
+            Log.e(THIS_FILE, "Stock contact app is not able to resolve contacts", e);
+        }
         if (cursor != null) {
             try {
                 if (cursor.getCount() > 0) {
