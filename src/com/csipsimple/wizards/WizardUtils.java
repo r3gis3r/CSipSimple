@@ -401,6 +401,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_spout, 30, 
                     new Locale[]{ }, false, true, 
                     Spout.class));
+            WIZARDS_DICT.put("WIMANX", new WizardInfo("WIMANX", "Wi-Manx", 
+                    R.drawable.ic_wizard_wimanx, 30, 
+                    new Locale[]{ }, false, true, 
+                    Wimanx.class));
             
 			
 			//Locales
