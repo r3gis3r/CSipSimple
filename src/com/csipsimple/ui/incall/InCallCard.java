@@ -364,7 +364,7 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
             int minState = callPlugin.getMetaDataInt(SipManager.EXTRA_SIP_CALL_MIN_STATE, SipCallSession.InvState.EARLY);
             int maxState = callPlugin.getMetaDataInt(SipManager.EXTRA_SIP_CALL_MAX_STATE, SipCallSession.InvState.CONFIRMED);
             int way = callPlugin.getMetaDataInt(SipManager.EXTRA_SIP_CALL_CALL_WAY, (1 << 0 | 1 << 1));
-            Log.w(THIS_FILE, "Can add plugin ? " + minState + ", " + maxState + ", "+ way);
+            Log.d(THIS_FILE, "Can add plugin ? " + minState + ", " + maxState + ", "+ way);
             if(callInfo.getCallState() < minState) {
                 continue;
             }
@@ -380,7 +380,7 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
             MenuItem pluginMenu = btnMenuBuilder.add(R.id.controls, MenuBuilder.NONE, MenuBuilder.NONE, callPlugin.getName());
             Intent it = callPlugin.getIntent();
             it.putExtra(SipManager.EXTRA_CALL_INFO, callInfo);
-            pluginMenu.setIntent(callPlugin.getIntent());
+            pluginMenu.setIntent(it);
         }
         
         
