@@ -379,7 +379,7 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
             }
             MenuItem pluginMenu = btnMenuBuilder.add(R.id.controls, MenuBuilder.NONE, MenuBuilder.NONE, callPlugin.getName());
             Intent it = callPlugin.getIntent();
-            it.putExtra(SipManager.EXTRA_CALL_INFO, callInfo);
+            it.putExtra(SipManager.EXTRA_CALL_INFO, new SipCallSession(callInfo));
             pluginMenu.setIntent(it);
         }
         
