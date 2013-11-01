@@ -405,6 +405,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_wimanx, 30, 
                     new Locale[]{ }, false, true, 
                     Wimanx.class));
+            WIZARDS_DICT.put("ADVANCEFONE", new WizardInfo("ADVANCEFONE", "Advancefone", 
+                    R.drawable.ic_wizard_advancefone, 30, 
+                    new Locale[]{ }, false, true, 
+                    Advancefone.class));
             
 			
 			//Locales
