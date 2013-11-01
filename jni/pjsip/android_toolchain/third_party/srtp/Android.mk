@@ -16,7 +16,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../pjlib/include \
 			
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
-PJLIB_SRC_DIR := 
+PJLIB_SRC_DIR := .
 
 LOCAL_SRC_FILES := $(PJLIB_SRC_DIR)/crypto/cipher/cipher.c $(PJLIB_SRC_DIR)/crypto/cipher/null_cipher.c      \
 		$(PJLIB_SRC_DIR)/crypto/cipher/aes.c $(PJLIB_SRC_DIR)/crypto/cipher/aes_icm.c             \
