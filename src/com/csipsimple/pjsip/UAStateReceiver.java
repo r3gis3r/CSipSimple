@@ -57,6 +57,7 @@ import com.csipsimple.service.SipService.SameThreadException;
 import com.csipsimple.service.SipService.SipRunnable;
 import com.csipsimple.service.impl.SipCallSessionImpl;
 import com.csipsimple.utils.CallLogHelper;
+import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.Threading;
 import com.csipsimple.utils.TimerWrapper;
@@ -933,13 +934,16 @@ public class UAStateReceiver extends Callback {
      */
     private void broadCastAndroidCallState(String state, String number) {
         // Android normalized event
-        Intent intent = new Intent(ACTION_PHONE_STATE_CHANGED);
-        intent.putExtra(TelephonyManager.EXTRA_STATE, state);
-        if (number != null) {
-            intent.putExtra(TelephonyManager.EXTRA_INCOMING_NUMBER, number);
+        if(!Compatibility.isCompatible(19)) {
+            // Not allowed to do that from kitkat
+            Intent intent = new Intent(ACTION_PHONE_STATE_CHANGED);
+            intent.putExtra(TelephonyManager.EXTRA_STATE, state);
+            if (number != null) {
+                intent.putExtra(TelephonyManager.EXTRA_INCOMING_NUMBER, number);
+            }
+            intent.putExtra(pjService.service.getString(R.string.app_name), true);
+            pjService.service.sendBroadcast(intent, android.Manifest.permission.READ_PHONE_STATE);
         }
-        intent.putExtra(pjService.service.getString(R.string.app_name), true);
-        pjService.service.sendBroadcast(intent, android.Manifest.permission.READ_PHONE_STATE);
     }
 
     /**
