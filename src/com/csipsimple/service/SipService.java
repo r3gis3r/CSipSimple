@@ -428,7 +428,7 @@ public class SipService extends Service {
 		@Override
 		public SipCallSession getCallInfo(final int callId) throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
-			return pjService.getCallInfo(callId);
+			return new SipCallSession(pjService.getCallInfo(callId));
 		}
 
         /**
@@ -481,7 +481,12 @@ public class SipService extends Service {
 		public SipCallSession[] getCalls() throws RemoteException {
 			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
 			if(pjService != null) {
-				return pjService.getCalls();
+				SipCallSession[] listOfCallsImpl = pjService.getCalls();
+				SipCallSession[] result = new SipCallSession[listOfCallsImpl.length];
+				for(int sessIdx = 0; sessIdx < listOfCallsImpl.length; sessIdx++) {
+				    result[sessIdx] = new SipCallSession(listOfCallsImpl[sessIdx]);
+				}
+				return result;
 			}
 			return new SipCallSession[0];
 		}
