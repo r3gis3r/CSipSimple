@@ -824,6 +824,9 @@ public class SipService extends Service {
             OutgoingCall.ignoreNext = number;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void updateCallOptions(final int callId, final Bundle options) throws RemoteException {
             getExecutor().execute(new SipRunnable() {
@@ -832,6 +835,21 @@ public class SipService extends Service {
                     pjService.updateCallOptions(callId, options);
                 }
             });
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String getLocalNatType() throws RemoteException {
+            ReturnRunnable action = new ReturnRunnable() {
+                @Override
+                protected Object runWithReturn() throws SameThreadException {
+                    return (String) pjService.getDetectedNatType();
+                }
+            };
+            getExecutor().execute(action);
+            return (String) action.getResult();
         }
 
 

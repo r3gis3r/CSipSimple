@@ -131,6 +131,7 @@ public class PjSipService {
     private SparseArray<String> dtmfToAutoSend = new SparseArray<String>(5);
     private SparseArray<TimerTask> dtmfTasks = new SparseArray<TimerTask>(5);
     private SparseArray<PjStreamDialtoneGenerator> dtmfDialtoneGenerators = new SparseArray<PjStreamDialtoneGenerator>(5);
+    private String mNatDetected = "";
 
     // -------
     // Locks
@@ -1959,6 +1960,18 @@ public class PjSipService {
         }
         pjsua.jzrtp_SASRevoked(callId);
     }
+    
+    protected void setDetectedNatType(String natName, int status) {
+        // Maybe we will need to treat status to eliminate some set (depending of unknown string fine for 3rd part dev) 
+        mNatDetected = natName;
+    }
+
+    /**
+     * @return nat type name detected by pjsip. Empty string if nothing detected
+     */
+    public String getDetectedNatType() {
+        return mNatDetected;
+    }
 
     // Config subwrapper
     private pj_str_t[] getNameservers() {
@@ -2338,6 +2351,7 @@ public class PjSipService {
     public void setVideoAndroidCapturer(SurfaceView window) {
         pjsua.vid_set_android_capturer((Object) window);
     }
+
 
 
 }

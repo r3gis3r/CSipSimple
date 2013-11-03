@@ -573,9 +573,10 @@ public class UAStateReceiver extends Callback {
 
     @Override
     public void on_nat_detect(pj_stun_nat_detect_result res) {
-        // TODO : IMPLEMENT THIS FEATURE
-        Log.d(THIS_FILE,
-                "NAT TYPE DETECTED !!!" + res.getNat_type_name() + " et " + res.getStatus());
+        Log.d(THIS_FILE, "NAT TYPE DETECTED !!!" + res.getNat_type_name());
+        if (pjService != null) {
+            pjService.setDetectedNatType(res.getNat_type_name(), res.getStatus());
+        }
     }
 
     @Override

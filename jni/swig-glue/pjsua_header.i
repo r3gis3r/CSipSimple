@@ -40,7 +40,9 @@
 %apply pjsua_transport_id *OUTPUT { pjsua_transport_id *p_id };
 %apply pjsua_recorder_id *OUTPUT { pjsua_recorder_id *p_id };
 %apply pjsua_player_id *OUTPUT { pjsua_player_id *p_id };
-%apply pjsua_acc_id *OUTPUT { pjsua_buddy_id *p_buddy_id };
+%apply pjsua_buddy_id *OUTPUT { pjsua_buddy_id *p_buddy_id };
+%apply int *OUTPUT { pj_stun_nat_type *p_type };
+%apply int *OUTPUT { pj_stun_nat_type *type};
 %apply unsigned *INOUT { unsigned *count };
 %apply int *OUTPUT { int *capture_dev };
 %apply int *OUTPUT { int *playback_dev };
