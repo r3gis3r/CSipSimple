@@ -293,7 +293,7 @@ public class MessageFragment extends SherlockListFragment implements LoaderManag
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Builder toLoadUriBuilder = SipMessage.THREAD_ID_URI_BASE.buildUpon().appendEncodedPath(remoteFrom);
+        Builder toLoadUriBuilder = SipMessage.THREAD_ID_URI_BASE.buildUpon().appendEncodedPath(remoteFrom.replaceAll("/", "%2F"));
         return new CursorLoader(getActivity(), toLoadUriBuilder.build(), null, null, null,
                 SipMessage.FIELD_DATE + " ASC");
     }

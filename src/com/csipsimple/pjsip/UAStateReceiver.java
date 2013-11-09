@@ -316,6 +316,12 @@ public class UAStateReceiver extends Callback {
         String bodyStr = PjSipService.pjStrToString(body);
         String mimeStr = PjSipService.pjStrToString(mime_type);
 
+        // Sanitize from sip uri
+        int slashIndex = fromStr.indexOf("/");
+        if (slashIndex != -1){
+            fromStr = fromStr.substring(0, slashIndex);
+        }
+        
         SipMessage msg = new SipMessage(canonicFromStr, toStr, contactStr, bodyStr, mimeStr,
                 date, SipMessage.MESSAGE_TYPE_INBOX, fromStr);
 
