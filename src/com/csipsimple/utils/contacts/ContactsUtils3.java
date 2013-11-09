@@ -27,17 +27,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
-import android.database.MatrixCursor;
-import android.database.MatrixCursor.RowBuilder;
-import android.database.MergeCursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.Contacts;
+import android.provider.Contacts.Groups;
 import android.provider.Contacts.Intents;
 import android.provider.Contacts.People;
 import android.provider.Contacts.Phones;
-import android.provider.Contacts.Groups;
-import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -110,79 +106,6 @@ public class ContactsUtils3 extends ContactsWrapper {
         return (phones);
     }
 
-    @Override
-    public Cursor searchContact(Context ctxt, CharSequence constraint) {
-        String phone = "";
-        String cons = "";
-
-        if (constraint != null) {
-            cons = constraint.toString();
-
-            if (usefulAsDigits(cons)) {
-                phone = PhoneNumberUtils.convertKeypadLettersToDigits(cons);
-                if (phone.equals(cons)) {
-                    phone = "";
-                } else {
-                    phone = phone.trim();
-                }
-            }
-        }
-
-        Uri uri = Phones.CONTENT_URI;
-        /*
-         * if we decide to filter based on phone types use a selection like
-         * this. String selection = String.format("%s=%s OR %s=%s OR %s=%s",
-         * Phone.TYPE, Phone.TYPE_MOBILE, Phone.TYPE, Phone.TYPE_WORK_MOBILE,
-         * Phone.TYPE, Phone.TYPE_MMS);
-         */
-        String selection = String.format("%s LIKE ? OR %s LIKE ?", Phones.NUMBER,
-                Phones.DISPLAY_NAME);
-        Cursor phoneCursor =
-                ctxt.getContentResolver().query(uri,
-                        PROJECTION_PHONE,
-                        selection,
-                        new String[] {
-                                cons + "%", "%" + cons + "%"
-                        },
-                        SORT_ORDER);
-
-        if (phone.length() > 0) {
-
-            MatrixCursor translated = new MatrixCursor(PROJECTION_PHONE, 1 /* 2 */);
-
-            RowBuilder result = translated.newRow();
-            result.add(Integer.valueOf(-1)); // ID
-            result.add(Long.valueOf(-1)); // CONTACT_ID
-            result.add(Integer.valueOf(Phones.TYPE_CUSTOM)); // TYPE
-            result.add(cons); // NUMBER
-
-            result.add("\u00A0"); // LABEL
-            result.add(cons); // NAME
-
-            // Rewriten as phone number
-            /*
-             * result = translated.newRow(); result.add(Integer.valueOf(-1)); //
-             * ID result.add(Long.valueOf(-1)); // CONTACT_ID
-             * result.add(Integer.
-             * valueOf(ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM)); //
-             * TYPE result.add(phone); // NUMBER
-             */
-            /*
-             * The "\u00A0" keeps Phone.getDisplayLabel() from deciding to
-             * display the default label ("Home") next to the transformation of
-             * the letters into numbers.
-             */
-            /*
-             * result.add("\u00A0"); // LABEL result.add(cons); // NAME
-             */
-
-            return new MergeCursor(new Cursor[] {
-                    translated, phoneCursor
-            });
-        } else {
-            return phoneCursor;
-        }
-    }
 
     @Override
     public CharSequence transformToSipUri(Context ctxt, Cursor cursor) {
@@ -192,37 +115,6 @@ public class ContactsUtils3 extends ContactsWrapper {
         }
         number = number.trim();
         return number;
-    }
-
-    @Override
-    public void bindAutoCompleteView(View view, Context context, Cursor cursor) {
-        TextView name = (TextView) view.findViewById(R.id.name);
-        TextView label = (TextView) view.findViewById(R.id.label);
-        TextView number = (TextView) view.findViewById(R.id.number);
-        ImageView image = (ImageView) view.findViewById(R.id.contact_photo);
-        
-        
-        name.setText(cursor.getString(NAME_INDEX));
-        int type = cursor.getInt(TYPE_INDEX);
-        CharSequence labelText = Phones.getDisplayLabel(context, type,
-                cursor.getString(LABEL_INDEX));
-        // When there's no label, getDisplayLabel() returns a CharSequence of
-        // length==1 containing
-        // a unicode non-breaking space. Need to check for that and consider
-        // that as "no label".
-        if (labelText.length() == 0 || (labelText.length() == 1 && labelText.charAt(0) == '\u00A0')) {
-            label.setVisibility(View.GONE);
-        } else {
-            label.setText(labelText);
-            label.setVisibility(View.VISIBLE);
-        }
-
-        number.setText(cursor.getString(NUMBER_INDEX));
-
-        Long peopleId = cursor.getLong(CONTACT_ID_INDEX);
-        Uri uri = ContentUris.withAppendedId(People.CONTENT_URI, peopleId);
-        Bitmap bitmap = getContactPhoto(context, uri, false, R.drawable.ic_contact_picture_holo_dark);
-        image.setImageBitmap(bitmap);
     }
 
     @Override
@@ -309,9 +201,14 @@ public class ContactsUtils3 extends ContactsWrapper {
 
 
     @Override
-    public Cursor getContactsPhones(Context ctxt) {
+    public Cursor getContactsPhones(Context ctxt, CharSequence constraint) {
         Uri uri = Phones.CONTENT_URI;
-        Cursor resCursor = ctxt.getContentResolver().query(uri, PROJECTION_PHONE, null, null,
+        String selection = String.format("%s LIKE ? OR %s LIKE ?", Phones.NUMBER,
+                Phones.DISPLAY_NAME);
+        String[] selectionArgs = new String[] {
+                constraint + "%", "%" + constraint + "%"
+        };
+        Cursor resCursor = ctxt.getContentResolver().query(uri, PROJECTION_PHONE, selection, selectionArgs,
                 Phones.DISPLAY_NAME + " ASC");
         return resCursor;
     }
@@ -327,11 +224,13 @@ public class ContactsUtils3 extends ContactsWrapper {
         Bitmap bitmap = getContactPhoto(context, uri, false, R.drawable.ic_contact_picture_holo_dark);
         
         // Get views
-        TextView tv = (TextView) view.findViewById(R.id.contact_name);
-        TextView sub = (TextView) view.findViewById(R.id.subject);
+        TextView tv = (TextView) view.findViewById(R.id.name);
+        TextView sub = (TextView) view.findViewById(R.id.number);
+        TextView label = (TextView) view.findViewById(R.id.label);
         ImageView imageView = (ImageView) view.findViewById(R.id.contact_photo);
         
         // Bind
+        label.setVisibility(View.GONE);
         view.setTag(value);
         tv.setText(displayName);
         sub.setText(value);
@@ -415,5 +314,13 @@ public class ContactsUtils3 extends ContactsWrapper {
     public List<String> getCSipPhonesContact(Context ctxt, Long contactId) {
         // TODO Auto-generated method stub
         return new ArrayList<String>();
+    }
+
+    /* (non-Javadoc)
+     * @see com.csipsimple.utils.contacts.ContactsWrapper#isExternalPhoneNumber(android.content.Context, android.database.Cursor)
+     */
+    @Override
+    public boolean isExternalPhoneNumber(Context context, Cursor cursor) {
+        return true;
     }
 }

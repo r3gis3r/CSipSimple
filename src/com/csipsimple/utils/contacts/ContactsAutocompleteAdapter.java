@@ -60,18 +60,19 @@ public class ContactsAutocompleteAdapter extends ResourceCursorAdapter {
 
     @Override
     public final void bindView(View view, Context context, Cursor cursor) {
-    	ContactsWrapper.getInstance().bindAutoCompleteView(view, context, cursor);
+    	ContactsWrapper.getInstance().bindContactPhoneView(view, context, cursor);
     }
 
     @Override
     public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
-        return ContactsWrapper.getInstance().searchContact(mContext, constraint);
+        return ContactsWrapper.getInstance().getContactsPhones(mContext, constraint);
     }
     
     @Override
     public final CharSequence convertToString(Cursor cursor) {
     	CharSequence number = ContactsWrapper.getInstance().transformToSipUri(mContext, cursor);
-    	if(!TextUtils.isEmpty(number)) {
+        boolean isExternalPhone = ContactsWrapper.getInstance().isExternalPhoneNumber(mContext, cursor);
+    	if(!TextUtils.isEmpty(number) && isExternalPhone) {
 			return Filter.rewritePhoneNumber(mContext, currentAccId, number.toString());
     	}
     	return number;

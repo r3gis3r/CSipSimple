@@ -30,8 +30,8 @@
         android:layout_height="?android:attr/listPreferredItemHeight"
         android:layout_gravity="center"
         android:contentDescription="@string/empty_description"
-        android:paddingTop="4dip"
-        android:scaleType="centerInside"
+        android:padding="2dip"
+        android:scaleType="fitCenter"
         android:src="@drawable/ic_contact_picture_holo_dark" />
 
     <View

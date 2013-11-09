@@ -93,7 +93,7 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
             // Don't bind cursor in this case
             return;
         }
-        Cursor c = ContactsWrapper.getInstance().getContactsPhones(context);
+        Cursor c = ContactsWrapper.getInstance().getContactsPhones(context, null);
         contactsAdapter = new ContactAdapter(context, c);
         completeList.setAdapter(contactsAdapter);
         completeList.setOnItemClickListener(this);
@@ -108,7 +108,7 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
         private AlphabetIndexer alphaIndexer;
 
         public ContactAdapter(Context context, Cursor c) {
-            super(context, R.layout.contact_phone_list_item, c, new String[] {}, new int[] {});
+            super(context, R.layout.search_contact_list_item, c, new String[] {}, new int[] {});
             alphaIndexer = new AlphabetIndexer(c, ContactsWrapper.getInstance()
                     .getContactIndexableColumnIndex(c),
                     " ABCDEFGHIJKLMNOPQRSTUVWXYZ");

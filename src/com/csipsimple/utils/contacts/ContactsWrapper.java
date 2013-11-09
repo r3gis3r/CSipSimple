@@ -89,17 +89,6 @@ public abstract class ContactsWrapper {
     public abstract List<Phone> getPhoneNumbers(Context ctxt, long contactId, int flag);
 
     /**
-     * Find contacts-phone tuple in the contact database based on an user input
-     * string This method make clever search accross several field of the
-     * contact
-     * 
-     * @param ctxt the context of the application
-     * @param constraint the filtering string for the name
-     * @return a cursor to the result
-     */
-    public abstract Cursor searchContact(Context ctxt, CharSequence constraint);
-
-    /**
      * Transform a contact-phone entry into a sip uri
      * 
      * @param ctxt the context of the application
@@ -109,16 +98,13 @@ public abstract class ContactsWrapper {
     public abstract CharSequence transformToSipUri(Context ctxt, Cursor cursor);
 
     /**
-     * Bind to view the contact-phone tuple
-     * View should be expanded from search_contact_list_item.xml
-     * 
-     * @param view the view to fill with infos
+     * Is the cursor content a phone number that should have rewriting rules applied on
      * @param context the context of the application
-     * @param cursor the cursor to the contact-phone tuple
+     * @param cursor the cursor to the contact entry
+     * @return true if a phone number
      */
-    public abstract void bindAutoCompleteView(View view, Context context, Cursor cursor);
-
-
+    public abstract boolean isExternalPhoneNumber(Context context, Cursor cursor);
+    
     /**
      * Bind to view the contact
      * 
@@ -132,9 +118,10 @@ public abstract class ContactsWrapper {
      *  Get a cursor loader on contacts entries based on contact grouping 
      * 
      * @param ctxt the context of the application
+     * @param constraint Search string. If null returns all
      * @return the result cursor
      */
-    public abstract Cursor getContactsPhones(Context ctxt);
+    public abstract Cursor getContactsPhones(Context ctxt, CharSequence constraint);
     
     /**
      * Retrieve list of csip: im entries in a group
@@ -318,5 +305,6 @@ public abstract class ContactsWrapper {
      * @return Caller information of the current application user
      */
     public abstract CallerInfo findSelfInfo(Context ctxt);
+
 
 }

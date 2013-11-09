@@ -36,6 +36,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds;
@@ -57,7 +58,6 @@ import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipUri;
 import com.csipsimple.models.CallerInfo;
 import com.csipsimple.utils.Compatibility;
-import com.csipsimple.utils.ContactsAsyncHelper;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesProviderWrapper;
 
@@ -177,125 +177,6 @@ public class ContactsUtils5 extends ContactsWrapper {
     }
 
     @Override
-    public Cursor searchContact(Context ctxt, CharSequence constraint) {
-        String phone = "";
-        String cons = null;
-
-        if (constraint != null) {
-            cons = constraint.toString();
-
-            if (usefulAsDigits(cons)) {
-                phone = PhoneNumberUtils.convertKeypadLettersToDigits(cons);
-                if (phone.equals(cons)) {
-                    phone = "";
-                } else {
-                    phone = phone.trim();
-                }
-            }
-        }
-
-        // TODO : filter more complex, see getAllContactsAdapter
-        Cursor phoneCursor;
-        if(!TextUtils.isEmpty(cons)) {
-            Uri uri = Uri.withAppendedPath(CommonDataKinds.Phone.CONTENT_FILTER_URI,
-                    Uri.encode(cons));
-            /*
-             * if we decide to filter based on phone types use a selection like
-             * this. String selection = String.format("%s=%s OR %s=%s OR %s=%s",
-             * Phone.TYPE, Phone.TYPE_MOBILE, Phone.TYPE, Phone.TYPE_WORK_MOBILE,
-             * Phone.TYPE, Phone.TYPE_MMS);
-             */
-             phoneCursor = ctxt.getContentResolver().query(uri,
-                            PROJECTION_PHONE,
-                            null, // selection,
-                            null,
-                            SORT_ORDER);
-        }else {
-             phoneCursor = ctxt.getContentResolver().query(CommonDataKinds.Phone.CONTENT_URI,
-                            PROJECTION_PHONE,
-                            null, // selection,
-                            null,
-                           DISPLAY_NAME_ORDER);
-        }
-
-        if (phone.length() > 0) {
-            /*
-            MatrixCursor translated = new MatrixCursor(PROJECTION_PHONE, 1);
-
-            RowBuilder result = translated.newRow();
-            result.add(Integer.valueOf(-1)); // ID
-            result.add(Long.valueOf(-1)); // CONTACT_ID
-            result.add(Integer.valueOf(CommonDataKinds.Phone.TYPE_CUSTOM)); // TYPE
-            result.add(cons); // NUMBER
-
-            result.add("\u00A0"); // LABEL
-            result.add(cons); // NAME
-            */
-            // Rewriten as phone number
-            /*
-             * result = translated.newRow(); result.add(Integer.valueOf(-1)); //
-             * ID result.add(Long.valueOf(-1)); // CONTACT_ID
-             * result.add(Integer.
-             * valueOf(ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM)); //
-             * TYPE result.add(phone); // NUMBER
-             */
-            /*
-             * The "\u00A0" keeps Phone.getDisplayLabel() from deciding to
-             * display the default label ("Home") next to the transformation of
-             * the letters into numbers.
-             */
-            /*
-             * result.add("\u00A0"); // LABEL result.add(cons); // NAME
-             */
-
-            // return new MergeCursor(new Cursor[] { translated, phoneCursor });
-            return phoneCursor;
-        } else {
-            return phoneCursor;
-        }
-    }
-
-    @Override
-    public CharSequence transformToSipUri(Context ctxt, Cursor cursor) {
-        String number = cursor.getString(NUMBER_INDEX);
-        if (number == null) {
-            return "";
-        }
-        number = number.trim();
-        return number;
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void bindAutoCompleteView(View view, Context context, Cursor cursor) {
-        TextView name = (TextView) view.findViewById(R.id.name);
-        TextView label = (TextView) view.findViewById(R.id.label);
-        TextView number = (TextView) view.findViewById(R.id.number);
-        ImageView imageView = (ImageView) view.findViewById(R.id.contact_photo);
-
-        name.setText(cursor.getString(NAME_INDEX));
-
-        int type = cursor.getInt(TYPE_INDEX);
-        CharSequence labelText = CommonDataKinds.Phone
-                .getTypeLabel(context.getResources(), type, cursor.getString(LABEL_INDEX));
-        // When there's no label, getDisplayLabel() returns a CharSequence of
-        // length==1 containing
-        // a unicode non-breaking space. Need to check for that and consider
-        // that as "no label".
-        if (labelText.length() == 0 || (labelText.length() == 1 && labelText.charAt(0) == '\u00A0')) {
-            label.setVisibility(View.GONE);
-        } else {
-            label.setText(labelText);
-            label.setVisibility(View.VISIBLE);
-        }
-
-        number.setText(cursor.getString(NUMBER_INDEX));
-
-        Uri uri = ContentUris.withAppendedId(Contacts.CONTENT_URI, cursor.getLong(CONTACT_ID_INDEX));
-        ContactsAsyncHelper.updateImageViewWithContactAsync(context, imageView, uri, R.drawable.ic_contact_picture_holo_dark);
-    }
-
-    @Override
     public CallerInfo findCallerInfo(Context ctxt, String number) {
         Uri searchUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
 
@@ -398,7 +279,6 @@ public class ContactsUtils5 extends ContactsWrapper {
 
         return callerInfo;
     }
-    
 
     @Override
     public CallerInfo findCallerInfoForUri(Context ctxt, String sipUri) {
@@ -521,7 +401,7 @@ public class ContactsUtils5 extends ContactsWrapper {
     }
 
     @Override
-    public Cursor getContactsPhones(Context ctxt) {
+    public Cursor getContactsPhones(Context ctxt, CharSequence constraint) {
 
         Uri uri = Data.CONTENT_URI;
 
@@ -556,7 +436,12 @@ public class ContactsUtils5 extends ContactsWrapper {
                     Data.DISPLAY_NAME,
                     Data.PHOTO_ID,
                     Data.LOOKUP_KEY,
-                    Data.PHOTO_URI
+                    Data.PHOTO_URI,
+                    Data.MIMETYPE,
+                    Data.DATA2,
+                    Data.DATA3,
+                    Data.DATA5,
+                    Data.DATA6
             };
         } else {
             projection = new String[] {
@@ -565,37 +450,125 @@ public class ContactsUtils5 extends ContactsWrapper {
                     Data.DATA1,
                     Data.DISPLAY_NAME,
                     Data.PHOTO_ID,
-                    Data.LOOKUP_KEY
+                    Data.LOOKUP_KEY,
+                    Data.MIMETYPE,
+                    Data.DATA2,
+                    Data.DATA3,
+                    Data.DATA5,
+                    Data.DATA6
             };
+        }
+        // Treat constraint
+        String[] selectionArgs = null;
+        if (!TextUtils.isEmpty(constraint)) {
+            String phoneConstraint = null;
+            boolean isDigitOnly = constraint.toString().matches("^[0-9\\-\\(\\)+]+$");
+            if (usefulAsDigits(constraint)) {
+                phoneConstraint = PhoneNumberUtils.convertKeypadLettersToDigits(constraint.toString());
+                if (!phoneConstraint.equals(constraint.toString())) {
+                    phoneConstraint = phoneConstraint.trim();
+                }
+            }
+            if(phoneConstraint == null) {
+                query += String.format(" AND (%s LIKE ? OR %s LIKE ?)",
+                        Data.DATA1,
+                       Data.DISPLAY_NAME);
+                selectionArgs = new String[] {
+                        isDigitOnly ? constraint + "%" : "%" + constraint + "%",
+                        "%" + constraint + "%"
+                };
+            }else {
+                query += String.format(" AND (%s LIKE ? OR %s LIKE ? OR %s LIKE ?)", 
+                        Data.DATA1,
+                        Data.DISPLAY_NAME,
+                        Data.DATA1);
+                selectionArgs = new String[] {
+                        isDigitOnly ? constraint + "%" : "%" + constraint + "%",
+                        "%" + constraint + "%",
+                        phoneConstraint + "%" 
+                };
+            }
         }
 
         Cursor resCursor = ctxt.getContentResolver().query(uri,
-                projection, query,
-                null, Data.DISPLAY_NAME + " ASC");
+                projection, query, selectionArgs, Data.DISPLAY_NAME + " ASC");
 
         return resCursor;
     }
+    
+    @Override
+    public CharSequence transformToSipUri(Context ctxt, Cursor cursor) {
+        String value = cursor.getString(cursor.getColumnIndex(Data.DATA1));
+        if (value == null) {
+            return "";
+        }
+        value = value.trim();
+        return value;
+    }
+    /* (non-Javadoc)
+     * @see com.csipsimple.utils.contacts.ContactsWrapper#isExternalPhoneNumber(android.content.Context, android.database.Cursor)
+     */
+    @Override
+    public boolean isExternalPhoneNumber(Context context, Cursor cursor) {
+        String mimeType = cursor.getString(cursor.getColumnIndex(Data.MIMETYPE));
+        return CommonDataKinds.Phone.CONTENT_ITEM_TYPE.equalsIgnoreCase(mimeType);
+    }
 
+    /* (non-Javadoc)
+     * @see com.csipsimple.utils.contacts.ContactsWrapper#bindContactPhoneView(android.view.View, android.content.Context, android.database.Cursor)
+     */
     @Override
     public void bindContactPhoneView(View view, Context context, Cursor cursor) {
-
         // Get values
         String value = cursor.getString(cursor.getColumnIndex(Data.DATA1));
         String displayName = cursor.getString(cursor.getColumnIndex(Data.DISPLAY_NAME));
         Long contactId = cursor.getLong(cursor.getColumnIndex(Data.CONTACT_ID));
         Uri uri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
         Bitmap bitmap = getContactPhoto(context, uri, false, R.drawable.ic_contact_picture_holo_dark);
-
+        CharSequence labelName = "";
+        String mimeType = cursor.getString(cursor.getColumnIndex(Data.MIMETYPE));
+        if(CommonDataKinds.Phone.CONTENT_ITEM_TYPE.equalsIgnoreCase(mimeType)) {
+            int typeColumnIdx = cursor.getColumnIndex(CommonDataKinds.Phone.TYPE);
+            int labelColumnIdx = cursor.getColumnIndex(CommonDataKinds.Phone.LABEL);
+            if(labelColumnIdx != -1 && typeColumnIdx != -1) {
+                String labelField = cursor.getString(labelColumnIdx);
+                int typeField = cursor.getInt(typeColumnIdx);
+                labelName = ContactsContract.CommonDataKinds.Phone.getTypeLabel(context.getResources(), typeField, labelField);
+            }
+        }else if(CommonDataKinds.Im.CONTENT_ITEM_TYPE.equalsIgnoreCase(mimeType)) {
+            int typeColumnIdx = cursor.getColumnIndex(CommonDataKinds.Im.PROTOCOL);
+            int labelColumnIdx = cursor.getColumnIndex(CommonDataKinds.Im.CUSTOM_PROTOCOL);
+            if(typeColumnIdx != -1 && labelColumnIdx != -1) {
+                String labelField = cursor.getString(labelColumnIdx);
+                int typeField = cursor.getInt(typeColumnIdx);
+                labelName = ContactsContract.CommonDataKinds.Im.getProtocolLabel(context.getResources(), typeField, labelField);
+            }
+        }
+        
         // Get views
-        TextView tv = (TextView) view.findViewById(R.id.contact_name);
-        TextView sub = (TextView) view.findViewById(R.id.subject);
+        TextView tv = (TextView) view.findViewById(R.id.name);
+        TextView label = (TextView) view.findViewById(R.id.label);
+        TextView sub = (TextView) view.findViewById(R.id.number);
         ImageView imageView = (ImageView) view.findViewById(R.id.contact_photo);
+        
 
         // Bind
         view.setTag(value);
         tv.setText(displayName);
         sub.setText(value);
-        imageView.setImageBitmap(bitmap);
+        // When there's no label, getDisplayLabel() returns a CharSequence of  length==1 containing a unicode non-breaking space.
+        // Need to check for that and consider that as "no label".
+        if (TextUtils.isEmpty(labelName) || (labelName.length() == 1 && labelName.charAt(0) == '\u00A0')) {
+            label.setVisibility(View.GONE);
+        } else {
+            label.setText(labelName);
+            label.setVisibility(View.VISIBLE);
+        }
+        if(imageView != null) {
+            imageView.setImageBitmap(bitmap);
+        }
+//        Uri uri = ContentUris.withAppendedId(Contacts.CONTENT_URI, cursor.getLong(CONTACT_ID_INDEX));
+//        ContactsAsyncHelper.updateImageViewWithContactAsync(context, imageView, uri, R.drawable.ic_contact_picture_holo_dark);
     }
 
     @Override
@@ -704,6 +677,7 @@ public class ContactsUtils5 extends ContactsWrapper {
         return results;
     }
 
+    @TargetApi(Build.VERSION_CODES.FROYO)
     @Override
     public void updateCSipPresence(Context ctxt, String buddyUri,
             SipManager.PresenceStatus presStatus, String statusText) {
@@ -929,5 +903,7 @@ public class ContactsUtils5 extends ContactsWrapper {
         }
         return false;
     }
+
+
 
 }

@@ -76,12 +76,12 @@ public class ContactsSearchAdapter extends CursorAdapter implements SectionIndex
     
     @Override
     public final void bindView(View view, Context context, Cursor cursor) {
-    	ContactsWrapper.getInstance().bindAutoCompleteView(view, context, cursor);
+    	ContactsWrapper.getInstance().bindContactPhoneView(view, context, cursor);
     }
 
     @Override
     public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
-        Cursor c = ContactsWrapper.getInstance().searchContact(mContext, constraint);
+        Cursor c = ContactsWrapper.getInstance().getContactsPhones(mContext, constraint);
         
         if(alphaIndexer == null) {
             alphaIndexer = new AlphabetIndexer(c, ContactsWrapper.getInstance().getContactIndexableColumnIndex(c),
@@ -95,7 +95,8 @@ public class ContactsSearchAdapter extends CursorAdapter implements SectionIndex
     @Override
     public final CharSequence convertToString(Cursor cursor) {
     	CharSequence number = ContactsWrapper.getInstance().transformToSipUri(mContext, cursor);
-    	if(!TextUtils.isEmpty(number)) {
+        boolean isExternalPhone = ContactsWrapper.getInstance().isExternalPhoneNumber(mContext, cursor);
+    	if(!TextUtils.isEmpty(number) && isExternalPhone) {
     	    String stripNbr = PhoneNumberUtils.stripSeparators(number.toString());
 			return Filter.rewritePhoneNumber(mContext, currentAccId, stripNbr);
     	}
