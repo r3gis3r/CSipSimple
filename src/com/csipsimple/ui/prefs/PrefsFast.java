@@ -76,15 +76,13 @@ public class PrefsFast extends SherlockActivity implements OnClickListener {
 		findViewById(R.id.row_glob_tg).setOnClickListener(this);
 		
 		updateFromPrefs();
-		
-		
 	}
 	
 
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
-		applyPrefs();
+		//applyPrefs();
 	}
 	
 	private void updateFromPrefs() {
@@ -146,6 +144,7 @@ public class PrefsFast extends SherlockActivity implements OnClickListener {
 			if(!SipConfigManager.getPreferenceBooleanValue(this, PreferencesWrapper.HAS_ALREADY_SETUP, false) ) {
 			    SipConfigManager.setPreferenceBooleanValue(this, PreferencesWrapper.HAS_ALREADY_SETUP, true);
 			}
+			applyPrefs();
 			finish();
 		}
 	}
