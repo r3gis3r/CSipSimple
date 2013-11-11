@@ -156,7 +156,7 @@ public class Local extends BaseImplementation {
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
 		int transport = getIntValue(transportPref, SipProfile.TRANSPORT_UDP);
-		if(transport == SipProfile.TRANSPORT_UDP) {
+		if(transport == SipProfile.TRANSPORT_UDP || transport == SipProfile.TRANSPORT_AUTO) {
 		    prefs.setPreferenceStringValue(SipConfigManager.UDP_TRANSPORT_PORT, "5060");
 		}else if(transport == SipProfile.TRANSPORT_TCP) {
 		    prefs.setPreferenceStringValue(SipConfigManager.TCP_TRANSPORT_PORT, "5060");
