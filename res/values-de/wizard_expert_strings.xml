@@ -39,6 +39,8 @@
   <string name="w_expert_mwi_enabled_desc">Erhalte Benachrichtigungen der Sprachbox</string>
   <string name="w_expert_allow_via_rewrite">Erlaube Via-rewrite</string>
   <string name="w_expert_allow_via_rewrite_desc">Korrigiere den Ursprungs-Via (sent-by) dahingehend, dass dieselbe Schnittstellenadresse wie diejenige in der REGISTER-Anfrage verwendet wird</string>
+  <string name="w_expert_allow_sdp_nat_rewrite">Erlaube das Umschreiben von SDP NAT </string>
+  <string name="w_expert_allow_sdp_nat_rewrite_desc">Korrigiere die gesendete Adresse in SDP, um die gleiche Interface-Adresse wie in der REGISTER Anfrage zu verwenden (NUR wenn STUN und ICE nicht verwendet werden) </string>
   <string name="w_expert_ipv6_media_use">Verwende IPv6 für Medien</string>
   <string name="w_expert_default_uri_scheme">Standard-URI-Schema</string>
   <string name="w_expert_default_uri_scheme_desc">Vorangestelltes Schema für die angerufene url, wenn nicht anders angegeben</string>

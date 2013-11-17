@@ -11,9 +11,9 @@
   <string name="w_expert_username">Nazwa użytkownika</string>
   <string name="w_expert_username_desc">Nazwa użytkownika dla uwierzytelnienia</string>
   <string name="w_expert_data">Dane (hasło)</string>
-  <string name="w_expert_data_desc">Hasło (lub inne dane) w celu uwierzytelnienia</string>
+  <string name="w_expert_data_desc">Hasło (lub inne dane) uwierzytelnienia</string>
   <string name="w_expert_datatype">Typ danych</string>
-  <string name="w_expert_datatype_desc">Typ danych dla hasła</string>
+  <string name="w_expert_datatype_desc">Typ danych wprowadzonych w polu dla hasła</string>
   <string name="w_expert_t_proxy">Proxy</string>
   <string name="w_expert_proxy">URI proxy</string>
   <string name="w_expert_proxy_desc">Format: \"sip:proxy.net[:port]\"</string>
@@ -39,6 +39,8 @@
   <string name="w_expert_mwi_enabled_desc">Otrzymuj powiadomienia skrzynki głosowej</string>
   <string name="w_expert_allow_via_rewrite">Zezwól na zmianę Via</string>
   <string name="w_expert_allow_via_rewrite_desc">Napraw wysłanie przez Via aby używac tego samego adresu interfejsu jakiego w żądaniu REJESTRU</string>
+  <string name="w_expert_allow_sdp_nat_rewrite">Zezwól SDP na przepisanie NAT</string>
+  <string name="w_expert_allow_sdp_nat_rewrite_desc">Napraw adres wysłany w SDP, aby użyć tego samego adresu interfejsu jak we wniosku REJESTRU (TYLKO gdy STUN i ICE nie są używane)</string>
   <string name="w_expert_ipv6_media_use">Używaj IPv6 dla mediów</string>
   <string name="w_expert_default_uri_scheme">Domyślny schemat uri</string>
   <string name="w_expert_default_uri_scheme_desc">Dołączy schemat do wywoływanego uri jeśli nie został określony</string>

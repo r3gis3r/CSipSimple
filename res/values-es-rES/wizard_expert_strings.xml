@@ -39,6 +39,8 @@
   <string name="w_expert_mwi_enabled_desc">Registrar con notificaciones de buzón de voz</string>
   <string name="w_expert_allow_via_rewrite">Autorizar la reescritura de  Via</string>
   <string name="w_expert_allow_via_rewrite_desc">Corrige la Vía send-by para que utilice la misma interfaz que se utiliza para la solicitud de REGISTRO</string>
+  <string name="w_expert_allow_sdp_nat_rewrite">Permitir reescritura del NAT de SDP</string>
+  <string name="w_expert_allow_sdp_nat_rewrite_desc">Arreglar la dirección enviada en SDP para usar la misma dirección de interfaz que la de la petición de REGISTRO (SÓLO cuando STUN y ICE no se usen)</string>
   <string name="w_expert_ipv6_media_use">Usar IPV6 para multimedios</string>
   <string name="w_expert_default_uri_scheme">Esquema uri por defecto</string>
   <string name="w_expert_default_uri_scheme_desc">Esquema para prefijar a la URI llamada si no es especificada</string>

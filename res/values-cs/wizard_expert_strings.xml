@@ -39,6 +39,8 @@
   <string name="w_expert_mwi_enabled_desc">Získat upozornění z hlasové schránky</string>
   <string name="w_expert_allow_via_rewrite">Povolit přes přepsání</string>
   <string name="w_expert_allow_via_rewrite_desc">Určí, že Via použije k odeslání stejnou adresu rozhraní, jako v požadavku REGISTR</string>
+  <string name="w_expert_allow_sdp_nat_rewrite">Povolit přepisovní SDP Nat </string>
+  <string name="w_expert_allow_sdp_nat_rewrite_desc">Oprava adresy odeslaná v SDP používá stejnou adresu rozhraní jako ta v žádosti REGISTER (pouze pokud se nepoužívají STUN a ICE)</string>
   <string name="w_expert_ipv6_media_use">Použít IPv6 pro média</string>
   <string name="w_expert_default_uri_scheme">Výchozí schéma URI</string>
   <string name="w_expert_default_uri_scheme_desc">Schéma pro přidání volaného URI pokud není uvedeno</string>

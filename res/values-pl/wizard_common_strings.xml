@@ -5,7 +5,7 @@
   <string name="w_common_username">Nazwa użytkownika</string>
   <string name="w_common_username_desc">Logowane do Konta SIP (nie załanczaj @sip.server)</string>
   <string name="w_common_phone_number">Numer telefonu</string>
-  <string name="w_common_phone_number_desc">Numer telefonu SIP przydany przez operatora</string>
+  <string name="w_common_phone_number_desc">Numer telefonu SIP przyznany przez operatora</string>
   <string name="w_common_password">Hasło</string>
   <string name="w_common_password_desc">Hasło dla tego konta</string>
   <string name="w_common_server">Serwer</string>

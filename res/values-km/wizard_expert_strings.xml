@@ -39,6 +39,8 @@
   <string name="w_expert_mwi_enabled_desc">ទទួល​បាន​ការ​ជូន​ដំណឹង​ប្រអប់​​សំបុត្រ​ជា​សំឡេង</string>
   <string name="w_expert_allow_via_rewrite">អនុញ្ញាត​តាម​រយៈ​សរសេរ​ឡើង​វិញ</string>
   <string name="w_expert_allow_via_rewrite_desc">កំណត់​តាមរយៈ​អ្វី​បានផ្ញើ​ ដើម្បី​ប្រើ​​អាសយដ្ឋាន​ចំណុច​ប្រទាក់​តែ​មួយ​ដូច​មាន​ក្នុង​សំណើ​ចុះឈ្មោះ</string>
+  <string name="w_expert_allow_sdp_nat_rewrite">អនុញ្ញាត​ឲ្យ​សរសេរ​ជា​ថ្មី SDP NAT</string>
+  <string name="w_expert_allow_sdp_nat_rewrite_desc">កែ​អាសយដ្ឋាន​​ដែល​បាន​ផ្ញើ​នៅ​ក្នុង SDP ដើម្បី​​ប្រើ​​អាសយដ្ឋាន​ចំណុច​ប្រទាក់​តែ​មួយ​នៅ​ក្នុង​សំណើ​ចុះ​ឈ្មោះ (តែ​នៅ​ពេល STUN និង ICE មិន​ត្រូវ​បាន​ប្រើ​ប៉ុណ្ណោះ)</string>
   <string name="w_expert_ipv6_media_use">ប្រើ IPV6 សម្រាប់​មេឌៀ</string>
   <string name="w_expert_default_uri_scheme">គ្រោងការណ៍ uri លំនាំ​ដើម</string>
   <string name="w_expert_default_uri_scheme_desc">Scheme to prepend to callee uri ប្រសិនបើ​មិន​បាន​បញ្ជាក់</string>

@@ -65,6 +65,7 @@
   <string name="enable_stun">Habilitar STUN</string>
   <string name="enable_stun_desc">Activar la funcionalidad STUN</string>
   <string name="enable_stun2">Use nuevo formato STUN</string>
+  <string name="enable_stun2_desc">Las peticiones STUN para resolver direcciones mapeadas de socket deben usar el nuevo formato.</string>
   <string name="stun_server">Servidor STUN</string>
   <string name="stun_server_desc">Servidores STUN (HOST[:PUERTO], ...)</string>
   <string name="enable_qos">Habilitar QoS</string>
@@ -105,6 +106,8 @@
   <string name="disable_tcp_switch_desc">Si está activado, previene el cambio a TCP para paquetes UDP demasiado grandes</string>
   <string name="disable_rport">Deshabilitar rport en solicitud</string>
   <string name="disable_rport_desc">Solamente activar para servidores con errores. Deshabilita soporte RFC 3581 por no enviar rport.</string>
+  <string name="add_bandwidth_tias_in_sdp">Añadir modificador TIAS de ancho de banda para SDP</string>
+  <string name="add_bandwidth_tias_in_sdp_desc">Como para RFC3890. Es necesario para el vídeo en servidores Avaya, pero rompe un procesamiento problemático para algunos servidores SIP.</string>
   <!--Security-->
   <string name="tls">Cifrado TLS</string>
   <string name="secure_transport">Protocolo seguro</string>
@@ -246,6 +249,7 @@
   <string name="codec_h264_profile">Perfil H264</string>
   <string name="codec_h264_level">Nivel H264</string>
   <string name="codec_h264_bitrate">H264 bitrate</string>
+  <string name="codec_h264_bitrate_desc">Usar 0 por defecto para un nivel seleccionado</string>
   <string name="thread_count">Número de subprocesos</string>
   <string name="thread_count_desc">Número de subprocesos asignados a la pila SIP. Si es mayor que 0 la batería se gasta más rápido.</string>
   <string name="media_thread_count">Contador de tareas para Medios</string>
@@ -267,6 +271,7 @@
   <string name="dial_press_tone">Reacción sonora del marcador telefónico</string>
   <string name="dial_press_tone_desc">Reproducir un sonido cuando se pulsa un número</string>
   <string name="dtmf_press_tone">Retroalimentación de tono DTMF</string>
+  <string name="dtmf_press_tone_desc">Reproducir tonos de marcado al enviar señales DTMF en la llamada</string>
   <string name="dial_press_vibrate">Reacción de vibración del marcador telefónico</string>
   <string name="dial_press_vibrate_desc">Vibrar al pulsar un número</string>
   <string name="start_with_text_dialer">Marcador telefónico en modo texto</string>
