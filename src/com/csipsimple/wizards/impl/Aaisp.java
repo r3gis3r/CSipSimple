@@ -33,7 +33,8 @@ public class Aaisp extends SimpleImplementation {
 	
 	@Override
 	protected String getDomain() {
-		return "proxy.aasip.co.uk";
+		//return "proxy.aasip.co.uk";
+		return "voiceless.aa.net.uk";
 	}
 
     private final static String USUAL_PREFIX = "+44";
