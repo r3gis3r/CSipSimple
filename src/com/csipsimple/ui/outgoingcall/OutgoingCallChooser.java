@@ -160,6 +160,8 @@ public class OutgoingCallChooser extends SherlockFragmentActivity {
     private void connectService() {
         PreferencesProviderWrapper prefsWrapper = new PreferencesProviderWrapper(this);
         Intent sipService = new Intent(SipManager.INTENT_SIP_SERVICE);
+        // Optional, but here we bundle so just ensure we are using csipsimple package
+        sipService.setPackage(getPackageName());
         if (prefsWrapper.isValidConnectionForOutgoing()) {
             sipService.putExtra(SipManager.EXTRA_OUTGOING_ACTIVITY, getComponentName());
             startService(sipService);

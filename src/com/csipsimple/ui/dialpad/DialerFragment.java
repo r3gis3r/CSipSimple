@@ -329,7 +329,10 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        getActivity().bindService(new Intent(SipManager.INTENT_SIP_SERVICE), connection,
+        Intent serviceIntent = new Intent(SipManager.INTENT_SIP_SERVICE);
+        // Optional, but here we bundle so just ensure we are using csipsimple package
+        serviceIntent.setPackage(activity.getPackageName());
+        getActivity().bindService(serviceIntent, connection,
                 Context.BIND_AUTO_CREATE);
         // timings.addSplit("Bind asked for two");
         if (prefsWrapper == null) {

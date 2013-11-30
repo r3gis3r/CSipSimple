@@ -103,6 +103,8 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 	protected void onResume() {
 		super.onResume();
 		Intent sipServiceIntent = new Intent(SipManager.INTENT_SIP_SERVICE);
+        // Optional, but here we bundle so just ensure we are using csipsimple package
+		sipServiceIntent.setPackage(getPackageName());
 		bindService(sipServiceIntent , sipConnection, BIND_AUTO_CREATE);
 		
 		

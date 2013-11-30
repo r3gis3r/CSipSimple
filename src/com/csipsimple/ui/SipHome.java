@@ -495,6 +495,8 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
         Thread t = new Thread("StartSip") {
             public void run() {
                 Intent serviceIntent = new Intent(SipManager.INTENT_SIP_SERVICE);
+                // Optional, but here we bundle so just ensure we are using csipsimple package
+                serviceIntent.setPackage(SipHome.this.getPackageName());
                 serviceIntent.putExtra(SipManager.EXTRA_OUTGOING_ACTIVITY, new ComponentName(SipHome.this, SipHome.class));
                 startService(serviceIntent);
                 postStartSipService();
