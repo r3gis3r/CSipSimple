@@ -79,7 +79,6 @@ public class ContactsUtils14 extends ContactsUtils5 {
         if(cursor != null) {
             try {
                 if(cursor.getCount() > 0) {
-                    Log.d(THIS_FILE, "Found " + cursor.getCount() + "self info ");
                     cursor.moveToFirst();
                     
                     ContentValues cv = new ContentValues();
