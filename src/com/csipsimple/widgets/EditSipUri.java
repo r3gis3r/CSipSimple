@@ -73,8 +73,6 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
         domainTextHelper = (TextView) findViewById(R.id.dialtxt_domain_helper);
         completeList = (ListView) findViewById(R.id.autoCompleteList);
 
-        autoCompleteAdapter = new ContactsAutocompleteAdapter(context);
-
         // Map events
         accountChooserButtonText.setOnAccountChangeListener(new OnAccountChangeListener() {
             @Override
@@ -89,18 +87,45 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
         });
         dialUser.addTextChangedListener(this);
         
+    }
+    
+    /* (non-Javadoc)
+     * @see android.view.View#onAttachedToWindow()
+     */
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
         if(isInEditMode()) {
             // Don't bind cursor in this case
             return;
         }
-        Cursor c = ContactsWrapper.getInstance().getContactsPhones(context, null);
-        contactsAdapter = new ContactAdapter(context, c);
+        Cursor c = ContactsWrapper.getInstance().getContactsPhones(getContext(), null);
+        contactsAdapter = new ContactAdapter(getContext(), c);
         completeList.setAdapter(contactsAdapter);
         completeList.setOnItemClickListener(this);
 
+        autoCompleteAdapter = new ContactsAutocompleteAdapter(getContext());
         dialUser.setAdapter(autoCompleteAdapter);
-        
+    }
+    
+    /* (non-Javadoc)
+     * @see android.view.View#onDetachedFromWindow()
+     */
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
 
+        if(isInEditMode()) {
+            // Don't bind cursor in this case
+            return;
+        }
+        if(contactsAdapter != null) {
+            contactsAdapter.changeCursor(null);
+        }
+        if(autoCompleteAdapter != null) {
+            autoCompleteAdapter.changeCursor(null);
+        }
     }
 
     private class ContactAdapter extends SimpleCursorAdapter implements SectionIndexer {
