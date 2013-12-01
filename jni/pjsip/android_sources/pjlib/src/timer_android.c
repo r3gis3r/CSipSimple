@@ -281,6 +281,11 @@ PJ_DEF(pj_timer_entry*) pj_timer_entry_init( pj_timer_entry *entry,
     return entry;
 }
 
+PJ_DEF(pj_bool_t) pj_timer_entry_running( pj_timer_entry *entry )
+{
+    return (entry->_timer_id >= 0);
+}
+
 static pj_status_t schedule_w_grp_lock(pj_timer_heap_t *ht,
                                        pj_timer_entry *entry,
                                        const pj_time_val *delay,

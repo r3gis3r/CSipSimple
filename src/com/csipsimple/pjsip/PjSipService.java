@@ -82,7 +82,6 @@ import org.pjsip.pjsua.pjsip_tls_setting;
 import org.pjsip.pjsua.pjsip_transport_type_e;
 import org.pjsip.pjsua.pjsua;
 import org.pjsip.pjsua.pjsuaConstants;
-import org.pjsip.pjsua.pjsua_acc_config;
 import org.pjsip.pjsua.pjsua_acc_info;
 import org.pjsip.pjsua.pjsua_buddy_config;
 import org.pjsip.pjsua.pjsua_call_flag;
@@ -817,7 +816,7 @@ public class PjSipService {
         account.cfg.setRegister_on_acc_add(pjsuaConstants.PJ_FALSE);
 
         if (currentAccountStatus.isAddedToStack()) {
-            pjsua.csipsimple_set_acc_user_data(account.cfg, account.css_cfg);
+            pjsua.csipsimple_set_acc_user_data(currentAccountStatus.getPjsuaId(), account.css_cfg);
             status = pjsua.acc_modify(currentAccountStatus.getPjsuaId(), account.cfg);
             beforeAccountRegistration(currentAccountStatus.getPjsuaId(), profile);
             ContentValues cv = new ContentValues();
@@ -857,16 +856,14 @@ public class PjSipService {
                         break;
                 }
 
-                pjsua_acc_config nCfg = new pjsua_acc_config();
-                pjsua.acc_get_config(accId[0], nCfg);
-                pjsua.csipsimple_set_acc_user_data(nCfg, account.css_cfg);
+                pjsua.csipsimple_set_acc_user_data(accId[0], account.css_cfg);
                 // TODO : use video cfg here
-                nCfg.setVid_in_auto_show(pjsuaConstants.PJ_TRUE);
-                nCfg.setVid_out_auto_transmit(pjsuaConstants.PJ_TRUE);
-                status = pjsua.acc_modify(accId[0], nCfg);
+//                nCfg.setVid_in_auto_show(pjsuaConstants.PJ_TRUE);
+//                nCfg.setVid_out_auto_transmit(pjsuaConstants.PJ_TRUE);
+//                status = pjsua.acc_modify(accId[0], nCfg);
             } else {
                 // Cause of standard account different from local account :)
-                pjsua.csipsimple_set_acc_user_data(account.cfg, account.css_cfg);
+                pjsua.csipsimple_set_acc_user_data(accId[0], account.css_cfg);
                 status = pjsua.acc_add(account.cfg, pjsuaConstants.PJ_FALSE, accId);
                 beforeAccountRegistration(accId[0], profile);
                 pjsua.acc_set_registration(accId[0], 1);

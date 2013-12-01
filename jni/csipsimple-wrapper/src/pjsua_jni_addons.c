@@ -622,12 +622,13 @@ PJ_DECL(void) csipsimple_acc_config_default(csipsimple_acc_config* css_acc_cfg){
 	css_acc_cfg->p_preferred_identity.slen = 0;
 }
 
-PJ_DECL(pj_status_t) csipsimple_set_acc_user_data(pjsua_acc_config* acc_cfg, csipsimple_acc_config* css_acc_cfg){
+PJ_DECL(pj_status_t) csipsimple_set_acc_user_data(pjsua_acc_id acc_id, csipsimple_acc_config* css_acc_cfg){
 
 	csipsimple_acc_config *additional_acc_cfg = PJ_POOL_ZALLOC_T(css_var.pool, csipsimple_acc_config);
 	pj_memcpy(additional_acc_cfg, css_acc_cfg, sizeof(csipsimple_acc_config));
 	pj_strdup(css_var.pool, &additional_acc_cfg->p_preferred_identity, &css_acc_cfg->p_preferred_identity);
-	acc_cfg->user_data = additional_acc_cfg;
+
+	pjsua_acc_set_user_data(acc_id, additional_acc_cfg);
 
 	return PJ_SUCCESS;
 }
