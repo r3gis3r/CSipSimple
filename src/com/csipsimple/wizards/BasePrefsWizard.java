@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -44,6 +45,7 @@ import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.wizards.WizardUtils.WizardInfo;
 
 import java.util.List;
+import java.util.UUID;
 
 public class BasePrefsWizard extends GenericPrefs {
 	
@@ -289,6 +291,7 @@ public class BasePrefsWizard extends GenericPrefs {
 		    prefs.startEditing();
 			wizard.setDefaultParams(prefs);
 			prefs.endEditing();
+			applyNewAccountDefault(account);
 			Uri uri = getContentResolver().insert(SipProfile.ACCOUNT_URI, account.getDbContentValues());
 			
 			// After insert, add filters for this wizard 
@@ -320,7 +323,20 @@ public class BasePrefsWizard extends GenericPrefs {
 		}
 	}
 
-	@Override
+	/**
+	 * Apply default settings for a new account to check very basic coherence of settings and auto-modify settings missing
+     * @param account
+     */
+    private void applyNewAccountDefault(SipProfile account) {
+        if(account.use_rfc5626) {
+            if(TextUtils.isEmpty(account.rfc5626_instance_id)) {
+                String autoInstanceId = (UUID.randomUUID()).toString();
+                account.rfc5626_instance_id = "<urn:uuid:"+autoInstanceId+">";
+            }
+        }
+    }
+
+    @Override
 	protected int getXmlPreferences() {
 		return wizard.getBasePreferenceResource();
 	}
