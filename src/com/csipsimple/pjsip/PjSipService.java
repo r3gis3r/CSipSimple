@@ -863,8 +863,8 @@ public class PjSipService {
 //                status = pjsua.acc_modify(accId[0], nCfg);
             } else {
                 // Cause of standard account different from local account :)
-                pjsua.csipsimple_set_acc_user_data(accId[0], account.css_cfg);
                 status = pjsua.acc_add(account.cfg, pjsuaConstants.PJ_FALSE, accId);
+                pjsua.csipsimple_set_acc_user_data(accId[0], account.css_cfg);
                 beforeAccountRegistration(accId[0], profile);
                 pjsua.acc_set_registration(accId[0], 1);
             }
