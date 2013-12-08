@@ -1081,6 +1081,12 @@ public class SipConfigManager {
      */
     public static final String AUTO_RECORD_CALLS = "auto_record_calls";
     /**
+     * Play a wait tone when the call is on hold on remote side.
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String PLAY_WAITTONE_ON_HOLD = "play_waittone_on_hold";
+    /**
      * Default display name to use for sip contact.<br/>
      * This can be overriden per account.
      * 

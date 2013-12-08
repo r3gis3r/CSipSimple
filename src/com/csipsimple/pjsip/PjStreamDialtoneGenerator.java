@@ -26,15 +26,14 @@ import com.csipsimple.utils.Log;
 import org.pjsip.pjsua.pj_pool_t;
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pjmedia_port;
+import org.pjsip.pjsua.pjmedia_tone_desc;
 import org.pjsip.pjsua.pjmedia_tone_digit;
 import org.pjsip.pjsua.pjsua;
-import org.pjsip.pjsua.pjsuaConstants;
 import org.pjsip.pjsua.pjsua_call_info;
 
 /**
  * DTMF In band tone generator for a given call object
  * It creates it's own pool, media port, and can stream in. 
- * @author r3gis3r
  *
  */
 public class PjStreamDialtoneGenerator {
@@ -43,13 +42,20 @@ public class PjStreamDialtoneGenerator {
     private static final String THIS_FILE = "PjStreamDialtoneGenerator";
     private static String SUPPORTED_DTMF = "0123456789abcd*#";
     private final int callId;
+    private final boolean streamAsMicro;
 	private pj_pool_t dialtonePool;
 	private pjmedia_port dialtoneGen;
 	private int dialtoneSlot = -1;
-	
+	private Thread mLoopingThread = null;
+	private Boolean mContinueLooping = false;
 	
 	public PjStreamDialtoneGenerator(int aCallId) {
+        this(aCallId, true);
+    }
+	
+    public PjStreamDialtoneGenerator(int aCallId, boolean onMicro) {
         callId = aCallId;
+        streamAsMicro = onMicro;
     }
 	
 	/**
@@ -83,8 +89,12 @@ public class PjStreamDialtoneGenerator {
 			return status;
 		}
 		dialtoneSlot = dialtoneSlotPtr[0];
-		int callConfSlot = info.getConf_slot();
-		status = pjsua.conf_connect(dialtoneSlot, callConfSlot);
+		if(streamAsMicro) {
+    		int callConfSlot = info.getConf_slot();
+    		status = pjsua.conf_connect(dialtoneSlot, callConfSlot);
+		}else {
+		    status = pjsua.conf_connect(dialtoneSlot, 0);
+		}
 		if (status != pjsua.PJ_SUCCESS) {
 			dialtoneSlot = -1;
 			stopDialtoneGenerator();
@@ -123,13 +133,10 @@ public class PjStreamDialtoneGenerator {
 	 * @return the pjsip status
 	 */
 	public synchronized int sendPjMediaDialTone(String dtmfChars) {
-		if (dialtoneGen == null) {
-			int status = startDialtoneGenerator();
-			if (status != pjsua.PJ_SUCCESS) {
-				return -1;
-			}
-		}
-		int status = pjsuaConstants.PJ_SUCCESS;
+	    int status = ensureDialtoneGen();
+	    if(status != pjsua.PJ_SUCCESS) {
+	        return status;
+	    }
 		stopSending();
 		
 		for(int i = 0 ; i < dtmfChars.length(); i++ ) {
@@ -150,10 +157,71 @@ public class PjStreamDialtoneGenerator {
 
 		return status;
 	}
+	/**
+	 * Start playback of a waiting tone.
+	 * This will create a thread looping until {@link #stopDialtoneGenerator()} called
+	 *  
+	 * @return #PJ_SUCCESS if start done correctly
+	 */
+    public synchronized int startPjMediaWaitingTone() {
+        int status = ensureDialtoneGen();
+        if (status != pjsua.PJ_SUCCESS) {
+            return status;
+        }
+        stopSending();
+        mContinueLooping = true;
+        mLoopingThread = new Thread() {
+            @Override
+            public void run() {
+                while(mContinueLooping) {
+                    try {
+                        // Found dtmf char, use digit api
+                        pjmedia_tone_desc[] tone = new pjmedia_tone_desc[1];
+                        tone[0] = new pjmedia_tone_desc();
+                        tone[0].setVolume((short) 0);  // 0 means default
+                        tone[0].setOn_msec((short) 100);
+                        tone[0].setOff_msec((short) 200);
+                        tone[0].setFreq1((short)440);
+                        tone[0].setFreq2((short)350); // Not sure about this one
+                        pjsua.pjmedia_tonegen_play(dialtoneGen, 1, tone, 0);
+                        mContinueLooping.wait(3000);
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
+            } 
+        };
+        mLoopingThread.start();
+        return status;
+    }
+	
+	private int ensureDialtoneGen() {
+        if (dialtoneGen == null) {
+            int status = startDialtoneGenerator();
+            if (status != pjsua.PJ_SUCCESS) {
+                return -1;
+            }
+        }
+        return pjsua.PJ_SUCCESS;
+	}
 	
 	private void stopSending() {
+	    if(mLoopingThread != null) {
+	        mContinueLooping = false;
+	        mContinueLooping.notify();
+	        mLoopingThread.interrupt();
+	    }
         if (dialtoneGen != null) {
             pjsua.pjmedia_tonegen_stop(dialtoneGen);
+        }
+        if(mLoopingThread != null) {
+            try {
+                mLoopingThread.join(100);
+            } catch (InterruptedException e) {
+                Log.e(THIS_FILE, "Problem joining looping thread", e);
+            }finally {
+                mLoopingThread = null;
+            }
         }
 	}
 

@@ -93,6 +93,7 @@ public class UAStateReceiver extends Callback {
 
     private int eventLockCount = 0;
     private boolean mIntegrateWithCallLogs;
+    private boolean mPlayWaittone;
     private int mPreferedHeadsetAction;
     private boolean mAutoRecordCalls;
     private int mMicroSource;
@@ -221,6 +222,7 @@ public class UAStateReceiver extends Callback {
                 pjService.stopDialtoneGenerator(callId);
                 pjService.stopRecording(callId);
                 pjService.stopPlaying(callId);
+                pjService.stopWaittoneGenerator(callId);
             } else {
                 if (ongoingCallLock != null && !ongoingCallLock.isHeld()) {
                     ongoingCallLock.acquire();
@@ -412,8 +414,9 @@ public class UAStateReceiver extends Callback {
              */
             boolean connectToOtherCalls = false;
             int callConfSlot = callInfo.getConfPort();
-            if (callInfo.getMediaStatus() == SipCallSession.MediaState.ACTIVE ||
-                    callInfo.getMediaStatus() == SipCallSession.MediaState.REMOTE_HOLD) {
+            int mediaStatus = callInfo.getMediaStatus();
+            if (mediaStatus == SipCallSession.MediaState.ACTIVE ||
+                    mediaStatus == SipCallSession.MediaState.REMOTE_HOLD) {
                 
                 connectToOtherCalls = true;
                 pjsua.conf_connect(callConfSlot, 0);
@@ -434,6 +437,7 @@ public class UAStateReceiver extends Callback {
             
 
             // Connects/disconnnect to other active calls (for conferencing).
+            boolean hasOtherCall = false;
             synchronized (callsList) {
                 if (callsList != null) {
                     for (int i = 0; i < callsList.size(); i++) {
@@ -441,6 +445,7 @@ public class UAStateReceiver extends Callback {
                         if (otherCallInfo != null && otherCallInfo != callInfo) {
                             int otherMediaStatus = otherCallInfo.getMediaStatus();
                             if(otherCallInfo.isActive() && otherMediaStatus !=  SipCallSession.MediaState.NONE) {
+                                hasOtherCall = true;
                                 boolean connect = connectToOtherCalls && (otherMediaStatus == SipCallSession.MediaState.ACTIVE ||
                                                                                                                     otherMediaStatus == SipCallSession.MediaState.REMOTE_HOLD);
                                 int otherCallConfSlot = otherCallInfo.getConfPort();
@@ -452,9 +457,17 @@ public class UAStateReceiver extends Callback {
                                     pjsua.conf_disconnect(otherCallConfSlot, callConfSlot);
                                 }
                             }
-                            
                         }
                     }
+                }
+            }
+
+            // Play wait tone
+            if(mPlayWaittone) {
+                if(mediaStatus == SipCallSession.MediaState.REMOTE_HOLD && !hasOtherCall) {
+                    pjService.startWaittoneGenerator(callId);
+                }else {
+                    pjService.stopWaittoneGenerator(callId);
                 }
             }
 
@@ -909,6 +922,8 @@ public class UAStateReceiver extends Callback {
                 SipConfigManager.AUTO_RECORD_CALLS);
         mMicroSource = SipConfigManager.getPreferenceIntegerValue(ctxt,
                 SipConfigManager.MICRO_SOURCE);
+        mPlayWaittone = SipConfigManager.getPreferenceBooleanValue(ctxt, 
+                SipConfigManager.PLAY_WAITTONE_ON_HOLD, false);
     }
 
     // --------

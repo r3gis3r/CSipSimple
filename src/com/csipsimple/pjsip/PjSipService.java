@@ -117,7 +117,6 @@ public class PjSipService {
             localTcpAccPjId, localTcp6AccPjId,
             localTlsAccPjId, localTls6AccPjId;
     public PreferencesProviderWrapper prefsWrapper;
-    // private PjStreamDialtoneGenerator dialtoneGenerator;
 
     private Integer hasBeenHoldByGSM = null;
     private Integer hasBeenChangedRingerMode = null;
@@ -130,6 +129,7 @@ public class PjSipService {
     private SparseArray<String> dtmfToAutoSend = new SparseArray<String>(5);
     private SparseArray<TimerTask> dtmfTasks = new SparseArray<TimerTask>(5);
     private SparseArray<PjStreamDialtoneGenerator> dtmfDialtoneGenerators = new SparseArray<PjStreamDialtoneGenerator>(5);
+    private SparseArray<PjStreamDialtoneGenerator> waittoneGenerators = new SparseArray<PjStreamDialtoneGenerator>(5);
     private String mNatDetected = "";
 
     // -------
@@ -1495,6 +1495,20 @@ public class PjSipService {
         if (dtmfTasks.get(callId) != null) {
             dtmfTasks.get(callId).cancel();
             dtmfTasks.put(callId, null);
+        }
+    }
+
+    public void startWaittoneGenerator(int callId) {
+        if (waittoneGenerators.get(callId) == null) {
+            waittoneGenerators.put(callId, new PjStreamDialtoneGenerator(callId, false));
+        }
+        waittoneGenerators.get(callId).startPjMediaWaitingTone();
+    }
+    
+    public void stopWaittoneGenerator(int callId) {
+        if (waittoneGenerators.get(callId) != null) {
+            waittoneGenerators.get(callId).stopDialtoneGenerator();
+            waittoneGenerators.put(callId, null);
         }
     }
 
