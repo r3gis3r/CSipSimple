@@ -63,6 +63,12 @@
             android:numeric="signed"
             android:summary="@string/dtmf_wait_time_desc"
             android:title="@string/dtmf_wait_time" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="play_waittone_on_hold"
+            android:summary="@string/play_waittone_on_hold_desc"
+            android:title="@string/play_waittone_on_hold" />
     </PreferenceCategory>
 
 </PreferenceScreen>

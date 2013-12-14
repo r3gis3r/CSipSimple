@@ -29,6 +29,7 @@ import org.pjsip.pjsua.pjmedia_port;
 import org.pjsip.pjsua.pjmedia_tone_desc;
 import org.pjsip.pjsua.pjmedia_tone_digit;
 import org.pjsip.pjsua.pjsua;
+import org.pjsip.pjsua.pjsuaConstants;
 import org.pjsip.pjsua.pjsua_call_info;
 
 /**
@@ -46,8 +47,6 @@ public class PjStreamDialtoneGenerator {
 	private pj_pool_t dialtonePool;
 	private pjmedia_port dialtoneGen;
 	private int dialtoneSlot = -1;
-	private Thread mLoopingThread = null;
-	private Boolean mContinueLooping = false;
 	
 	public PjStreamDialtoneGenerator(int aCallId) {
         this(aCallId, true);
@@ -169,29 +168,15 @@ public class PjStreamDialtoneGenerator {
             return status;
         }
         stopSending();
-        mContinueLooping = true;
-        mLoopingThread = new Thread() {
-            @Override
-            public void run() {
-                while(mContinueLooping) {
-                    try {
-                        // Found dtmf char, use digit api
-                        pjmedia_tone_desc[] tone = new pjmedia_tone_desc[1];
-                        tone[0] = new pjmedia_tone_desc();
-                        tone[0].setVolume((short) 0);  // 0 means default
-                        tone[0].setOn_msec((short) 100);
-                        tone[0].setOff_msec((short) 200);
-                        tone[0].setFreq1((short)440);
-                        tone[0].setFreq2((short)350); // Not sure about this one
-                        pjsua.pjmedia_tonegen_play(dialtoneGen, 1, tone, 0);
-                        mContinueLooping.wait(3000);
-                    } catch (InterruptedException e) {
-                        break;
-                    }
-                }
-            } 
-        };
-        mLoopingThread.start();
+        // Found dtmf char, use digit api
+        pjmedia_tone_desc[] tone = new pjmedia_tone_desc[1];
+        tone[0] = new pjmedia_tone_desc();
+        tone[0].setVolume((short) 0);  // 0 means default
+        tone[0].setOn_msec((short) 100);
+        tone[0].setOff_msec((short) 1500);
+        tone[0].setFreq1((short)440);
+        tone[0].setFreq2((short)350); // Not sure about this one
+        pjsua.pjmedia_tonegen_play(dialtoneGen, 1, tone, pjsuaConstants.PJMEDIA_TONEGEN_LOOP);
         return status;
     }
 	
@@ -206,22 +191,8 @@ public class PjStreamDialtoneGenerator {
 	}
 	
 	private void stopSending() {
-	    if(mLoopingThread != null) {
-	        mContinueLooping = false;
-	        mContinueLooping.notify();
-	        mLoopingThread.interrupt();
-	    }
         if (dialtoneGen != null) {
             pjsua.pjmedia_tonegen_stop(dialtoneGen);
-        }
-        if(mLoopingThread != null) {
-            try {
-                mLoopingThread.join(100);
-            } catch (InterruptedException e) {
-                Log.e(THIS_FILE, "Problem joining looping thread", e);
-            }finally {
-                mLoopingThread = null;
-            }
         }
 	}
 

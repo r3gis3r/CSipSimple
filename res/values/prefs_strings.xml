@@ -340,6 +340,8 @@
     <string name="vid_out_auto_transmit_desc">Send video from device automatically</string>
     <string name="use_video">Use video</string>
     <string name="use_video_desc">Send video from device automatically</string>
+    <string name="play_waittone_on_hold">Wait tone on hold</string>
+    <string name="play_waittone_on_hold_desc">Play a tone when remote part hold</string>
 
     <!-- Settings modes -->
     <string name="expert_preferences">Expert mode</string>
