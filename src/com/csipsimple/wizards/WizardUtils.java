@@ -1064,10 +1064,12 @@ public class WizardUtils {
                     Hibritel.class));
             WIZARDS_DICT.put("POLFON", new WizardInfo("POLFON", "polfon", 
                     R.drawable.ic_wizard_polfon, 19, 
-                    new Locale[]{
-                    new Locale("pl")
-                    }, false, false, 
+                    new Locale[]{ new Locale("pl") }, false, false, 
                     Polfon.class));
+            WIZARDS_DICT.put("TELPHIN", new WizardInfo("TELPHIN", "Telphin", 
+                    R.drawable.ic_wizard_telphin, 45, 
+                    new Locale[]{ locale("ru_RU") }, false, false, 
+                    Telphin.class));
             
             
 		}else {
