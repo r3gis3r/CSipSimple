@@ -56,7 +56,7 @@ public class Mobex extends SimpleImplementation {
      */
     @Override
     protected String getDomain() {
-        return "200.152.124.172";
+        return "conecta.mobex.com.br";
     }
 
     /**
