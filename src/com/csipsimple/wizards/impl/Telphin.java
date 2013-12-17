@@ -21,6 +21,8 @@
 
 package com.csipsimple.wizards.impl;
 
+import android.text.InputType;
+
 import com.csipsimple.api.SipProfile;
 
 public class Telphin extends SimpleImplementation {
@@ -33,6 +35,7 @@ public class Telphin extends SimpleImplementation {
 	@Override
 	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
+        accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
 	}
 
 
