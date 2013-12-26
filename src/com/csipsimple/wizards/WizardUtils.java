@@ -1070,6 +1070,14 @@ public class WizardUtils {
                     R.drawable.ic_wizard_telphin, 45, 
                     new Locale[]{ locale("ru_RU") }, false, false, 
                     Telphin.class));
+            WIZARDS_DICT.put("NETGSM", new WizardInfo("NETGSM", "Netgsm", 
+                    R.drawable.ic_wizard_netgsm, 30, 
+                    new Locale[] {new Locale("TR", "tr")}, false, false, 
+                    NetGSM.class));
+            WIZARDS_DICT.put("NETGSMSANTRAL", new WizardInfo("NETGSMSANTRAL", "Netgsm Sanal Santral", 
+                    R.drawable.ic_wizard_netgsmsantral, 30,
+                    new Locale[] {new Locale("TR", "tr")}, false, false, 
+                    NetGSMSantral.class));
             
             
 		}else {
