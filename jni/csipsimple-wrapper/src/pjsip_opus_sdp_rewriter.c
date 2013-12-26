@@ -98,7 +98,8 @@ static pj_status_t opus_sdp_on_tx_msg(pjsip_tx_data *tdata)
         pjsip_msg_body* body = tdata->msg->body;
         if (opus_sdp_body_is_sdp(body))
         {
-            pjmedia_sdp_attr* opus_attr = opus_sdp_get_opus_rtpmap_attr((pjmedia_sdp_session*) body->data);
+            pjsip_msg_body* new_body = pjsip_msg_body_clone(tdata->pool, body);
+            pjmedia_sdp_attr* opus_attr = opus_sdp_get_opus_rtpmap_attr((pjmedia_sdp_session*) new_body->data);
             if(opus_attr != NULL){
                 pj_str_t new_value;
                 char* found_opus = pj_stristr(&opus_attr->value, &STR_OPUS);
@@ -107,6 +108,7 @@ static pj_status_t opus_sdp_on_tx_msg(pjsip_tx_data *tdata)
                                                                                                                 found_opus - opus_attr->value.ptr, opus_attr->value.ptr,
                                                                                                                 STR_OPUS_RFC_FMT.slen, STR_OPUS_RFC_FMT.ptr);
                 opus_attr->value = new_value;
+                tdata->msg->body = new_body;
             }
         }
     }
