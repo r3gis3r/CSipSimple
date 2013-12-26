@@ -25,9 +25,11 @@ LOCAL_SRC_FILES += $(SILK_SOURCES:%=../sources/%)
 ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI),armeabi armeabi-v7a))
 LOCAL_C_INCLUDES += $(OPUS_PATH)/silk/fixed
 LOCAL_SRC_FILES += $(SILK_SOURCES_FIXED:%=../sources/%)
+LOCAL_SRC_FILES += $(OPUS_SOURCES_FIXED:%=../sources/%)
 else
 LOCAL_C_INCLUDES += $(OPUS_PATH)/silk/float
 LOCAL_SRC_FILES += $(SILK_SOURCES_FLOAT:%=../sources/%)
+LOCAL_SRC_FILES += $(OPUS_SOURCES_FLOAT:%=../sources/%)
 endif
 include $(OPUS_PATH)/celt_sources.mk
 LOCAL_SRC_FILES += $(CELT_SOURCES:%=../sources/%)
@@ -44,7 +46,7 @@ LOCAL_CFLAGS += -DOPUS_BUILD -DVAR_ARRAYS
 # Hack to mute restrict not supported by ndk 
 LOCAL_CFLAGS += -Drestrict=__restrict
 ifeq ($(TARGET_ARCH_ABI),$(filter $(TARGET_ARCH_ABI),armeabi armeabi-v7a))
-LOCAL_CFLAGS += -DFIXED_POINT
+LOCAL_CFLAGS += -DFIXED_POINT=1 -DDISABLE_FLOAT_API
 endif
 
 LOCAL_STATIC_LIBRARIES += libgcc
