@@ -136,9 +136,6 @@ PJ_DECL(pj_str_t) call_secure_media_info(pjsua_call_id call_id) {
 							zrtp_state_info info = jzrtp_getInfoFromTransport(call_med->tp);
 							if(info.secure){
 								char msg[512];
-								PJ_LOG(4, (THIS_FILE, "ZRTP :: V %d", info.sas_verified));
-								PJ_LOG(4, (THIS_FILE, "ZRTP :: S L %d", info.sas.slen));
-								PJ_LOG(4, (THIS_FILE, "ZRTP :: C L %d", info.cipher.slen));
 
 								pj_ansi_snprintf(msg, sizeof(msg), "ZRTP - %s\n%.*s\n%.*s",
 										info.sas_verified ? "Verified": "Not verified",

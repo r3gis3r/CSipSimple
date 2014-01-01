@@ -136,6 +136,11 @@ public final class Compatibility {
                 && !Compatibility.isCompatible(9)) {
             return true;
         }
+        // LG-G2
+        if (android.os.Build.DEVICE.toLowerCase().startsWith("g2")
+                && android.os.Build.BRAND.toLowerCase().startsWith("lge")) {
+            return true;
+        }
         // LG-LS840
         if (android.os.Build.DEVICE.toLowerCase().startsWith("cayman")) {
             return true;
@@ -930,6 +935,13 @@ public final class Compatibility {
         }
         if (lastSeenVersion < 2302) {
             if (android.os.Build.DEVICE.toUpperCase().startsWith("U8836")) {
+                prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
+                        shouldUseModeApi());
+            }
+        }
+        if(lastSeenVersion < 2348) {
+            if (android.os.Build.DEVICE.toLowerCase().startsWith("g2")
+                    && android.os.Build.BRAND.toLowerCase().startsWith("lge")) {
                 prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
                         shouldUseModeApi());
             }

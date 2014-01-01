@@ -30,6 +30,10 @@ import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Message;
 import android.os.Vibrator;
 
 import com.csipsimple.models.CallerInfo;
@@ -46,15 +50,19 @@ public class Ringer {
     // Uri for the ringtone.
     Uri customRingtoneUri;
 
-    Ringtone ringtone = null;				// [sentinel]
     Vibrator vibrator;
     VibratorThread vibratorThread;
-    RingerThread ringerThread;
+    HandlerThread ringerThread;
     Context context;
+
+    private RingWorkerHandler ringerWorker;
 
     public Ringer(Context aContext) {
         context = aContext;
         vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        ringerThread = new HandlerThread("RingerThread");
+        ringerThread.start();
+        ringerWorker = new RingWorkerHandler(ringerThread.getLooper());
     }
 
     /**
@@ -70,7 +78,8 @@ public class Ringer {
                 (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         	
         	//Save ringtone at the begining in case we raise vol
-            ringtone = getRingtone(remoteContact, defaultRingtone);
+            Ringtone ringtone = getRingtone(remoteContact, defaultRingtone);
+            ringerWorker.setRingtone(ringtone);
             
         	//No ring no vibrate
             int ringerMode = audioManager.getRingerMode();
@@ -103,14 +112,8 @@ public class Ringer {
             	return;
             }
 
-            Log.d(THIS_FILE, "Starting ring with " + ringtone.getTitle(context));
-            
-            if (ringerThread == null) {
-            	ringerThread = new RingerThread();
-            	Log.d(THIS_FILE, "Starting ringer...");
-            	audioManager.setMode(AudioManager.MODE_RINGTONE);
-            	ringerThread.start();
-            }
+            ringerWorker.startRinging(audioManager);
+        	
         }
     }
 
@@ -122,7 +125,7 @@ public class Ringer {
      *     isRingtonePlaying() or isVibrating() instead.)
      */
     public boolean isRinging() {
-    	return (ringerThread != null || vibratorThread != null);
+    	return (!ringerWorker.isStopped() || vibratorThread != null);
     }
     
     /**
@@ -132,7 +135,6 @@ public class Ringer {
 	public void stopRing() {
 		synchronized (this) {
 			Log.d(THIS_FILE, "==> stopRing() called...");
-
 			stopVibrator();
 			stopRinger();
 		}
@@ -140,14 +142,7 @@ public class Ringer {
     
     
 	private void stopRinger() {
-		if (ringerThread != null) {
-			ringerThread.interrupt();
-			try {
-				ringerThread.join(250);
-			} catch (InterruptedException e) {
-			}
-			ringerThread = null;
-		}
+	    ringerWorker.askStop();
 	}
     
 	private void stopVibrator() {
@@ -186,15 +181,9 @@ public class Ringer {
 				stopRinger();
 				return;
 			}
-			
-			//Ringer
-			if (ringerThread == null) {
-            	ringerThread = new RingerThread();
-            	Log.d(THIS_FILE, "Starting ringer...");
-            	audioManager.setMode(AudioManager.MODE_RINGTONE);
-            	ringerThread.start();
-            }
 
+            //Ringer
+			ringerWorker.startRinging(audioManager);
 		}
 	}
 
@@ -213,25 +202,75 @@ public class Ringer {
     		Log.d(THIS_FILE, "Vibrator thread exiting");
         }
     }
-    
-    private class RingerThread extends Thread {
-    	public void run() {
-            try {
-	    		while (true) {
-	    			ringtone.play();
-	    			while (ringtone.isPlaying()) {
-	    				Thread.sleep(100);
-	    			}
-	    		}
-            } catch (InterruptedException ex) {
-        		Log.d(THIS_FILE, "Ringer thread interrupt");
-            } finally {
-            	if(ringtone != null) {
-            		ringtone.stop();
-            	}
+
+    /**
+     * Thread worker class that handles the task playing ringtone
+     */
+    private class RingWorkerHandler extends Handler {
+        public static final int PROGRESS_RING = 0;
+        private Boolean askedStopped = false;
+        private Ringtone ringtone = null;
+
+        public RingWorkerHandler(Looper looper) {
+            super(looper);
+        }
+        
+        /**
+         * @param audioManager 
+         * 
+         */
+        public void startRinging(AudioManager audioManager) {
+            if(ringtone != null) {
+                Log.d(THIS_FILE, "Starting ring with " + ringtone.getTitle(context));
+                Message msg = ringerWorker.obtainMessage(RingWorkerHandler.PROGRESS_RING);
+                msg.arg1 = RingWorkerHandler.PROGRESS_RING;
+                Log.d(THIS_FILE, "Starting ringer...");
+                audioManager.setMode(AudioManager.MODE_RINGTONE);
+                ringerWorker.sendMessage(msg);
             }
-    		Log.d(THIS_FILE, "Ringer thread exiting");
-    	}
+        }
+
+        /**
+         * @param ringtone
+         */
+        public synchronized void setRingtone(Ringtone ringtone) {
+            if(this.ringtone != null) {
+                this.ringtone.stop();
+            }
+            this.ringtone = ringtone;
+            askedStopped = false;
+        }
+
+        public synchronized void askStop() {
+            askedStopped = true;
+        }
+        
+        public synchronized boolean isStopped() {
+            return askedStopped || (ringtone == null);
+        }
+
+        public void handleMessage(Message msg) {
+            if(ringtone == null) {
+                return;
+            }
+            if (msg.arg1 == PROGRESS_RING) {
+                synchronized (askedStopped) {
+                    if(askedStopped) {
+                        ringtone.stop();
+                        ringtone = null;
+                        return;
+                    }
+                }
+                
+                if(!ringtone.isPlaying()) {
+                    ringtone.play();
+                }
+
+                Message msgBis = ringerWorker.obtainMessage(RingWorkerHandler.PROGRESS_RING);
+                msg.arg1 = RingWorkerHandler.PROGRESS_RING;
+                ringerWorker.sendMessageDelayed(msgBis, 100);
+            }
+        }
     }
 
     private Ringtone getRingtone(String remoteContact, String defaultRingtone) {
