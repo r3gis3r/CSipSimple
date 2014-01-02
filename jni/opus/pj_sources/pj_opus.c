@@ -171,7 +171,7 @@ void apply_opus_codec_params(pj_pool_t* pool, pjmedia_codec_param *attr) {
 	}
 	if (attr->info.clock_rate < 48000) {
 		attr->setting.dec_fmtp.param[attr->setting.dec_fmtp.cnt].name = pj_str(
-				"maxcodedaudiobandwidth");
+				"maxplaybackrate");
 		char clock_rate_char[8];
 		pj_utoa(attr->info.clock_rate, clock_rate_char);
 		pj_strdup2(pool,
@@ -496,7 +496,7 @@ static pj_status_t opus_codec_open(pjmedia_codec *codec,
 	const pj_str_t STR_FMTP_USE_INBAND_FEC = { "useinbandfec", 12 };
 	const pj_str_t STR_FMTP_MAX_AVERAGE_BITRATE = { "maxaveragebitrate", 17 };
 	const pj_str_t STR_FMTP_MAX_CODED_AUDIO_BANDWIDTH = {
-			"maxcodedaudiobandwidth", 22 };
+			"maxplaybackrate", 15 };
 	const pj_str_t STR_FMTP_USE_DTX = { "usedtx", 6 };
 
 	opus = (struct opus_private*) codec->codec_data;
