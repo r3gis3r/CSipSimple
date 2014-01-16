@@ -409,6 +409,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_advancefone, 30, 
                     new Locale[]{ }, false, true, 
                     Advancefone.class));
+            WIZARDS_DICT.put("KURIRA", new WizardInfo("KURIRA", "Kurira", 
+                    R.drawable.ic_wizard_kurira, 30, 
+                    new Locale[]{ }, false, true, 
+                    Kurira.class));
             
 			
 			//Locales
