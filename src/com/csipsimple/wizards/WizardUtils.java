@@ -1082,6 +1082,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_netgsmsantral, 30,
                     new Locale[] {new Locale("TR", "tr")}, false, false, 
                     NetGSMSantral.class));
+            WIZARDS_DICT.put("GTEL", new WizardInfo("GTEL", "GTel", 
+                    R.drawable.ic_wizard_gtel, 30,
+                    new Locale[] {new Locale("TN", "tn")}, false, false, 
+                    GTel.class));
             
             
 		}else {
