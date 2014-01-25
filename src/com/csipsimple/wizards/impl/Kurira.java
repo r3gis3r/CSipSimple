@@ -61,6 +61,7 @@ public class Kurira extends SimpleImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
         account.proxies = new String[] {"sip:41.221.159.76"};
+        account.username =  getText(accountUsername).trim() + "@" + getDomain();
 		return account;
 	}
 	
