@@ -413,6 +413,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_kurira, 30, 
                     new Locale[]{ }, false, true, 
                     Kurira.class));
+            WIZARDS_DICT.put("VOSTRON", new WizardInfo("VOSTRON", "Vostron", 
+                    R.drawable.ic_wizard_vostron, 30, 
+                    new Locale[]{ }, false, true, 
+                    Vostron.class));
             
 			
 			//Locales
