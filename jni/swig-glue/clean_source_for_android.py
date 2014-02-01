@@ -71,4 +71,4 @@ if __name__ == '__main__':
 	brut_code = open(filename).read()
 	code_wo_rtti = remove_rtti(brut_code)
 	code_dalvik_compat = make_dalvik_compat(code_wo_rtti)
-	print code_dalvik_compat
+	print(code_dalvik_compat)

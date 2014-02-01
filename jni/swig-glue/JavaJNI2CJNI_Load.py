@@ -60,9 +60,9 @@ def render_to_template(defs, template_string):
 if __name__ == "__main__":
 	try:
 		opts, args = getopt.getopt(sys.argv[1:], "i:o:t:m:p:", ["input=", "output=", "template=", "module=", "package="])
-	except getopt.GetoptError, err:
+	except getopt.GetoptError as err:
 		# print help information and exit:
-		print str(err) # will print something like "option -a not recognized"
+		print(str(err)) # will print something like "option -a not recognized"
 		sys.exit(2)
 	
 	input_stream = None

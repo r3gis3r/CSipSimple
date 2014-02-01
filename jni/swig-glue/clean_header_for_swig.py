@@ -87,5 +87,5 @@ if __name__ == '__main__':
 	code_necessary = remove_useless_methods(code_w_decls)
 	code_stripped = remove_blank_lines(code_necessary)
 	code_renamed = add_pjsua_rename(code_stripped)
-	print code_renamed
+	print(code_renamed)
 

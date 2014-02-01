@@ -13,4 +13,4 @@ if __name__ == '__main__':
 	filename = sys.argv[1]
 	brut_code = open(filename).read()
 	code_fixed = make_dalvik_compat(brut_code)
-	print code_fixed
+	print(code_fixed)
