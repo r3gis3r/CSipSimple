@@ -65,17 +65,15 @@ public class GTel extends SimpleImplementation {
 		account.proxies = null;
 		account.transport = SipProfile.TRANSPORT_UDP;
 		account.publish_enabled = 1;
-		account.media_stun_use =1;
-        account.sip_stun_use =1;
+		account.media_stun_use =0;
+        account.sip_stun_use =0;
 		return account;
 	}
 	
 	@Override
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
-		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, true);
         prefs.setPreferenceStringValue(SipConfigManager.KEEP_ALIVE_INTERVAL_MOBILE, "20");
         prefs.setPreferenceStringValue(SipConfigManager.KEEP_ALIVE_INTERVAL_WIFI, "40");
-        prefs.addStunServer("stun.gtel.tn");
 	}
 }
