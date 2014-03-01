@@ -180,7 +180,7 @@ public class TimerWrapper extends BroadcastReceiver {
 		
 		// Push next
         Log.v(THIS_FILE, "Schedule TIMER " + entryId + " in " + intervalMs + "ms @ " + firstTime);
-		alarmManager.set(alarmType, firstTime, pendingIntent);
+        Compatibility.setExactAlarm(alarmManager, alarmType, firstTime, pendingIntent);
 		scheduleEntries.add((Integer) entryId);
         scheduleTimes.add((Long) firstTime);
 		return 1;

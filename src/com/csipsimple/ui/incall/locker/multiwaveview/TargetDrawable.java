@@ -59,23 +59,22 @@ public class TargetDrawable {
     private final int mResourceId;
 
     /* package */ static class DrawableWithAlpha extends Drawable {
-        private float mAlpha = 1.0f;
+        private int mAlpha = 255;
         private Drawable mRealDrawable;
         public DrawableWithAlpha(Drawable realDrawable) {
             mRealDrawable = realDrawable;
         }
-        public void setAlpha(float alpha) {
-            mAlpha = alpha;
-        }
-        public float getAlpha() {
+        public int getAlpha() {
             return mAlpha;
         }
         public void draw(Canvas canvas) {
-            mRealDrawable.setAlpha((int) Math.round(mAlpha * 255f));
+            mRealDrawable.setAlpha(mAlpha);
             mRealDrawable.draw(canvas);
         }
+        
         @Override
         public void setAlpha(int alpha) {
+            mAlpha = alpha;
             mRealDrawable.setAlpha(alpha);
         }
         @Override

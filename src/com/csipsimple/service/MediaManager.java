@@ -35,7 +35,6 @@ import android.net.wifi.WifiManager.WifiLock;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
-import android.provider.Settings;
 
 import com.csipsimple.api.MediaState;
 import com.csipsimple.api.SipConfigManager;
@@ -207,8 +206,7 @@ public class MediaManager implements BluetoothChangeListener {
 		
 		//Wifi management if necessary
 		ContentResolver ctntResolver = service.getContentResolver();
-		Settings.System.putInt(ctntResolver, Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_NEVER);
-		
+		Compatibility.setWifiSleepPolicy(ctntResolver, Compatibility.getWifiSleepPolicyNever());
 		
 		//Acquire wifi lock
 		WifiManager wman = (WifiManager) service.getSystemService(Context.WIFI_SERVICE);
@@ -375,7 +373,7 @@ public class MediaManager implements BluetoothChangeListener {
 //		ed.putInt("savedVibrateRing", audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER));
 //		ed.putInt("savedVibradeNotif", audioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION));
 //		ed.putInt("savedRingerMode", audioManager.getRingerMode());
-		ed.putInt("savedWifiPolicy" , android.provider.Settings.System.getInt(ctntResolver, android.provider.Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT));
+		ed.putInt("savedWifiPolicy" , Compatibility.getWifiSleepPolicy(ctntResolver));
 		
 		int inCallStream = Compatibility.getInCallStream(userWantBluetooth);
 		ed.putInt("savedVolume", audioManager.getStreamVolume(inCallStream));
@@ -402,8 +400,7 @@ public class MediaManager implements BluetoothChangeListener {
 		}
 		
 		ContentResolver ctntResolver = service.getContentResolver();
-
-		Settings.System.putInt(ctntResolver, Settings.System.WIFI_SLEEP_POLICY, prefs.getInt("savedWifiPolicy", Settings.System.WIFI_SLEEP_POLICY_DEFAULT));
+		Compatibility.setWifiSleepPolicy(ctntResolver, prefs.getInt("savedWifiPolicy", Compatibility.getWifiSleepPolicyDefault()));
 //		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER, prefs.getInt("savedVibrateRing", AudioManager.VIBRATE_SETTING_ONLY_SILENT));
 //		audioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION, prefs.getInt("savedVibradeNotif", AudioManager.VIBRATE_SETTING_OFF));
 //		audioManager.setRingerMode(prefs.getInt("savedRingerMode", AudioManager.RINGER_MODE_NORMAL));

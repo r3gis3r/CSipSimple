@@ -21,6 +21,10 @@
 
 package com.csipsimple.utils;
 
+import android.annotation.TargetApi;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -31,8 +35,10 @@ import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.MediaRecorder.AudioSource;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.Contacts;
+import android.provider.Settings;
 import android.text.TextUtils;
 
 import com.csipsimple.api.SipConfigManager;
@@ -1044,4 +1050,70 @@ public final class Compatibility {
         return false;
     }
 
+    /**
+     * Get the current wifi sleep policy
+     * @param ctntResolver android content resolver
+     * @return the current wifi sleep policy
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public static int getWifiSleepPolicy(ContentResolver ctntResolver) {
+        if(Compatibility.isCompatible(Build.VERSION_CODES.JELLY_BEAN_MR1)) {
+            return Settings.Global.getInt(ctntResolver, Settings.Global.WIFI_SLEEP_POLICY, Settings.Global.WIFI_SLEEP_POLICY_DEFAULT);
+        }else {
+            return Settings.System.getInt(ctntResolver, Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+        }
+    }
+
+    /**
+     * @return default wifi sleep policy
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public static int getWifiSleepPolicyDefault() {
+        if(Compatibility.isCompatible(Build.VERSION_CODES.JELLY_BEAN_MR1)) {
+            return Settings.Global.WIFI_SLEEP_POLICY_DEFAULT;
+        }else {
+            return Settings.System.WIFI_SLEEP_POLICY_DEFAULT;
+        }
+    }
+
+    /**
+     * @return wifi policy to never sleep
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public static int getWifiSleepPolicyNever() {
+        if(Compatibility.isCompatible(Build.VERSION_CODES.JELLY_BEAN_MR1)) {
+            return Settings.Global.WIFI_SLEEP_POLICY_NEVER;
+        }else {
+            return Settings.System.WIFI_SLEEP_POLICY_NEVER;
+        }
+    }
+    
+    /**
+     * Set wifi policy to a value
+     * @param ctntResolver context content resolver
+     * @param policy the policy to set
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public static void setWifiSleepPolicy(ContentResolver ctntResolver, int policy) {
+        if(!Compatibility.isCompatible(Build.VERSION_CODES.JELLY_BEAN_MR1)) {
+            Settings.System.putInt(ctntResolver, Settings.System.WIFI_SLEEP_POLICY, policy);
+        }else {
+            // We are not granted permission to change that in api 17+
+            //Settings.Global.putInt(ctntResolver, Settings.Global.WIFI_SLEEP_POLICY, policy);
+        }
+    }
+
+    /**
+     * Wrapper to set alarm at exact time
+     * @see android.app.AlarmManager#setExact(int, long, PendingIntent)
+     */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public static void setExactAlarm(AlarmManager alarmManager, int alarmType, long firstTime,
+            PendingIntent pendingIntent) {
+        if(isCompatible(Build.VERSION_CODES.KITKAT)) {
+            alarmManager.setExact(alarmType, firstTime, pendingIntent);
+        }else {
+            alarmManager.set(alarmType, firstTime, pendingIntent);
+        }
+    }
 }
