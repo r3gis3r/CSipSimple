@@ -300,8 +300,8 @@ public class UAStateReceiver extends Callback {
                 break;
         }
 
-        pjService.service.presenceMgr.changeBuddyState(PjSipService.pjStrToString(binfo.getUri()),
-                binfo.getMonitor_pres(), presStatus, presStatusTxt);
+//        pjService.service.presenceMgr.changeBuddyState(PjSipService.pjStrToString(binfo.getUri()),
+//                binfo.getMonitor_pres(), presStatus, presStatusTxt);
         unlockCpu();
     }
 

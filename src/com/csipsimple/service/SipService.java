@@ -914,7 +914,7 @@ public class SipService extends Service {
 	private static HandlerThread executorThread;
 	
 	private AccountStatusContentObserver statusObserver = null;
-    public PresenceManager presenceMgr;
+    //public PresenceManager presenceMgr;
     private BroadcastReceiver serviceReceiver;
 	
 	class AccountStatusContentObserver extends ContentObserver {
@@ -1000,7 +1000,7 @@ public class SipService extends Service {
 		boolean hasSetup = prefsWrapper.getPreferenceBooleanValue(PreferencesProviderWrapper.HAS_ALREADY_SETUP_SERVICE, false);
 		Log.d(THIS_FILE, "Service has been setup ? "+ hasSetup);
 		
-		presenceMgr = new PresenceManager();
+		//presenceMgr = new PresenceManager();
         registerServiceBroadcasts();
 		
 		if(!hasSetup) {
@@ -1290,7 +1290,7 @@ public class SipService extends Service {
 		Log.d(THIS_FILE, "Ask pjservice to start itself");
 		
 
-        presenceMgr.startMonitoring(this);
+        //presenceMgr.startMonitoring(this);
 		if(pjService.sipStart()) {
 		    // This should be done after in acquire resource
 		    // But due to http://code.google.com/p/android/issues/detail?id=21635
@@ -1319,9 +1319,9 @@ public class SipService extends Service {
 			*/
 		}
 		if(canStop) {
-		    if(presenceMgr != null) {
-		        presenceMgr.stopMonitoring();
-		    }
+		    //if(presenceMgr != null) {
+		    //    presenceMgr.stopMonitoring();
+		    //}
 		    
 		    // Due to http://code.google.com/p/android/issues/detail?id=21635
             // exclude 14 and upper from auto disabling on stop.
