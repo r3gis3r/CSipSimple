@@ -177,6 +177,7 @@
             android:theme="@style/DarkTheme"
             android:uiOptions="splitActionBarWhenNarrow" >
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.SENDTO" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -185,6 +186,16 @@
                 <data android:scheme="csip" />
                 <data android:scheme="sip" />
                 <data android:scheme="sips" />
+                <data android:scheme="sms" />
+                <data android:scheme="smsto" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.SENDTO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="csip"
                     android:scheme="imto" />
@@ -194,16 +205,6 @@
                 <data
                     android:host="skype"
                     android:scheme="imto" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="csip" />
-                <data android:scheme="sip" />
-                <data android:scheme="sips" />
             </intent-filter>
         </activity-alias>
 
@@ -423,7 +424,9 @@
                 <action android:name="android.intent.action.SENDTO" />
 
                 <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
+                <data android:scheme="sms" />
                 <data android:scheme="smsto" />
             </intent-filter>
         </activity-alias>

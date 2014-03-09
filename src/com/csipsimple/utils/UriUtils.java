@@ -78,6 +78,7 @@ public class UriUtils {
     private final static String SCHEME_IMTO = "imto";
     private final static String SCHEME_TEL = "tel";
     private final static String SCHEME_SMSTO = "smsto";
+    private final static String SCHEME_SMS = "sms";
     private final static String AUTHORITY_CSIP = SipManager.PROTOCOL_CSIP;
     private final static String AUTHORITY_SIP = SipManager.PROTOCOL_SIP;
     private final static String AUTHORITY_SKYPE = "skype";
@@ -110,7 +111,7 @@ public class UriUtils {
                                 AUTHORITY_SKYPE.equals(auth) ) {
                             phoneNumber = data.getLastPathSegment();
                         }
-                    }else if (SCHEME_SMSTO.equals(scheme)) {
+                    }else if (SCHEME_SMSTO.equals(scheme) || SCHEME_SMS.equals(scheme)) {
                         phoneNumber = PhoneNumberUtils.stripSeparators(data.getSchemeSpecificPart());
                     }
                 } else {
@@ -123,7 +124,7 @@ public class UriUtils {
                 String scheme = data.getScheme();
                 if(scheme != null) {
                     scheme = scheme.toLowerCase();
-                    if(SCHEME_SMSTO.equals(scheme) || SCHEME_TEL.equals(scheme)) {
+                    if(SCHEME_SMSTO.equals(scheme) || SCHEME_SMS.equals(scheme) || SCHEME_TEL.equals(scheme)) {
                         phoneNumber = PhoneNumberUtils.stripSeparators(phoneNumber);
                     }
                 }
