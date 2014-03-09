@@ -411,8 +411,8 @@ public class ContactsUtils5 extends ContactsWrapper {
 
         // Has sip uri
         if (Compatibility.isCompatible(9)) {
-            isPhoneType += " OR " + Data.MIMETYPE + "='"
-                    + CommonDataKinds.SipAddress.CONTENT_ITEM_TYPE + "'";
+            isPhoneType += " OR (" + Data.MIMETYPE + "='"
+                    + CommonDataKinds.SipAddress.CONTENT_ITEM_TYPE + "')";
         }
         // Sip: IM custo
         isPhoneType += " OR (" + Data.MIMETYPE + "='" + CommonDataKinds.Im.CONTENT_ITEM_TYPE + "' "
@@ -469,25 +469,34 @@ public class ContactsUtils5 extends ContactsWrapper {
                     phoneConstraint = phoneConstraint.trim();
                 }
             }
-            if(phoneConstraint == null) {
-                query += String.format(" AND (%s LIKE ? OR %s LIKE ?)",
-                        Data.DATA1,
-                       Data.DISPLAY_NAME);
-                selectionArgs = new String[] {
-                        isDigitOnly ? constraint + "%" : "%" + constraint + "%",
-                        "%" + constraint + "%"
-                };
-            }else {
-                query += String.format(" AND (%s LIKE ? OR %s LIKE ? OR %s LIKE ?)", 
-                        Data.DATA1,
-                        Data.DISPLAY_NAME,
-                        Data.DATA1);
-                selectionArgs = new String[] {
-                        isDigitOnly ? constraint + "%" : "%" + constraint + "%",
-                        "%" + constraint + "%",
-                        phoneConstraint + "%" 
-                };
+            
+            // Start filter condition
+            ArrayList<String> selectionArgsArray = new ArrayList<String>();
+            query += " AND (";
+            // Filter the data (aka phone number or sip uri)
+            query += String.format("%s LIKE ?", Data.DATA1);
+            selectionArgsArray.add(constraint + "%");
+            if(!TextUtils.isEmpty(phoneConstraint) && !phoneConstraint.equals(constraint)) {
+                query += String.format(" OR %s LIKE ?", Data.DATA1);
+                selectionArgsArray.add(phoneConstraint + "%");
             }
+            // Filter the contact based on other data such as name
+            if(!TextUtils.isEmpty(constraint) && !isDigitOnly) {
+                query += " OR " + Data.RAW_CONTACT_ID + " IN " +
+                    "(SELECT name_data." + Data.RAW_CONTACT_ID +
+                        " FROM view_data AS name_data"+
+                        " WHERE name_data." + Data.MIMETYPE + "='" + CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE + "'" + 
+                        " AND (" + 
+                              "name_data."+CommonDataKinds.StructuredName.FAMILY_NAME + " LIKE ? OR " +
+                              "name_data."+CommonDataKinds.StructuredName.GIVEN_NAME + " LIKE ?" +
+                        ")"+
+                    ")";
+                selectionArgsArray.add(constraint + "%");
+                selectionArgsArray.add(constraint + "%");
+            }
+            query += ")";
+            selectionArgs = selectionArgsArray.toArray(new String[selectionArgsArray.size()]);
+            
         }
 
         Cursor resCursor = ctxt.getContentResolver().query(uri,

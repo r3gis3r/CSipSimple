@@ -22,7 +22,6 @@
 package com.csipsimple.widgets;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -32,21 +31,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AlphabetIndexer;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SectionIndexer;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.models.Filter;
 import com.csipsimple.utils.Log;
-import com.csipsimple.utils.contacts.ContactsAutocompleteAdapter;
-import com.csipsimple.utils.contacts.ContactsWrapper;
+import com.csipsimple.utils.contacts.ContactsSearchAdapter;
 import com.csipsimple.widgets.AccountChooserButton.OnAccountChangeListener;
 
 import java.util.regex.Pattern;
@@ -58,8 +53,8 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
     private AccountChooserButton accountChooserButtonText;
     private TextView domainTextHelper;
     private ListView completeList;
-    private ContactAdapter contactsAdapter;
-    private ContactsAutocompleteAdapter autoCompleteAdapter;
+    private ContactsSearchAdapter contactsAdapter;
+    //private ContactsAutocompleteAdapter autoCompleteAdapter;
 
     public EditSipUri(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -82,7 +77,7 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
                 if (account != null) {
                     accId = account.id;
                 }
-                autoCompleteAdapter.setSelectedAccount(accId);
+                contactsAdapter.setSelectedAccount(accId);
             }
         });
         dialUser.addTextChangedListener(this);
@@ -100,13 +95,12 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
             // Don't bind cursor in this case
             return;
         }
-        Cursor c = ContactsWrapper.getInstance().getContactsPhones(getContext(), null);
-        contactsAdapter = new ContactAdapter(getContext(), c);
+        contactsAdapter = new ContactsSearchAdapter(getContext());
         completeList.setAdapter(contactsAdapter);
         completeList.setOnItemClickListener(this);
 
-        autoCompleteAdapter = new ContactsAutocompleteAdapter(getContext());
-        dialUser.setAdapter(autoCompleteAdapter);
+//        autoCompleteAdapter = new ContactsAutocompleteAdapter(getContext());
+//        dialUser.setAdapter(autoCompleteAdapter);
     }
     
     /* (non-Javadoc)
@@ -123,43 +117,9 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
         if(contactsAdapter != null) {
             contactsAdapter.changeCursor(null);
         }
-        if(autoCompleteAdapter != null) {
-            autoCompleteAdapter.changeCursor(null);
-        }
-    }
-
-    private class ContactAdapter extends SimpleCursorAdapter implements SectionIndexer {
-
-        private AlphabetIndexer alphaIndexer;
-
-        public ContactAdapter(Context context, Cursor c) {
-            super(context, R.layout.search_contact_list_item, c, new String[] {}, new int[] {});
-            alphaIndexer = new AlphabetIndexer(c, ContactsWrapper.getInstance()
-                    .getContactIndexableColumnIndex(c),
-                    " ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-        }
-
-        @Override
-        public void bindView(View view, Context context, Cursor cursor) {
-            super.bindView(view, context, cursor);
-            ContactsWrapper.getInstance().bindContactPhoneView(view, context, cursor);
-        }
-
-        @Override
-        public int getPositionForSection(int arg0) {
-            return alphaIndexer.getPositionForSection(arg0);
-        }
-
-        @Override
-        public int getSectionForPosition(int arg0) {
-            return alphaIndexer.getSectionForPosition(arg0);
-        }
-
-        @Override
-        public Object[] getSections() {
-            return alphaIndexer.getSections();
-        }
-
+//        if(autoCompleteAdapter != null) {
+//            autoCompleteAdapter.changeCursor(null);
+//        }
     }
 
     public class ToCall {
@@ -189,7 +149,9 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
     private void updateDialTextHelper() {
 
         String dialUserValue = dialUser.getText().toString();
-
+        if(TextUtils.isEmpty(dialUserValue) || dialUserValue.length() >= 2) {
+            contactsAdapter.getFilter().filter(dialUserValue);
+        }
         accountChooserButtonText.setChangeable(TextUtils.isEmpty(dialUserValue));
 
         SipProfile acc = accountChooserButtonText.getSelectedAccount();
@@ -247,7 +209,7 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
     }
 
     @Override
-    public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+    public void onTextChanged(CharSequence newText, int arg1, int arg2, int arg3) {
         updateDialTextHelper();
     }
 

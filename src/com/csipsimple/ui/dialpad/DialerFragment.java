@@ -497,9 +497,11 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
 
         // If single pane for smartphone use autocomplete list
         if (hasAutocompleteList()) {
-            //if (digits.length() >= 2) {
-                autoCompleteAdapter.getFilter().filter(digits.getText().toString());
-            //} else {
+            String filter = digits.getText().toString();
+            if (TextUtils.isEmpty(filter) || filter.length() >= 2) {
+                autoCompleteAdapter.getFilter().filter(filter);
+            }
+            //else {
             //    autoCompleteAdapter.swapCursor(null);
             //}
         }
