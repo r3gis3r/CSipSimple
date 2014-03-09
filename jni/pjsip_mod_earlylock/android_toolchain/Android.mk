@@ -22,7 +22,6 @@ LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 
 LOCAL_SRC_FILES := src/pjsip_mod_earlylock.cpp 
 
-LOCAL_LDLIBS += -llog -ldl
 LOCAL_STATIC_LIBRARIES += libgcc
 
 include $(BUILD_STATIC_LIBRARY)

@@ -16,17 +16,17 @@ FLAGS="--cross-prefix=$NDK_CROSS_PREFIX"
 
 case "$TARGET_ARCH_ABI" in
 	x86)
-		FLAGS="$FLAGS --enable-pic --target-os=linux --arch=x86 --disable-asm "
-		;;
+	    FLAGS="$FLAGS --enable-pic --target-os=linux --arch=x86 --disable-asm "
+	    ;;
 	mips)
-		FLAGS="$FLAGS --target-os=linux --arch=mips --disable-asm "
-		;;
-    armeabi-v7a)
-        FLAGS="$FLAGS --enable-pic --target-os=linux --arch=arm --cpu=armv7-a"
-        ;;
+	    FLAGS="$FLAGS --target-os=linux --arch=mips --disable-asm "
+	    ;;
+        armeabi-v7a)
+            FLAGS="$FLAGS --enable-pic --target-os=linux --arch=arm --cpu=armv7-a"
+            ;;
 	armeabi)
-		FLAGS="$FLAGS --enable-pic --target-os=linux --arch=arm "
-		;;
+	    FLAGS="$FLAGS --enable-pic --target-os=linux --arch=arm "
+	    ;;
 esac
 
 pushd ffmpeg_src
@@ -109,7 +109,7 @@ FLAGS="$FLAGS --prefix=$DEST"
 EXTRA_CXXFLAGS="-Wno-multichar -fno-exceptions -fno-rtti"
 
 # X264 libs and includes
-EXTRA_CFLAGS="$EXTRA_CFLAGS -I$X264_INCLUDES"
+EXTRA_CFLAGS="$EXTRA_CFLAGS -DANDROID -D__thumb__ -mthumb -I$X264_INCLUDES"
 EXTRA_LDFLAGS="$EXTRA_LDFLAGS -L$X264_LIBS -Wl,-rpath-link,$X264_LIBS"
 
 # Stagefright

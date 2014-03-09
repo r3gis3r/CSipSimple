@@ -48,13 +48,13 @@ LOCAL_SRC_FILES += $(SILK_FILES_S:$(LOCAL_PATH)/%=%)
 LOCAL_C_INCLUDES += $(PJ_SILK_PATH)
 LOCAL_SRC_FILES += ../../pjsip/sources/pjmedia/src/pjmedia-codec/silk.c
 
-#LOCAL_SHARED_LIBRARIES += libpjsipjni
+LOCAL_SHARED_LIBRARIES += libpjsipjni
 
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
 
-#LOCAL_STATIC_LIBRARIES += libgcc
+LOCAL_STATIC_LIBRARIES += libgcc
 
-include $(BUILD_STATIC_LIBRARY)
+include $(BUILD_SHARED_LIBRARY)
 include $(CLEAR_VARS)
 
 endif

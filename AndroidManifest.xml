@@ -545,7 +545,20 @@
 
         <!-- Extra codecs -->
 
+        <receiver
+            android:name="com.csipsimple.plugins.codecs.ReceiverSILK"
+            android:exported="false" >
+            <meta-data
+                android:name="lib_name"
+                android:value="libpj_silk_codec.so" />
+            <meta-data
+                android:name="init_factory"
+                android:value="pjmedia_codec_silk_init" />
 
+            <intent-filter>
+                <action android:name="com.csipsimple.codecs.action.REGISTER_CODEC" />
+            </intent-filter>
+        </receiver>
         <!-- OPUS? -->
 
 

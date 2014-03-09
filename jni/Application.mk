@@ -24,7 +24,7 @@ MY_USE_VIDEO := 1
 
 MY_USE_TLS := 1
 MY_USE_ZRTP := 1
-MY_USE_STATIC_SSL := 0
+MY_USE_STATIC_SSL := 1
 
 #############################################################
 # Do not change behind this line the are flags for pj build #
@@ -39,6 +39,9 @@ $(call __ndk_info,No local settings... build all in release mode !)
 endif
 
 APP_MODULES := libpjsipjni pj_opensl_dev
+ifeq ($(MY_USE_SILK),1)
+APP_MODULES += pj_silk_codec
+endif
 
 SWIG ?= swig2.0
 PYTHON ?= python
