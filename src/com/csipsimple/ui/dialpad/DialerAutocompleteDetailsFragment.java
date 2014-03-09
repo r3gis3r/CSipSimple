@@ -90,7 +90,7 @@ public class DialerAutocompleteDetailsFragment extends SherlockListFragment {
      * @param constraint the string to filter on
      */
     public void filter(CharSequence constraint) {
-        autoCompleteAdapter.getFilter().filter(constraint);
+        autoCompleteAdapter.setSelectedText(constraint.toString());
         this.constraint = constraint;
     }
 }

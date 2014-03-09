@@ -31,12 +31,18 @@ import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.support.v4.widget.CursorAdapter;
 import android.telephony.PhoneNumberUtils;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.CharacterStyle;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AlphabetIndexer;
 import android.widget.SectionIndexer;
+import android.widget.TextView;
 
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
@@ -50,7 +56,9 @@ public class ContactsSearchAdapter extends CursorAdapter implements SectionIndex
     private final Context mContext;
     private long currentAccId = SipProfile.INVALID_ID;
     AlphabetIndexer alphaIndexer;
-
+    private String currentFilter = "";
+    private CharacterStyle boldStyle = new StyleSpan(android.graphics.Typeface.BOLD);
+    private CharacterStyle highlightStyle = new ForegroundColorSpan(0xFF33B5E5);
     
     public ContactsSearchAdapter(Context context) {
         // Note that the RecipientsAdapter doesn't support auto-requeries. If we
@@ -66,6 +74,18 @@ public class ContactsSearchAdapter extends CursorAdapter implements SectionIndex
     public final void setSelectedAccount(long accId) {
     	currentAccId = accId;
     }
+    public final void setSelectedText(String txt) {
+        if(!TextUtils.isEmpty(txt)) {
+            currentFilter  = txt.toLowerCase();            
+        }else {
+            currentFilter = "";
+        }
+        if (TextUtils.isEmpty(txt) || txt.length() >= 2) {
+            getFilter().filter(txt);
+        }else {
+            currentFilter = "";
+        }
+    }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
@@ -74,9 +94,26 @@ public class ContactsSearchAdapter extends CursorAdapter implements SectionIndex
         return inflater.inflate(R.layout.search_contact_list_item, parent, false);
     }
     
+    private boolean highlightTextViewSearch(TextView tv) {
+        if(currentFilter.length() > 0) {
+            String value = tv.getText().toString();
+            int foundIdx = value.toLowerCase().indexOf(currentFilter);
+            if(foundIdx >= 0) {
+                SpannableString spn = new SpannableString(value);
+                spn.setSpan(boldStyle, foundIdx, foundIdx + currentFilter.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spn.setSpan(highlightStyle, foundIdx, foundIdx + currentFilter.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                tv.setText(spn);
+                return true;
+            }
+        }
+        return false;
+    }
+    
     @Override
     public final void bindView(View view, Context context, Cursor cursor) {
     	ContactsWrapper.getInstance().bindContactPhoneView(view, context, cursor);
+    	highlightTextViewSearch((TextView) view.findViewById(R.id.name));
+        highlightTextViewSearch((TextView) view.findViewById(R.id.number));
     }
 
     @Override
@@ -134,8 +171,6 @@ public class ContactsSearchAdapter extends CursorAdapter implements SectionIndex
         }
         return null;
     }
-
-    
     
 }
 

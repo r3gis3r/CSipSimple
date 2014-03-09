@@ -149,9 +149,7 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
     private void updateDialTextHelper() {
 
         String dialUserValue = dialUser.getText().toString();
-        if(TextUtils.isEmpty(dialUserValue) || dialUserValue.length() >= 2) {
-            contactsAdapter.getFilter().filter(dialUserValue);
-        }
+        contactsAdapter.setSelectedText(dialUserValue);
         accountChooserButtonText.setChangeable(TextUtils.isEmpty(dialUserValue));
 
         SipProfile acc = accountChooserButtonText.getSelectedAccount();
