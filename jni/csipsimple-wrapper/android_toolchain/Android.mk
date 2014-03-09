@@ -72,9 +72,9 @@ endif
 ifeq ($(MY_USE_AMR),1)
 	LOCAL_STATIC_LIBRARIES += android_dyn_opencore
 endif
-ifeq ($(MY_USE_SILK),1)
-	LOCAL_STATIC_LIBRARIES += pj_silk_codec
-endif
+#ifeq ($(MY_USE_SILK),1)
+#	LOCAL_STATIC_LIBRARIES += pj_silk_codec
+#endif
 
 ifeq ($(MY_USE_ZRTP),1)
 	LOCAL_STATIC_LIBRARIES += zrtp4pj
