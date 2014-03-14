@@ -32,6 +32,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
 import com.csipsimple.api.SipManager;
+import com.csipsimple.ui.prefs.CodecsFragment;
 import com.csipsimple.ui.prefs.PrefsFilters;
 import com.csipsimple.ui.prefs.PrefsLogic;
 import com.csipsimple.utils.PreferencesWrapper;
@@ -97,4 +98,16 @@ public class MainPrefs extends SherlockPreferenceActivity {
         return super.onOptionsItemSelected(item);
     }
     
+    /* (non-Javadoc)
+     * @see android.preference.PreferenceActivity#isValidFragment(java.lang.String)
+     */
+    @Override
+    protected boolean isValidFragment(String fragmentName) {
+        if(PrefsLoaderFragment.class.getName().equals(fragmentName)) {
+            return true;
+        }else if(CodecsFragment.class.getName().equals(fragmentName)) {
+            return true;
+        }
+        return false;
+    }
 }

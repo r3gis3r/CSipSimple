@@ -225,4 +225,13 @@ public abstract class GenericPrefs extends SherlockPreferenceActivity implements
         it.putExtra(PrefsLogic.EXTRA_PREFERENCE_TYPE, type);
         pf.setIntent(it);
     }
+    
+    /* (non-Javadoc)
+     * @see android.preference.PreferenceActivity#isValidFragment(java.lang.String)
+     */
+    @Override
+    protected boolean isValidFragment(String fragmentName) {
+        // This pref activity does not include any fragment
+        return false;
+    }
 }
