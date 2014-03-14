@@ -96,10 +96,8 @@ public class Ippi extends SimpleImplementation implements OnAccountCreationDoneL
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
 		// Add stun server
-		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, true);
 		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_ICE, false); /* Seems to produce problems with TCP ? -- specific? */
 		prefs.setPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM, true);
-		prefs.addStunServer("stun.ippi.fr");
 	}
 
     private void setFirstViewVisibility(boolean visible) {
@@ -199,6 +197,10 @@ public class Ippi extends SimpleImplementation implements OnAccountCreationDoneL
 		//Proxy useless....?????
 		//account.proxies = null;
 		account.vm_nbr = "*1234";
+        account.sip_stun_use = 0;
+        account.media_stun_use = 0;
+        account.ice_cfg_enable = 1;
+        account.ice_cfg_use = 0;
 		return account;
 	}
 
