@@ -18,6 +18,7 @@
 
 #define MAX_HEAPS 64
 #define MAX_ENTRY_PER_HEAP 128
+#define REUSE_SLOT_INTERVAL 5
 
 enum
 {
@@ -48,7 +49,10 @@ struct pj_timer_heap_t
     /** Autodelete lock. */
     pj_bool_t auto_delete_lock;
 
+    /** List of known entries. _timer_id helps to find the slot (index is _timer_id -1). _timer_id is also used to compute the android id of the alarm */
     pj_timer_entry* entries[MAX_ENTRY_PER_HEAP];
+    /** As we fear android alarm manager does not apply synchronously cancel/enqueue, we do not reuse immediately an entry slot*/
+    int entries_reuse_in[MAX_ENTRY_PER_HEAP];
 
     /** Callback to be called when a timer expires. */
     pj_timer_heap_callback *callback;
@@ -76,7 +80,7 @@ PJ_INLINE(void) unlock_timer_heap( pj_timer_heap_t *ht )
 
 
 static int get_entry_id(pj_timer_heap_t *ht, pj_timer_entry *entry){
-	return entry->_timer_id + MAX_ENTRY_PER_HEAP * ht->heap_id;
+	return (entry->_timer_id -1) + MAX_ENTRY_PER_HEAP * ht->heap_id;
 }
 
 
@@ -90,16 +94,20 @@ static pj_status_t schedule_entry( pj_timer_heap_t *ht,
 	// Find one empty slot in ht entries
 	for (i = 0; i < MAX_ENTRY_PER_HEAP; i++) {
 		if (ht->entries[i] == NULL) {
-			ht->entries[i] = entry;
-			timer_slot = i;
-			break;
+            if(ht->entries_reuse_in[i] <= 0){
+                ht->entries[i] = entry;
+                timer_slot = i;
+                break;
+            }else{
+                ht->entries_reuse_in[i] --;
+            }
 		}
 	}
 
 	if (timer_slot >= 0) {
 		// Obtain the next unique sequence number.
 		// Set the entry
-		entry->_timer_id = timer_slot;
+		entry->_timer_id = timer_slot + 1;
 		entry->_timer_value = *future_time;
 
 		pj_uint32_t ft = PJ_TIME_VAL_MSEC(*delay);
@@ -127,18 +135,22 @@ static int cancel(pj_timer_heap_t *ht,
 	if ( (entry->_timer_id < 0) || (entry->_timer_id > MAX_ENTRY_PER_HEAP) ) {
 		PJ_LOG(
 				5,
-				(THIS_FILE, "Ask to cancel something already fired or cancelled : %d", entry->_timer_id));
+				(THIS_FILE, "Ask to cancel something already fired or cancelled : %d @ %p", entry->_timer_id, entry));
 		return 0;
+	}else if (entry->_timer_id == 0){
+	    // Not init timer entry
+	    return 0;
 	}
 
 	PJ_LOG(5, (THIS_FILE, "Cancel timer %d", entry->_timer_id));
 
 	// This includes case where the entry is not linked to the heap anymore
-	if (ht->entries[entry->_timer_id] != entry) {
+	if (ht->entries[entry->_timer_id - 1] != entry) {
+        PJ_LOG(2,
+            (THIS_FILE, "Cancelling something not linked to this heap : %d : %p vs %p", entry->_timer_id,
+                    entry, ht->entries[entry->_timer_id]));
         if ((flags & F_DONT_ASSERT) == 0){
-            PJ_LOG(1,
-                (THIS_FILE, "Cancelling something not linked to this heap : %d : %p vs %p", entry->_timer_id, entry, ht->entries[entry->_timer_id]));
-          pj_assert(entry == ht->entries[entry->_timer_id]);
+          pj_assert(entry == ht->entries[entry->_timer_id - 1]);
         }
 		return 0;
 	}
@@ -149,7 +161,8 @@ static int cancel(pj_timer_heap_t *ht,
 
 	if (cancelCount > 0) {
 		// Free the slot of this entry in ht
-		ht->entries[entry->_timer_id] = NULL;
+		ht->entries[entry->_timer_id - 1] = NULL;
+		ht->entries_reuse_in[entry->_timer_id - 1] = REUSE_SLOT_INTERVAL;
 		entry->_timer_id = -1;
 	}
 
@@ -218,6 +231,7 @@ PJ_DEF(pj_status_t) pj_timer_heap_create( pj_pool_t *pool,
 
     // RAZ table of pointers to entries for this heap
 	pj_bzero(ht->entries, MAX_ENTRY_PER_HEAP * sizeof(pj_timer_entry*));
+	pj_bzero(ht->entries_reuse_in, MAX_ENTRY_PER_HEAP * sizeof(int));
 
 	*p_heap = ht;
 	return PJ_SUCCESS;
@@ -283,7 +297,7 @@ PJ_DEF(pj_timer_entry*) pj_timer_entry_init( pj_timer_entry *entry,
 
 PJ_DEF(pj_bool_t) pj_timer_entry_running( pj_timer_entry *entry )
 {
-    return (entry->_timer_id >= 0);
+    return (entry->_timer_id >= 1);
 }
 
 static pj_status_t schedule_w_grp_lock(pj_timer_heap_t *ht,
@@ -300,7 +314,7 @@ static pj_status_t schedule_w_grp_lock(pj_timer_heap_t *ht,
     PJ_ASSERT_RETURN(entry->cb != NULL, PJ_EINVAL);
 
     /* Prevent same entry from being scheduled more than once */
-    PJ_ASSERT_RETURN(entry->_timer_id < 0, PJ_EINVALIDOP);
+    PJ_ASSERT_RETURN(entry->_timer_id < 1, PJ_EINVALIDOP);
 
     pj_gettickcount(&expires);
     PJ_TIME_VAL_ADD(expires, *delay);
@@ -447,13 +461,13 @@ PJ_DEF(pj_status_t) pj_timer_fire(int entry_code_id){
 	    pj_timer_heap_callback* cb = NULL;
 	    pj_grp_lock_t *grp_lock;
 
-	    PJ_LOG(5, (THIS_FILE, "FIRE timer %d of heap %d", entry_id, heap_id));
+	    PJ_LOG(5, (THIS_FILE, "FIRE timer %d of heap %d", entry_id + 1, heap_id));
 
 		lock_timer_heap(ht);
 
 		// Get callback if entry valid
 		entry = ht->entries[entry_id];
-		if (entry != NULL && entry->_timer_id >= 0) {
+		if (entry != NULL && entry->_timer_id >= 1) {
 			cb = entry->cb;
 		}
 		// Store the group lock
@@ -462,6 +476,7 @@ PJ_DEF(pj_status_t) pj_timer_fire(int entry_code_id){
 
 		// Release slot
 		ht->entries[entry_id] = NULL;
+		ht->entries_reuse_in[entry_id] = REUSE_SLOT_INTERVAL;
 		entry->_timer_id = -1;
 		unlock_timer_heap(ht);
 
