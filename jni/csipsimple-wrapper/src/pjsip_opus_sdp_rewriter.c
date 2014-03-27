@@ -142,11 +142,8 @@ PJ_DECL(pj_status_t) pjsip_opus_sdp_rewriter_init(unsigned target_clock_rate) {
     if(target_clock_rate > 0 && target_clock_rate <= 48000){
         pjopus_internal_clockrate = target_clock_rate;
     }else{
-        pjopus_internal_clockrate = 16000;
+        pjopus_internal_clockrate = 48000;
     }
-    if(target_clock_rate != 48000){
-        return pjsip_endpt_register_module(pjsua_get_pjsip_endpt(),
+    return pjsip_endpt_register_module(pjsua_get_pjsip_endpt(),
                             &pjsua_opus_sdp_rewriter);
-    }
-    return PJ_SUCCESS;
 }

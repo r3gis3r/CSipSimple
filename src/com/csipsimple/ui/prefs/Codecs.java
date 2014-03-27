@@ -21,18 +21,19 @@
 
 package com.csipsimple.ui.prefs;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.Tab;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.utils.Log;
@@ -173,6 +174,7 @@ public class Codecs extends SherlockFragmentActivity {
             mNextPosition = position;
         }
 
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         @Override
         public void onPageScrollStateChanged(int state) {
             switch (state) {

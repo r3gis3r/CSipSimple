@@ -579,8 +579,7 @@ static pj_status_t opus_codec_open(pjmedia_codec *codec,
 	/* Create decoder */
 	structSizeBytes = opus_decoder_get_size(attr->info.channel_cnt);
 	opus->psDec = pj_pool_zalloc(opus->pool, structSizeBytes);
-	ret = opus_decoder_init(opus->psDec, opus->externalFs,
-			attr->info.channel_cnt);
+	ret = opus_decoder_init(opus->psDec, opus->externalFs, attr->info.channel_cnt);
 	if (ret) {
 		PJ_LOG(1, (THIS_FILE, "Unable to init decoder : %d", ret));
 		return PJ_EINVAL;
@@ -683,9 +682,11 @@ static pj_status_t opus_codec_parse(pjmedia_codec *codec, void *pkt,
     samples_per_frame = opus_packet_get_samples_per_frame(pkt, opus->externalFs);
 
 #if _TRACE_OPUS
-    PJ_LOG(4, (THIS_FILE, "Pkt info : bw -> %d , spf -> %d" ,
+    PJ_LOG(4, (THIS_FILE, "Pkt info : bw -> %d , spf -> %d, offset %d, packet_size %d" ,
     		opus_packet_get_bandwidth(pkt),
-    		samples_per_frame
+    		samples_per_frame,
+    		payload_offset,
+    		pkt_size
     		));
 #endif
 
@@ -695,7 +696,7 @@ static pj_status_t opus_codec_parse(pjmedia_codec *codec, void *pkt,
                               (((unsigned)pkt & 0xFF) << 8) | i;
         frames[i].buf = pkt;
         frames[i].size = pkt_size;
-        frames[i].timestamp.u64 = ts->u64 + i * samples_per_frame;
+        frames[i].timestamp.u64 = ts->u64 * opus->externalFs / OPUS_CLOCK_RATE + i * samples_per_frame;
 #if _TRACE_OPUS
     	PJ_LOG(4, (THIS_FILE, "parsed %d of %d",frames[i].size, *frame_cnt));
 #endif

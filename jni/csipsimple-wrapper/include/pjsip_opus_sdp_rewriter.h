@@ -21,4 +21,4 @@ pj_status_t pjsip_opus_sdp_rewriter_init(unsigned target_clock_rate);
 }
 #endif
 
-#endif /* PJSIP_SIPCLF_H_ */
+#endif /* PJSIP_PJSIP_OPUS_SDP_REWRITER_H_ */
