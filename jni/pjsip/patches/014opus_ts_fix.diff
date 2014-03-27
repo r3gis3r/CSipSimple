@@ -1,0 +1,36 @@
+Index: pjsip/sources/pjmedia/src/pjmedia/stream.c
+===================================================================
+--- pjsip.orig/sources/pjmedia/src/pjmedia/stream.c	2014-03-28 00:00:03.696739798 +0100
++++ pjsip/sources/pjmedia/src/pjmedia/stream.c	2014-03-28 00:18:22.080311399 +0100
+@@ -200,6 +200,8 @@
+ 					    /**< Counter of remote timestamp
+ 						 checking */
+ #endif
++    pj_bool_t           has_opus_support;
++    unsigned            rtp_opus_tx_ts_len_per_pkt;
+ 
+ #if defined(PJMEDIA_HAS_RTCP_XR) && (PJMEDIA_HAS_RTCP_XR != 0)
+     pj_uint32_t		     rtcp_xr_last_tx;  /**< RTCP XR tx time
+@@ -1215,6 +1217,9 @@
+     rtp_ts_len = ts_len;
+ #endif
+ 
++    if(stream->has_opus_support || stream->codec_param.info.pt)
++    rtp_ts_len = stream->rtp_opus_tx_ts_len_per_pkt;
++
+     /* Init frame_out buffer. */
+     frame_out.buf = ((char*)channel->out_pkt) + sizeof(pjmedia_rtp_hdr);
+     frame_out.size = 0;
+@@ -2213,6 +2218,12 @@
+ 	stream->rtp_tx_ts_len_per_pkt >>= 1;
+     }
+ #endif
++    const pj_str_t opus_tag = { "opus", 4 };
++    if(pj_stricmp(&info->fmt.encoding_name, &opus_tag) == 0) {
++        stream->has_opus_support = PJ_TRUE;
++        stream->rtp_opus_tx_ts_len_per_pkt = stream->enc_samples_per_pkt * 48000 /
++                   (info->fmt.clock_rate * stream->codec_param.info.channel_cnt);
++    }
+ 
+     /* Init jitter buffer parameters: */
+     if (info->jb_max >= stream->codec_param.info.frm_ptime)
