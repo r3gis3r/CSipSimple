@@ -27,7 +27,7 @@ public class Globtelecom extends SimpleImplementation {
 
 	@Override
 	protected String getDomain() {
-		return "globtelecom.ru";
+		return "sip.gvoip.ru";
 	}
 	
 	@Override
