@@ -32,7 +32,7 @@ public class Globtelecom extends SimpleImplementation {
 	
 	@Override
 	protected String getDefaultName() {
-		return "Globtelecom";
+		return "GVoip";
 	}
 
 }
