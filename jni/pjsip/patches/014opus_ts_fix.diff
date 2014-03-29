@@ -1,7 +1,7 @@
 Index: pjsip/sources/pjmedia/src/pjmedia/stream.c
 ===================================================================
 --- pjsip.orig/sources/pjmedia/src/pjmedia/stream.c	2014-03-28 00:00:03.696739798 +0100
-+++ pjsip/sources/pjmedia/src/pjmedia/stream.c	2014-03-28 00:18:22.080311399 +0100
++++ pjsip/sources/pjmedia/src/pjmedia/stream.c	2014-03-29 16:41:04.832524005 +0100
 @@ -200,6 +200,8 @@
  					    /**< Counter of remote timestamp
  						 checking */
@@ -15,13 +15,13 @@ Index: pjsip/sources/pjmedia/src/pjmedia/stream.c
      rtp_ts_len = ts_len;
  #endif
  
-+    if(stream->has_opus_support || stream->codec_param.info.pt)
++    if(stream->has_opus_support)
 +    rtp_ts_len = stream->rtp_opus_tx_ts_len_per_pkt;
 +
      /* Init frame_out buffer. */
      frame_out.buf = ((char*)channel->out_pkt) + sizeof(pjmedia_rtp_hdr);
      frame_out.size = 0;
-@@ -2213,6 +2218,12 @@
+@@ -2213,6 +2218,14 @@
  	stream->rtp_tx_ts_len_per_pkt >>= 1;
      }
  #endif
@@ -30,6 +30,8 @@ Index: pjsip/sources/pjmedia/src/pjmedia/stream.c
 +        stream->has_opus_support = PJ_TRUE;
 +        stream->rtp_opus_tx_ts_len_per_pkt = stream->enc_samples_per_pkt * 48000 /
 +                   (info->fmt.clock_rate * stream->codec_param.info.channel_cnt);
++    }else{
++        stream->has_opus_support = PJ_FALSE;
 +    }
  
      /* Init jitter buffer parameters: */
