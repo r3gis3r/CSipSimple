@@ -21,6 +21,8 @@
 
 package com.csipsimple.wizards.impl;
 
+import android.preference.ListPreference;
+
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.models.Filter;
@@ -33,7 +35,11 @@ import java.util.regex.Pattern;
 
 public class SipCel extends SimpleImplementation {
 
-	@Override
+	private static final String KEY_SERVER_PORT = "server_port";
+    private ListPreference accountPort;
+    private boolean accountPortAdded = false;
+
+    @Override
 	protected String getDomain() {
 		return "sip.sipcel.mobi";
 	}
@@ -41,6 +47,64 @@ public class SipCel extends SimpleImplementation {
 	@Override
 	protected String getDefaultName() {
 		return "SipCel";
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.csipsimple.wizards.impl.SimpleImplementation#updateDescriptions()
+	 */
+	@Override
+	public void updateDescriptions() {
+	    super.updateDescriptions();
+	    setListFieldSummary(KEY_SERVER_PORT);
+	    if(accountUseTcp.isChecked()) {
+	        if (accountPortAdded) {
+	            hidePreference(null, KEY_SERVER_PORT);
+	            accountPortAdded = false;
+	        }
+	    }else {
+	        if(!accountPortAdded) {
+	            addPreference(accountPort);
+	            accountPortAdded = true;
+	        }
+	    }
+	    
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.csipsimple.wizards.impl.SimpleImplementation#fillLayout(com.csipsimple.api.SipProfile)
+	 */
+	@Override
+	public void fillLayout(SipProfile account) {
+	    super.fillLayout(account);
+
+        CharSequence[] ports = new CharSequence[] {"5060", "443"};
+        
+        boolean recycle = true;
+        accountPort = (ListPreference) findPreference(KEY_SERVER_PORT);
+        if(accountPort == null) {
+            recycle = false;
+            accountPort = new ListPreference(parent);
+            accountPort.setTitle("Server port");
+            accountPort.setSummary("Connect to port 443 instead of 5060");
+        }
+        
+        accountPort.setEntries(ports);
+        accountPort.setEntryValues(ports);
+        accountPort.setKey(KEY_SERVER_PORT);
+        accountPort.setDefaultValue("5060");
+        
+        if (account.proxies != null) {
+            for (String proxy : account.proxies) {
+                if(proxy.endsWith(":443")) {
+                    accountPort.setValue("443");
+                }
+            }
+        }
+        
+        if(!recycle && account.transport != SipProfile.TRANSPORT_TCP) {
+            addPreference(accountPort);
+            accountPortAdded = true;
+        }
 	}
 	
 	@Override
@@ -61,10 +125,10 @@ public class SipCel extends SimpleImplementation {
 		
         String proxyPort = "";
 		if(acc.transport == SipProfile.TRANSPORT_UDP) {
-		    proxyPort = ":443";
+		    proxyPort = ":" + accountPort.getValue();
 		}
 		
-		acc.proxies = new String[] { remoteServerUri + proxyPort };
+		acc.proxies = new String[] { "sip:" + remoteServerUri + proxyPort };
 		acc.publish_enabled = 1;
 		acc.sip_stun_use = 1;
 		acc.media_stun_use = 1;

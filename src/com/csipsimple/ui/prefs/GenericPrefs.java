@@ -39,6 +39,8 @@ import com.csipsimple.utils.Log;
 public abstract class GenericPrefs extends SherlockPreferenceActivity implements
         OnSharedPreferenceChangeListener, IPreferenceHelper {
 
+    private static final String THIS_FILE = "GenericPrefs";
+
     /**
      * Get the xml preference resource for this screen
      * 
@@ -164,6 +166,10 @@ public abstract class GenericPrefs extends SherlockPreferenceActivity implements
     public void setListFieldSummary(String fieldName) {
         PreferenceScreen pfs = getPreferenceScreen();
         ListPreference pref = (ListPreference) pfs.findPreference(fieldName);
+        if (pref == null) {
+            Log.w(THIS_FILE, "Unable to find preference " + fieldName);
+            return;
+        }
 
         CharSequence val = pref.getEntry();
         if (TextUtils.isEmpty(val)) {
