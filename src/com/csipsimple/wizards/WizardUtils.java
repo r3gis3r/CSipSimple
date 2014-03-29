@@ -746,7 +746,7 @@ public class WizardUtils {
                     R.drawable.ic_wizard_voipbel, 19, 
                     new Locale[]{ locale("nl_BE"), locale("nl_NL"), locale("fr_BE") }, false, false, 
                     VoipBel.class));
-            WIZARDS_DICT.put("GLOBTELECOM", new WizardInfo("GLOBTELECOM", "Globtelecom", 
+            WIZARDS_DICT.put("GLOBTELECOM", new WizardInfo("GLOBTELECOM", "GVoip", 
                     R.drawable.ic_wizard_globtelecom, 10, 
                     new Locale[]{locale("ru_RU"),}, false, false, 
                     Globtelecom.class));
