@@ -30,4 +30,7 @@
   <string name="zrtp_revoke_trusted_remote">Révoquer le ZRTP distant</string>
   <string name="transport_secure_to_server">Transport TLS utilisé jusqu\'au nœud le plus proche</string>
   <string name="transport_secure_full">La signalisation est censée être sécurisée de bout en bout</string>
+  <string name="description_direction_right">Droite</string>
+  <string name="description_direction_left">Gauche</string>
+  <string name="description_direction_up">Haut</string>
 </resources>

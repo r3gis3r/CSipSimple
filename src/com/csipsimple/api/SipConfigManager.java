@@ -1072,6 +1072,20 @@ public class SipConfigManager {
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
     public static final String USE_ANYWAY_OUT = "use_anyway_out";
+
+    /**
+     * Also enable mobile data when roaming is detected for incoming calls
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_ROAMING_IN = "use_roaming_in";
+    
+    /**
+     * Also enable mobile data when roaming is detected for outgoing calls
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String USE_ROAMING_OUT = "use_roaming_out";
     
     // CALLS
     /**

@@ -136,7 +136,14 @@ public class PreferencesProviderWrapper {
         boolean valid_for_3g = getPreferenceBooleanValue("use_3g_" + suffix, false);
         boolean valid_for_edge = getPreferenceBooleanValue("use_edge_" + suffix, false);
         boolean valid_for_gprs = getPreferenceBooleanValue("use_gprs_" + suffix, false);
-
+        boolean valid_for_roaming = getPreferenceBooleanValue("use_roaming_" + suffix, true);
+        
+        if(!valid_for_roaming && ni != null) {
+            if(ni.isRoaming()) {
+                return false;
+            }
+        }
+        
         if ((valid_for_3g || valid_for_edge || valid_for_gprs) &&
                 ni != null) {
             int type = ni.getType();

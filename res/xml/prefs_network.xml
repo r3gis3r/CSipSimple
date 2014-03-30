@@ -226,6 +226,11 @@
             android:key="use_anyway_in"
             android:summary="@string/use_anyway_desc"
             android:title="@string/use_anyway" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="use_roaming_in"
+            android:summary="@string/use_roaming_desc"
+            android:title="@string/use_roaming" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="for_outgoing"
@@ -260,6 +265,11 @@
             android:key="use_anyway_out"
             android:summary="@string/use_anyway_desc"
             android:title="@string/use_anyway" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="use_roaming_out"
+            android:summary="@string/use_roaming_desc"
+            android:title="@string/use_roaming" />
     </PreferenceCategory>
 
 </PreferenceScreen>

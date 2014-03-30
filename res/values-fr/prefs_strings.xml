@@ -29,6 +29,8 @@
   <string name="use_3g_disclamer">Votre opérateur DOIT vous autoriser l\'utilisation cette option</string>
   <string name="use_edge">Utiliser le EDGE</string>
   <string name="use_gprs">Utiliser le GPRS</string>
+  <string name="use_roaming">Utiliser en itinérance</string>
+  <string name="use_roaming_desc">Lorsque Android détecte une situation d\'itinérance</string>
   <string name="lock_wifi">Verouiller le WIFI</string>
   <string name="lock_wifi_desc">Empêche la mise en veille du WIFI lorsque le SIP est connecté</string>
   <string name="lock_wifi_perfs">Verrou haute performance</string>
@@ -278,6 +280,9 @@
   <string name="start_with_text_dialer_desc">Démarrer avec le numéroteur de type texte</string>
   <string name="use_alternate_unlocker">Ne pas utiliser le Slide pour répondre</string>
   <string name="use_alternate_unlocker_desc">Ne pas utiliser le dévérouillage glissant pour prendre les appels</string>
+  <string name="slider">Par glissement</string>
+  <string name="buttons">Boutons</string>
+  <string name="glowpad">Cercle de déverrouillage</string>
   <string name="keep_awake_incall">Rester allumer lorsqu\'en cours d\'appel</string>
   <string name="keep_awake_incall_desc">Corrige le son haché lorsque le téléphone est en WIFI (par exemple pour le Nexus One)</string>
   <string name="use_partial_wake_lock">Utiliser le verouillage CPU</string>
@@ -327,6 +332,8 @@
   <string name="vid_out_auto_transmit_desc">Send video from device automatically</string>
   <string name="use_video">Use video</string>
   <string name="use_video_desc">Send video from device automatically</string>
+  <string name="play_waittone_on_hold">Tonalité lors de la mise en attente</string>
+  <string name="play_waittone_on_hold_desc">Jouer un son lorsque le correspondant vous met en attente</string>
   <!--Settings modes-->
   <string name="expert_preferences">Mode expert</string>
   <string name="normal_preferences">Mode normal</string>
