@@ -39,4 +39,9 @@
   <string name="w_expert_mwi_enabled_desc">Obter notificações da caixa postal</string>
   <string name="w_expert_allow_via_rewrite">Permitir reescrita de \'Via\'</string>
   <string name="w_expert_allow_via_rewrite_desc">Corrigir o \'enviador por/via\' para que utilize o mesmo endereço de interface da requisição REGISTER</string>
+  <string name="w_expert_allow_sdp_nat_rewrite">Conceder SDP NAT seja reescrito</string>
+  <string name="w_expert_allow_sdp_nat_rewrite_desc">Corrigir o endereço enviado ao SDP para usar o mesmo endereço de interface como o do pedido de registro (APENAS quando STUN e ICE não são utilizados)</string>
+  <string name="w_expert_ipv6_media_use">Utilize IPv6 para mídia</string>
+  <string name="w_expert_default_uri_scheme">Método uri como padrão</string>
+  <string name="w_expert_default_uri_scheme_desc">Método que precederá o destinatário uri se não for especificado</string>
 </resources>

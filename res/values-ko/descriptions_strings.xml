@@ -1,18 +1,78 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--String describing the image on ImageButton one
+
+        Note: AccessibilityServices use this attribute to announce what the view represents.
+              This is especially valuable for views without textual representation like ImageView.-->
   <string name="description_image_button_one">1</string>
+  <!--String describing the image on ImageButton two
+
+        Note: AccessibilityServices use this attribute to announce what the view represents.
+              This is especially valuable for views without textual representation like ImageView.-->
   <string name="description_image_button_two">2</string>
+  <!--String describing the image on ImageButton three
+
+        Note: AccessibilityServices use this attribute to announce what the view represents.
+              This is especially valuable for views without textual representation like ImageView.-->
   <string name="description_image_button_three">3</string>
+  <!--String describing the image on ImageButton four
+
+        Note: AccessibilityServices use this attribute to announce what the view represents.
+              This is especially valuable for views without textual representation like ImageView.-->
   <string name="description_image_button_four">4</string>
+  <!--String describing the image on ImageButton five
+
+        Note: AccessibilityServices use this attribute to announce what the view represents.
+              This is especially valuable for views without textual representation like ImageView.-->
   <string name="description_image_button_five">5</string>
+  <!--String describing the image on ImageButton six
+
+        Note: AccessibilityServices use this attribute to announce what the view represents.
+              This is especially valuable for views without textual representation like ImageView.-->
   <string name="description_image_button_six">6</string>
+  <!--String describing the image on ImageButton seven
+
+        Note: AccessibilityServices use this attribute to announce what the view represents.
+              This is especially valuable for views without textual representation like ImageView.-->
   <string name="description_image_button_seven">7</string>
+  <!--String describing the image on ImageButton eight
+
+        Note: AccessibilityServices use this attribute to announce what the view represents.
+              This is especially valuable for views without textual representation like ImageView.-->
   <string name="description_image_button_eight">8</string>
+  <!--String describing the image on ImageButton nine
+
+        Note: AccessibilityServices use this attribute to announce what the view represents.
+              This is especially valuable for views without textual representation like ImageView.-->
   <string name="description_image_button_nine">9</string>
+  <!--String describing the image on ImageButton star
+
+        Note: AccessibilityServices use this attribute to announce what the view represents.
+              This is especially valuable for views without textual representation like ImageView.-->
   <string name="description_image_button_star">스타</string>
+  <!--String describing the image on ImageButton zero
+
+        Note: AccessibilityServices use this attribute to announce what the view represents.
+              This is especially valuable for views without textual representation like ImageView.-->
   <string name="description_image_button_zero">0</string>
+  <!--String describing the image on ImageButton pound
+
+        Note: AccessibilityServices use this attribute to announce what the view represents.
+              This is especially valuable for views without textual representation like ImageView.-->
   <string name="description_image_button_pound">파운드</string>
+  <!--String describing the Dial ImageButton
+
+         Used by AccessibilityService to announce the purpose of the button.-->
   <string name="description_dial_button">다이얼</string>
+  <!--String describing the Dial Video ImageButton
+
+         Used by AccessibilityService to announce the purpose of the button.-->
+  <!--String describing the Delete/Backspace ImageButton
+
+         Used by AccessibilityService to announce the purpose of the button.-->
   <string name="description_delete_button">백스페이스</string>
+  <!--String describing the digits text box containing the number to dial.
+
+         Used by AccessibilityService to announce the purpose of the view.-->
   <string name="description_digits_edittext">전화를 걸 번호</string>
 </resources>

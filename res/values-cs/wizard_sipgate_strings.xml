@@ -1,10 +1,10 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_sipgate_display_name">Název účtu</string>
-  <string name="w_sipgate_display_name_desc">Zobrazí název účtu</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_display_name_desc" ns0:ignore="UnusedResources">Zobrazí název účtu</string>
   <string name="w_sipgate_username">Sip ID</string>
-  <string name="w_sipgate_username_desc">Špatné jméno zkontrolujte nastavení na poskytovateli.</string>
-  <string name="w_sipgate_password">SIP heslo</string>
-  <string name="w_sipgate_password_desc">Špetné heslo, zkontrolujte na webu poskytovatele</string>
-  <string name="w_sipgate_server_desc">Něco jako : sip.poskytovatel.cz</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_username_desc" ns0:ignore="UnusedResources">Špatné jméno zkontrolujte nastavení na poskytovateli.</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_password" ns0:ignore="UnusedResources">SIP heslo</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_password_desc" ns0:ignore="UnusedResources">Špetné heslo, zkontrolujte na webu poskytovatele</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_server_desc" ns0:ignore="UnusedResources">Něco jako : sip.poskytovatel.cz</string>
 </resources>

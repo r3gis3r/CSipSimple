@@ -72,6 +72,7 @@
   <string name="enable_qos_desc">Habilitar QoS nos pacotes</string>
   <string name="dscp_val">Valor DSCP</string>
   <string name="dscp_val_desc">Valor de DSCP para tráfego SIP</string>
+  <string name="rtp_dscp_val_desc">Valor de DSCP para tráfego RTP</string>
   <string name="udp_keep_alive_interval_wifi">Intervalo de Keep Alive UDP para WiFi</string>
   <string name="udp_keep_alive_interval_mobile">Intervalo de Keep Alive UDP para Rede Móvel</string>
   <string name="tcp_keep_alive_interval_wifi">Intervalo de Keep Alive TCP para WiFi</string>
@@ -103,6 +104,8 @@
   <string name="network_route_polling_desc">Alternativa para a verificação VPN do Android 4.0. Deixe em 0 se não houver necessidade para desabilitar.</string>
   <string name="disable_tcp_switch">Desabilitar troca para TCP</string>
   <string name="disable_tcp_switch_desc">Se ativado, previne o recurso de enviar grandes pacotes via TCP em vez de UDP</string>
+  <string name="disable_rport">Desabilitar relatório em pedido</string>
+  <string name="disable_rport_desc">Apenas ativar erros nos servidores. Desativar suporte RFC 3581 por não enviar relatório.</string>
   <string name="add_bandwidth_tias_in_sdp">Adicionar modificador de banda TIAS no SDP</string>
   <string name="add_bandwidth_tias_in_sdp_desc">Conforme RFC3890. Necessário para vídeo em servidores Avaya mas interrompe a análise de bugs em alguns servidores SIP.</string>
   <!--Security-->
@@ -165,6 +168,10 @@
   <string name="codecs_desc">Prioridade (0 para desabilitar)</string>
   <string name="sip_dtmf">Modo DTMF</string>
   <string name="sip_dtmf_desc">Como enviar DTMF</string>
+  <string name="dtmf_pause_time">Tempo de pausa DTMF</string>
+  <string name="dtmf_pause_time_desc">Pausa (;) separador de tempo em ms</string>
+  <string name="dtmf_wait_time">Tempo de espera DTMF</string>
+  <string name="dtmf_wait_time_desc">Aguarde (;) separador de tempo em ms</string>
   <string name="use_soft_volume">Usar volume do software</string>
   <string name="use_soft_volume_desc">Usar volume do software em vez do volume do Android</string>
   <string name="use_routing_api">Usar API de roteamento</string>
@@ -241,8 +248,16 @@
   <string name="ilbc_frame_per_packet">Frames por pacote RTP iLBC</string>
   <string name="codec_h264_profile">Perfil H264</string>
   <string name="codec_h264_level">Nível H264</string>
+  <string name="codec_h264_bitrate">H264 bitrate</string>
+  <string name="codec_h264_bitrate_desc">Usar 0 como padrão para o nível selecionado</string>
   <string name="thread_count">Contador de processos</string>
   <string name="thread_count_desc">Número de processos alocados na pilha nativa</string>
+  <string name="media_thread_count">Contador de processos de mídia</string>
+  <string name="media_thread_count_desc">Número de processos alocados na mídia nativa</string>
+  <string name="setup_audio_before_init">Instalar áudio antes de iniciar</string>
+  <string name="setup_audio_before_init_desc">Atribua o modo correto do áudio antes da inicialização do stream de áudio</string>
+  <string name="video_capture_size">Tamanho de captura vídeo</string>
+  <string name="video_capture_size_desc">Tamanho de quadros de captura</string>
   <!--UI-->
   <string name="general_ui">Interface de usuário geral</string>
   <string name="native_dialer_integration">Integração com o discador nativo</string>
@@ -255,6 +270,8 @@
   <string name="integrate_with_native_calllogs_desc">Chamadas SIP serão mescladas (se possível) ao registro de chamadas nativo</string>
   <string name="dial_press_tone">Retorno de discagem sonoro</string>
   <string name="dial_press_tone_desc">Reproduzir sons ao pressionar números durante a discagem</string>
+  <string name="dtmf_press_tone">Comentários ao som DTMF</string>
+  <string name="dtmf_press_tone_desc">Reproduzir toque quando enviar DTMF na chamada</string>
   <string name="dial_press_vibrate">Retorno de discagem com vibração</string>
   <string name="dial_press_vibrate_desc">Vibrar dispositivo ao pressionar números durante a discagem</string>
   <string name="start_with_text_dialer">Discagem por texto</string>

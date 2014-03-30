@@ -26,4 +26,8 @@
   <string name="resume_call">Retomar Chamada</string>
   <string name="transfer_to_call">Transferir para chamada</string>
   <string name="send_dtmf">Enviar DTMF</string>
+  <string name="zrtp_trust_remote">ZRTP remoto confiável</string>
+  <string name="zrtp_revoke_trusted_remote">Revogar ZRTP remoto confiável</string>
+  <string name="transport_secure_to_server">TLS é utilizado para transportar hop imediatamente</string>
+  <string name="transport_secure_full">Avisar fim-do-fim é supostamente seguro</string>
 </resources>

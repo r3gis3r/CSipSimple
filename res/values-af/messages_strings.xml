@@ -1,21 +1,79 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!--The name of the SMS/MMS app as it appears to the user in the Home screen, task switcher, etc.-->
+  <!--Command name to open a Compose screen; displays in conversation list-->
   <string name="new_message">Nuwe boodskap</string>
+  <!--Summary text under "New Message" command; displays in conversation list-->
+  <!--Menu item for starting a new conversation-->
+  <!--Menu item to call the recipient of the conversation on the phone (imperative verb)-->
   <string name="menu_call">Bel</string>
+  <!--Menu item for deleting all conversations-->
+  <!--Context menu item on an individual conversation for deleting that conversation-->
+  <!--Context menu item on an individual conversation for viewing that conversation-->
+  <!--Name to use when we have an unspecified sender-->
   <string name="anonymous_recipient">Anoniem</string>
+  <!--Name of the local user when displaying sender of an outgoing message (personal pronoun)-->
   <string name="messagelist_sender_self">Ek</string>
+  <!--Abbreviation for "kilobyte"-->
   <string name="kilobyte">KB</string>
+  <!--Dialog box title brought up when warning the user that a message could not be delivered-->
+  <!--Dialog box message indicating that a message could not be delivered-->
+  <!--Menu item for deleting the entire conversation currently being viewed-->
+  <!--Text of a button appearing for MMS messages that have not yet been downloaded, causing the message
+         to be downloaded (imperative verb)-->
   <string name="download">Laai af</string>
+  <!--Message displayed in place of the "download message" button once it has been pressed,
+         indicating that the download is in progress-->
   <string name="downloading">Besig om af te laai</string>
+  <!--Individual message context menu item-->
+  <!--Header for context menu on an individual message-->
   <string name="message_options">Boodskap opsies</string>
+  <!--Button text on edit slide screen indicating the user wants to finish editing that slide-->
+  <!--Title bar displayed in compose message activity before a recipient has been selected-->
+  <!--Menu item in conversation screen for attaching something to the message being composed-->
+  <!--Button next to an attachment during message composition to view the attachment (imperative verb)-->
+  <!--Button in conversation screen for sending the SMS message currently being composed (imperative verb)-->
   <string name="send">Stuur</string>
+  <!--Menu item in conversation screen for returning to the conversation list-->
+  <!--Hint text in message body field when keyboard is exposed-->
+  <!--Hint text in message body field when keyboard is hidden-->
+  <!--Dialog title for warning the user that the picture they are trying to attach is too large-->
   <string name="image_too_large">Prent te groot</string>
+  <!--Dialog message text asking the user if he wants to resize the picture being attached-->
+  <!--Toast message while an image is being resized-->
+  <!--Context menu item on a message recipient for viewing their contact info-->
+  <!--Context menu item on a message recipient for adding them to the user's
+         contacts (used if the recipient is not already in the address book)-->
+  <!--Sender to be used if the sender address has been hidden-->
+  <!--Text to be used for affirmative response button in dialog boxes-->
   <string name="yes">Anvaar</string>
+  <!--Text to be used for negative response button in dialog boxes-->
   <string name="no">Kanselleer</string>
+  <!--Button text used for editing a slideshow (imperative verb)-->
+  <!--Settings screen menu item for restoring all settings to default-->
+  <!--Confirm Delete-->
+  <!--Delete confirmation dialog title-->
   <string name="confirm_dialog_title">Skrap</string>
+  <!--Delete entire thread confirmation dialog message-->
+  <!--Delete all threads confirmation dialog message-->
+  <!--Delete message confirmation dialog message-->
+  <!--Delete message confirmation dialog message for a locked message-->
+  <!--Delete entire thread confirmation dialog message-->
+  <!--Delete button title-->
   <string name="delete">Skrap</string>
+  <!--Status in "Report" window-->
   <string name="status_none">(Geen)</string>
+  <!--Status in "Report" window-->
+  <!--Status in "Report" window-->
   <string name="status_received">Ontvang</string>
+  <!--Status in "Report" window-->
+  <!--Status in "Report" window-->
+  <!--Status in "Report" window-->
   <string name="status_rejected">Geweier</string>
+  <!--Label in "Report" window-->
+  <!--Label in "Report" window-->
+  <!--Menu item-->
+  <!--Label for the "Me" number of this phone.-->
   <string name="me">Ek</string>
+  <!--Brief small label shown to right of message when it is being sent.-->
 </resources>

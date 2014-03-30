@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_authorization_auth_name">Nome de autenticação</string>
   <string name="w_authorization_auth_name_desc">Autenticação SIP</string>

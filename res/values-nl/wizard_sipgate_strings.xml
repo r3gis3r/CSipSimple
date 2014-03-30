@@ -1,10 +1,10 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_sipgate_display_name">Account-naam</string>
-  <string name="w_sipgate_display_name_desc">Weergavenaam voor dit account</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_display_name_desc" ns0:ignore="UnusedResources">Weergavenaam voor dit account</string>
   <string name="w_sipgate_username">SIP-ID</string>
-  <string name="w_sipgate_username_desc">Verschilt van uw sipgate-login! Controleer op de sipgate-website uw SIP-ID.</string>
-  <string name="w_sipgate_password">SIP-wachtwoord</string>
-  <string name="w_sipgate_password_desc">Verschilt van uw wachtwoord! Controleer op de sipgate-website uw SIP-wachtwoord.</string>
-  <string name="w_sipgate_server_desc">Zoiets als: sipgate.co.uk</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_username_desc" ns0:ignore="UnusedResources">Verschilt van uw sipgate-login! Controleer op de sipgate-website uw SIP-ID.</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_password" ns0:ignore="UnusedResources">SIP-wachtwoord</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_password_desc" ns0:ignore="UnusedResources">Verschilt van uw wachtwoord! Controleer op de sipgate-website uw SIP-wachtwoord.</string>
+  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_server_desc" ns0:ignore="UnusedResources">Zoiets als: sipgate.co.uk</string>
 </resources>

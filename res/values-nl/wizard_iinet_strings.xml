@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_iinet_state">Toestand</string>
   <string name="w_iinet_state_desc">De relevante toestand uit de volgende lijst</string>

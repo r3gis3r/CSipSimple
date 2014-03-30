@@ -17,4 +17,5 @@
   <string name="suffix_with">Adicionar sufixo</string>
   <string name="replace_match_by">Substituir ocorrência por</string>
   <string name="replace_all_by">Substituir tudo por</string>
+  <string name="call_info_header">Receba informações para resposta imediata</string>
 </resources>

@@ -51,6 +51,7 @@
   <string name="misc">Diversos</string>
   <string name="warning">AVISO</string>
   <string name="disconnect_and_incoming_explaination">Você configurou para estar disponível nesta rede !!! Ao clicar OK você estará confirmando que não deseja estar disponível até a próxima inicialização da aplicação</string>
+  <string name="disconnect_and_future_incoming_explaination">Ao desligar o aplicativo, você não estará disponível no SIP até reinicia-lo, seja qual for rede configurações você definir</string>
   <string name="gadget_title">Alternador de contas SIP</string>
   <string name="pickup_sip_uri">Escolher contato SIP</string>
   <string name="display_icon_in_status_bar_desc">A aplicação deve mostrar um ícone na barra de status quando registrada</string>
