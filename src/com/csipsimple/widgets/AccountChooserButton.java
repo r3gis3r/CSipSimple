@@ -25,18 +25,24 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.database.ContentObserver;
 import android.database.Cursor;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.actionbarsherlock.internal.view.View_HasStateListenerSupport;
+import com.actionbarsherlock.internal.view.View_OnAttachStateChangeListener;
+import com.actionbarsherlock.internal.view.menu.MenuBuilder;
+import com.actionbarsherlock.internal.view.menu.MenuPopupHelper;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.csipsimple.R;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.utils.AccountListUtils;
@@ -47,9 +53,11 @@ import com.csipsimple.utils.Compatibility;
 import com.csipsimple.utils.Log;
 import com.csipsimple.wizards.WizardUtils;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-public class AccountChooserButton extends LinearLayout implements OnClickListener {
+public class AccountChooserButton extends LinearLayout implements OnClickListener, View_HasStateListenerSupport {
 
     protected static final String THIS_FILE = "AccountChooserButton";
 
@@ -65,7 +73,6 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 
     private final TextView textView;
     private final ImageView imageView;
-    private HorizontalQuickActionWindow quickAction;
     private SipProfile account = null;
     private Long targetAccountId = null;
 
@@ -111,6 +118,8 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
         setOnClickListener(this);
         textView = (TextView) findViewById(R.id.quickaction_text);
         imageView = (ImageView) findViewById(R.id.quickaction_icon);
+
+        mMenuBuilder = new MenuBuilder(getContext());
         
         // Init accounts
         setAccount(null);
@@ -123,6 +132,10 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
     private final Handler mHandler = new Handler();
     private AccountStatusContentObserver statusObserver = null;
     private boolean canChangeIfValid = true;
+
+    private MenuPopupHelper mPopupMenu;
+    private MenuBuilder mMenuBuilder;
+    private final Set<View_OnAttachStateChangeListener> mListeners = new HashSet<View_OnAttachStateChangeListener>();
 
     /**
      * Observer for changes of account registration status
@@ -170,6 +183,10 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
         if(!isInEditMode()) {
             updateRegistration();
         }
+
+        for (View_OnAttachStateChangeListener listener : mListeners) {
+            listener.onViewAttachedToWindow(this);
+        }
     }
 
     @Override
@@ -179,26 +196,27 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
             getContext().getContentResolver().unregisterContentObserver(statusObserver);
             statusObserver = null;
         }
+
+        for (View_OnAttachStateChangeListener listener : mListeners) {
+            listener.onViewDetachedFromWindow(this);
+        }
     }
 
     @Override
     public void onClick(View v) {
         Log.d(THIS_FILE, "Click the account chooser button");
-        int[] xy = new int[2];
-        v.getLocationInWindow(xy);
-        Rect r = new Rect(xy[0], xy[1], xy[0] + v.getWidth(), xy[1] + v.getHeight());
 
-        if (quickAction == null) {
-            quickAction = new HorizontalQuickActionWindow(getContext(), this);
+        if(mPopupMenu == null) {
+            mPopupMenu = new MenuPopupHelper(getContext(), mMenuBuilder, this, false);
+            mPopupMenu.setForceShowIcon(true);
         }
-
-        quickAction.setAnchor(r);
-        quickAction.removeAllItems();
+        mMenuBuilder.removeGroup(R.id.menu_accbtn_accounts);
 
         Cursor c = getContext().getContentResolver().query(SipProfile.ACCOUNT_URI, ACC_PROJECTION, SipProfile.FIELD_ACTIVE + "=?", new String[] {
                 "1"
         }, null);
-
+        
+        boolean hasSomeSip = false;
         if (c != null) {
             try {
                 if (c.moveToFirst()) {
@@ -209,13 +227,12 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
                         if (accountStatusDisplay.availableForCalls) {
                             BitmapDrawable drawable = new BitmapDrawable(getResources(), 
                                     WizardUtils.getWizardBitmap(getContext(), account));
-                            quickAction.addItem(drawable, account.display_name,
-                                    new OnClickListener() {
-                                        public void onClick(View v) {
-                                            setAccount(account);
-                                            quickAction.dismiss();
-                                        }
-                                    });
+                            
+                            MenuItem item = mMenuBuilder.add(R.id.menu_accbtn_accounts, MenuBuilder.NONE, MenuBuilder.NONE, account.display_name);
+                            item.setIcon(drawable);
+                            item.setOnMenuItemClickListener(new OnAccountMenuItemListener(account));
+                            
+                            hasSomeSip = true;
                         }
                     } while (c.moveToNext());
                 }
@@ -224,6 +241,10 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
             } finally {
                 c.close();
             }
+        }
+        if(!hasSomeSip) {
+            MenuItem item = mMenuBuilder.add(R.id.menu_accbtn_accounts, MenuBuilder.NONE, MenuBuilder.NONE, R.string.acct_inactive);
+            item.setIcon(android.R.drawable.ic_dialog_alert);
         }
 
         if (showExternals) {
@@ -242,7 +263,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
             }
         }
 
-        quickAction.show();
+        mPopupMenu.show();
     }
     
     private class OnPluginLoadListener implements OnLoadListener {
@@ -254,7 +275,7 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
     /**
      * This runnable is intended to be run in UI thread (so in handler).
      */
-    private class PluginButtonManager implements Runnable, OnClickListener {
+    private class PluginButtonManager implements Runnable {
         CallHandlerPlugin ch;
 
         PluginButtonManager(CallHandlerPlugin callHandler) {
@@ -263,14 +284,9 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
 
         @Override
         public void run() {
-            quickAction.addItem(ch.getIconDrawable(),
-                    ch.getLabel().toString(), this);
-        }
-        
-        @Override
-        public void onClick(View v) {
-            setAccount(ch.getFakeProfile());
-            quickAction.dismiss();
+            MenuItem item = mMenuBuilder.add(R.id.menu_accbtn_accounts, Menu.NONE, Menu.NONE,  ch.getLabel().toString());
+            item.setIcon(ch.getIconDrawable());
+            item.setOnMenuItemClickListener(new OnAccountMenuItemListener(ch.getFakeProfile()));
         }
     }
 
@@ -417,6 +433,40 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
      */
     public void setShowExternals(boolean b) {
         showExternals = b;
+    }
+
+
+    /* (non-Javadoc)
+     * @see com.actionbarsherlock.internal.view.View_HasStateListenerSupport#addOnAttachStateChangeListener(com.actionbarsherlock.internal.view.View_OnAttachStateChangeListener)
+     */
+    @Override
+    public void addOnAttachStateChangeListener(View_OnAttachStateChangeListener listener) {
+        mListeners.add(listener);
+    }
+
+    /* (non-Javadoc)
+     * @see com.actionbarsherlock.internal.view.View_HasStateListenerSupport#removeOnAttachStateChangeListener(com.actionbarsherlock.internal.view.View_OnAttachStateChangeListener)
+     */
+    @Override
+    public void removeOnAttachStateChangeListener(View_OnAttachStateChangeListener listener) {
+        mListeners.remove(listener);
+    }
+    
+    
+    private class OnAccountMenuItemListener implements OnMenuItemClickListener {
+        private SipProfile mAccount;
+        OnAccountMenuItemListener(SipProfile account){
+            mAccount = account;
+        }
+        /* (non-Javadoc)
+         * @see com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener#onMenuItemClick(com.actionbarsherlock.view.MenuItem)
+         */
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            setAccount(mAccount);
+            return true;
+        }
+        
     }
 
 }

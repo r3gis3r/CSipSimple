@@ -74,16 +74,6 @@
         <item name="android:layout_margin">5dp</item>
     </style>
 
-    <style name="QuickActionAboveAnimation">
-        <item name="android:windowEnterAnimation">@anim/quickaction_above_enter</item>
-        <item name="android:windowExitAnimation">@anim/quickaction_above_exit</item>
-    </style>
-
-    <style name="QuickActionBelowAnimation">
-        <item name="android:windowEnterAnimation">@anim/quickaction_below_enter</item>
-        <item name="android:windowExitAnimation">@anim/quickaction_below_exit</item>
-    </style>
-
     <style name="DarkTheme" parent="Theme.Sherlock"></style>
 
     <style name="DarkTheme.Dialog" parent="Theme.Sherlock.Dialog">

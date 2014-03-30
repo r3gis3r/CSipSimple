@@ -18,7 +18,6 @@
 
     <dimen name="normal_height">64dip</dimen>
     <dimen name="expanded_height">128dip</dimen>
-    <dimen name="quickaction_shadow_horiz">0dip</dimen>
     <dimen name="right_panel_margin_left">0dip</dimen>
     <dimen name="right_panel_margin_vertical">0dip</dimen>
     <dimen name="right_panel_fading_edge">50px</dimen>
