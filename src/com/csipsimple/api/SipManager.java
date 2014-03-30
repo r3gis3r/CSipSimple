@@ -163,6 +163,15 @@ public final class SipManager {
      */
     public static final String ACTION_SIP_ACCOUNT_CHANGED = "com.csipsimple.service.ACCOUNT_CHANGED";
     /**
+     * Broadcast sent when a sip account has been deleted
+     * <p>
+     * <ul>
+     * <li>{@link SipProfile#FIELD_ID} the long id of the account</li>
+     * </ul>
+     * </p>
+     */
+    public static final String ACTION_SIP_ACCOUNT_DELETED = "com.csipsimple.service.ACCOUNT_DELETED";
+    /**
      * Broadcast sent when sip account registration has changed.
      * <p>
      * Provided extras :

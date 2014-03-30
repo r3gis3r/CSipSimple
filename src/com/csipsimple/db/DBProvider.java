@@ -361,7 +361,7 @@ public class DBProvider extends ContentProvider {
         	long rowId = ContentUris.parseId(uri);
         	if(rowId >= 0) {
         	    if(matched == ACCOUNTS_ID) {
-        	        broadcastAccountChange(rowId);
+        	        broadcastAccountDelete(rowId);
         	    }else if(matched == ACCOUNTS_STATUS_ID) {
         	        broadcastRegistrationChange(rowId);
         	    }
@@ -775,6 +775,17 @@ public class DBProvider extends ContentProvider {
 		getContext().sendBroadcast(publishIntent);
 		BackupWrapper.getInstance(getContext()).dataChanged();
 	}
+	
+    /**
+     * Broadcast the fact that account config has been deleted
+     * @param accountId
+     */
+    private void broadcastAccountDelete(long accountId) {
+        Intent publishIntent = new Intent(SipManager.ACTION_SIP_ACCOUNT_DELETED);
+        publishIntent.putExtra(SipProfile.FIELD_ID, accountId);
+        getContext().sendBroadcast(publishIntent);
+        BackupWrapper.getInstance(getContext()).dataChanged();
+    }
 	
 	/**
 	 * Broadcast the fact that registration / adding status changed

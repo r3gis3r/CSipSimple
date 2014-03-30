@@ -1083,6 +1083,7 @@ public class SipService extends Service {
 			IntentFilter intentfilter = new IntentFilter();
 			intentfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 			intentfilter.addAction(SipManager.ACTION_SIP_ACCOUNT_CHANGED);
+            intentfilter.addAction(SipManager.ACTION_SIP_ACCOUNT_DELETED);
 			intentfilter.addAction(SipManager.ACTION_SIP_CAN_BE_STOPPED);
 			intentfilter.addAction(SipManager.ACTION_SIP_REQUEST_RESTART);
 			intentfilter.addAction(DynamicReceiver4.ACTION_VPN_CONNECTIVITY);

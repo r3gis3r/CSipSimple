@@ -118,7 +118,7 @@ public class DynamicReceiver4 extends BroadcastReceiver {
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
             onConnectivityChanged(activeNetwork, isSticky);
         } else if (action.equals(SipManager.ACTION_SIP_ACCOUNT_CHANGED)) {
-            final long accountId = intent.getLongExtra(SipProfile.FIELD_ID, -1);
+            final long accountId = intent.getLongExtra(SipProfile.FIELD_ID, SipProfile.INVALID_ID);
             // Should that be threaded?
             if (accountId != SipProfile.INVALID_ID) {
                 final SipProfile account = service.getAccount(accountId);
@@ -126,6 +126,13 @@ public class DynamicReceiver4 extends BroadcastReceiver {
                     Log.d(THIS_FILE, "Enqueue set account registration");
                     service.setAccountRegistration(account, account.active ? 1 : 0, true);
                 }
+            }
+        } else if (action.equals(SipManager.ACTION_SIP_ACCOUNT_DELETED)){
+            final long accountId = intent.getLongExtra(SipProfile.FIELD_ID, SipProfile.INVALID_ID);
+            if(accountId != SipProfile.INVALID_ID) {
+                final SipProfile fakeProfile = new SipProfile();
+                fakeProfile.id = accountId;
+                service.setAccountRegistration(fakeProfile, 0, true);
             }
         } else if (action.equals(SipManager.ACTION_SIP_CAN_BE_STOPPED)) {
             service.cleanStop();
