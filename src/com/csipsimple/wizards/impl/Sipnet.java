@@ -55,8 +55,6 @@ public class Sipnet extends SimpleImplementation {
 		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_DNS_SRV, true);
 		prefs.setPreferenceBooleanValue(SipConfigManager.ECHO_CANCELLATION, true);
 		//prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_TLS, true);
-		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, false);
-		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_ICE, false);
 		//prefs.setPreferenceStringValue(SipConfigManager.LOG_LEVEL, "4");
 		
 		//wb codecs 
@@ -97,6 +95,10 @@ public class Sipnet extends SimpleImplementation {
         account.allow_via_rewrite = false;
         account.contact_rewrite_method = 1;
         account.try_clean_registers = 0;
+        account.sip_stun_use = 0;
+        account.media_stun_use = 0;
+        account.ice_cfg_enable = 1;
+        account.ice_cfg_use = 0;
         
         return account;
     }

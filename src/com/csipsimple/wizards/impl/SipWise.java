@@ -39,6 +39,10 @@ public class SipWise extends AlternateServerImplementation {
 		account.transport = SipProfile.TRANSPORT_UDP;
 		account.allow_contact_rewrite = false;
 		account.allow_via_rewrite = false;
+        account.sip_stun_use = 0;
+        account.media_stun_use = 0;
+        account.ice_cfg_enable = 1;
+        account.ice_cfg_use = 0;
 		return account;
 	}
 	
@@ -47,9 +51,6 @@ public class SipWise extends AlternateServerImplementation {
 	public void setDefaultParams(PreferencesWrapper prefs) {
 		super.setDefaultParams(prefs);
 		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_DNS_SRV, true);
-		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_ICE, false);
-		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_TURN, false);
-		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, false);
 	}
 
 	@Override

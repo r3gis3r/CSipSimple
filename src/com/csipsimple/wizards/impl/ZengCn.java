@@ -56,11 +56,21 @@ public class ZengCn extends SimpleImplementation {
 	public void setDefaultParams(PreferencesWrapper prefs) {
 	    super.setDefaultParams(prefs);
 
-        prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, false);
-        prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_ICE, false);
         prefs.setPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM, false);
         prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_DNS_SRV, false);
         
+	}
+	/* (non-Javadoc)
+	 * @see com.csipsimple.wizards.impl.SimpleImplementation#buildAccount(com.csipsimple.api.SipProfile)
+	 */
+	@Override
+	public SipProfile buildAccount(SipProfile account) {
+	    account = super.buildAccount(account);
+        account.sip_stun_use = 0;
+        account.media_stun_use = 0;
+        account.ice_cfg_enable = 1;
+        account.ice_cfg_use = 0;
+        return account;
 	}
 	
 	@Override

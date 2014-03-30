@@ -70,11 +70,14 @@ public class Keyyo extends SimpleImplementation {
 		account.contact_rewrite_method = 1;
         account.try_clean_registers = 0;
 		account.vm_nbr = "123";
+        account.sip_stun_use = 0;
+        account.media_stun_use = 0;
+        account.ice_cfg_enable = 1;
+        account.ice_cfg_use = 0;
 		return account;
 	}
 	
 	public static void setKeyyoDefaultParams(PreferencesWrapper prefs) {
-		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_STUN, false);
 		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_DNS_SRV, true);
 		prefs.setPreferenceBooleanValue(SipConfigManager.ECHO_CANCELLATION, true);
 		prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_VAD, true);
