@@ -1691,6 +1691,28 @@ public class SipProfile implements Parcelable {
         }
         return "";
     }
+    
+    public ParsedSipContactInfos formatCalleeNumber(String fuzzyNumber) {
+        ParsedSipContactInfos finalCallee = SipUri.parseSipContact(fuzzyNumber);
+
+        if (TextUtils.isEmpty(finalCallee.domain)) {
+            String defaultDomain = getDefaultDomain();
+            if(TextUtils.isEmpty(defaultDomain)) {
+                finalCallee.domain = finalCallee.userName;
+                finalCallee.userName = null;
+            }else {
+                finalCallee.domain = defaultDomain;
+            }
+        }
+        if (TextUtils.isEmpty(finalCallee.scheme)) {
+            if (!TextUtils.isEmpty(default_uri_scheme)) {
+                finalCallee.scheme = default_uri_scheme;
+            } else {
+                finalCallee.scheme = SipManager.PROTOCOL_SIP;
+            }
+        }
+        return finalCallee;
+    }
 
     // Helpers static factory
     /**

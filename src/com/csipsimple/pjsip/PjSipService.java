@@ -45,7 +45,6 @@ import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipManager.PresenceStatus;
 import com.csipsimple.api.SipProfile;
 import com.csipsimple.api.SipProfileState;
-import com.csipsimple.api.SipUri;
 import com.csipsimple.api.SipUri.ParsedSipContactInfos;
 import com.csipsimple.pjsip.earlylock.EarlyLockModule;
 import com.csipsimple.pjsip.player.IPlayerHandler;
@@ -1873,26 +1872,9 @@ public class PjSipService {
         }
 
         // Check integrity of callee field
-
-        ParsedSipContactInfos finalCallee = SipUri.parseSipContact(callee);
-
-        if (TextUtils.isEmpty(finalCallee.domain) ||
-                TextUtils.isEmpty(finalCallee.scheme)) {
-            Log.d(THIS_FILE, "default acc : " + finalAccountId);
-            account = service.getAccount((int) finalAccountId);
-        }
-
-        if (TextUtils.isEmpty(finalCallee.domain)) {
-            String defaultDomain = account.getDefaultDomain();
-            finalCallee.domain = defaultDomain;
-        }
-        if (TextUtils.isEmpty(finalCallee.scheme)) {
-            if (!TextUtils.isEmpty(account.default_uri_scheme)) {
-                finalCallee.scheme = account.default_uri_scheme;
-            } else {
-                finalCallee.scheme = SipManager.PROTOCOL_SIP;
-            }
-        }
+        // Get real account information now
+        account = service.getAccount((int) finalAccountId);
+        ParsedSipContactInfos finalCallee = account.formatCalleeNumber(callee);
         String digitsToAdd = null;
         if (!TextUtils.isEmpty(finalCallee.userName) &&
                 (finalCallee.userName.contains(",") || finalCallee.userName.contains(";"))) {

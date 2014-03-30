@@ -72,6 +72,8 @@ import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.api.SipUri.ParsedSipContactInfos;
+import com.csipsimple.models.Filter;
 import com.csipsimple.ui.SipHome.ViewPagerVisibilityListener;
 import com.csipsimple.ui.dialpad.DialerLayout.OnAutoCompleteListVisibilityChangedListener;
 import com.csipsimple.utils.CallHandlerPlugin;
@@ -157,6 +159,10 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
 
     private DialerLayout dialerLayout;
 
+    private MenuItem accountChooserFilterItem;
+
+    private TextView rewriteTextInfo;
+
 	@Override
 	public void onAutoCompleteListVisibiltyChanged() {
         applyTextToAutoComplete();
@@ -195,7 +201,21 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         dialPad = (Dialpad) v.findViewById(R.id.dialPad);
         callBar = (DialerCallBar) v.findViewById(R.id.dialerCallBar);
         autoCompleteList = (ListView) v.findViewById(R.id.autoCompleteList);
+        rewriteTextInfo = (TextView) v.findViewById(R.id.rewriteTextInfo);
+        
         accountChooserButton = (AccountChooserButton) v.findViewById(R.id.accountChooserButton);
+        
+        accountChooserFilterItem = accountChooserButton.addExtraMenuItem(R.string.apply_rewrite);
+        accountChooserFilterItem.setCheckable(true);
+        accountChooserFilterItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                setRewritingFeature(!accountChooserFilterItem.isChecked());
+                return true;
+            }
+        });
+        setRewritingFeature(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.REWRITE_RULES_DIALER));
+        
         dialerLayout = (DialerLayout) v.findViewById(R.id.top_digit_dialer);
         //switchTextView = (ImageButton) v.findViewById(R.id.switchTextView);
 
@@ -385,6 +405,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
                 accId = account.id;
             }
             autoCompleteAdapter.setSelectedAccount(accId);
+            applyRewritingInfo();
         }
     };
     
@@ -587,13 +608,15 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
     @Override
     public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
         // Nothing to do here
-
     }
 
     @Override
     public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
         afterTextChanged(digits.getText());
-        accountChooserButton.setChangeable(TextUtils.isEmpty(digits.getText().toString()));
+        String newText = digits.getText().toString();
+        // Allow account chooser button to automatically change again as we have clear field
+        accountChooserButton.setChangeable(TextUtils.isEmpty(newText));
+        applyRewritingInfo();
     }
 
     // Options
@@ -635,14 +658,19 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         Long accountToUse = SipProfile.INVALID_ID;
         // Find account to use
         SipProfile acc = accountChooserButton.getSelectedAccount();
-        if (acc != null) {
-            accountToUse = acc.id;
+        if(acc == null) {
+            return;
         }
+
+        accountToUse = acc.id;
         // Find number to dial
+        toCall = digits.getText().toString();
         if(isDigit) {
-            toCall = PhoneNumberUtils.stripSeparators(digits.getText().toString());
-        }else {
-            toCall = digits.getText().toString();
+            toCall = PhoneNumberUtils.stripSeparators(toCall);
+        }
+
+        if(accountChooserFilterItem != null && accountChooserFilterItem.isChecked()) {
+            toCall = rewriteNumber(toCall);
         }
         
         if (TextUtils.isEmpty(toCall)) {
@@ -672,14 +700,16 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         }
     }
     
-    
     public void placeVMCall() {
         Long accountToUse = SipProfile.INVALID_ID;
         SipProfile acc = null;
         acc = accountChooserButton.getSelectedAccount();
-        if (acc != null) {
-            accountToUse = acc.id;
+        if (acc == null) {
+            // Maybe we could inform user nothing will happen here?
+            return;
         }
+        
+        accountToUse = acc.id;
 
         if (accountToUse >= 0) {
             SipProfile vmAcc = SipProfile.getProfileFromDbId(getActivity(), acc.id, new String[] {
@@ -850,4 +880,40 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         return digits.onKeyDown(keyCode, event);
     }
 
+    // In dialer rewriting feature
+    
+    private void setRewritingFeature(boolean active) {
+        accountChooserFilterItem.setChecked(active);
+        rewriteTextInfo.setVisibility(active?View.VISIBLE:View.GONE);
+        if(active) {
+             applyRewritingInfo();
+        }
+        prefsWrapper.setPreferenceBooleanValue(SipConfigManager.REWRITE_RULES_DIALER, active);
+    }
+    
+    private String rewriteNumber(String number) {
+        SipProfile acc = accountChooserButton.getSelectedAccount();
+        if (acc == null) {
+            return number;
+        }
+        String numberRewrite = Filter.rewritePhoneNumber(getActivity(), acc.id, number);
+        if(TextUtils.isEmpty(numberRewrite)) {
+            return "";
+        }
+        ParsedSipContactInfos finalCallee = acc.formatCalleeNumber(numberRewrite);
+        return finalCallee.getReadableSipUri();
+    }
+    
+    private void applyRewritingInfo() {
+        // Rewrite information textView update
+        String newText = digits.getText().toString();
+        if(accountChooserFilterItem != null && accountChooserFilterItem.isChecked()) {
+            if(isDigit) {
+                newText = PhoneNumberUtils.stripSeparators(newText);
+            }
+            rewriteTextInfo.setText(rewriteNumber(newText));
+        }else {
+            rewriteTextInfo.setText("");
+        }
+    }
 }

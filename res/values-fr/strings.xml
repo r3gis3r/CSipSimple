@@ -81,6 +81,7 @@
   <string name="cant_write_file">Erreur d\'écriture du fichier</string>
   <string name="info">Infos</string>
   <string name="csipsimple_shortcut">SIP - Raccourci</string>
+  <string name="apply_rewrite">Réécriture du n°</string>
   <!--Presence stuff-->
   <string name="online">En ligne</string>
   <string name="offline">Hors ligne</string>

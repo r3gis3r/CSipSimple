@@ -99,6 +99,7 @@
     <string name="cant_write_file">Error writing file</string>
     <string name="info">Info</string>
     <string name="csipsimple_shortcut">SIP - shortcut</string>
+    <string name="apply_rewrite">Apply rewriting</string>
 
     <!-- Presence stuff -->
     <string name="online">Online</string>

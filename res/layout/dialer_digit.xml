@@ -64,6 +64,19 @@
             android:textAppearance="@style/DialtactsDigitsTextAppearance"
             android:textColor="@android:color/white" />
 
+        <TextView
+            android:id="@+id/rewriteTextInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/accountChooserButton"
+            android:gravity="center"
+            android:textColor="#88FFFFFF"
+            android:textSize="10sp"
+            android:textStyle="italic"
+            android:visibility="gone" />
+
         <com.csipsimple.widgets.AccountChooserButton
             android:id="@+id/accountChooserButton"
             android:layout_width="wrap_content"

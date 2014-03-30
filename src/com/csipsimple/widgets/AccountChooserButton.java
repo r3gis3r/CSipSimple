@@ -466,7 +466,10 @@ public class AccountChooserButton extends LinearLayout implements OnClickListene
             setAccount(mAccount);
             return true;
         }
-        
+    }
+    
+    public MenuItem addExtraMenuItem(int titleRes) {
+        return mMenuBuilder.add(R.id.menu_accbtn_extras, MenuBuilder.NONE, 100, titleRes);
     }
 
 }

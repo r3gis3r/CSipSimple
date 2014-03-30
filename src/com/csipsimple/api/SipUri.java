@@ -81,15 +81,9 @@ public final class SipUri {
         
         public String toString(boolean includeDisplayName) {
             StringBuffer buildString = new StringBuffer();
-            if(TextUtils.isEmpty(scheme)) {
-                buildString.append("<sip:");
-            }else {
-                buildString.append("<" + scheme + ":");
-            }
-            if(!TextUtils.isEmpty(userName)) {
-                buildString.append(encodeUser(userName) + "@");
-            }
-            buildString.append(domain + ">");
+            buildString.append("<");
+            buildString.append(getReadableSipUri());
+            buildString.append(">");
             
             // Append display name at beggining if necessary
             if (includeDisplayName && !TextUtils.isEmpty(displayName)) {
@@ -101,6 +95,20 @@ public final class SipUri {
                 encodedName = encodedName.replace("\\", "%5C");
                 buildString.insert(0, "\""+encodedName+"\" ");
             }
+            return buildString.toString();
+        }
+        
+        public String getReadableSipUri() {
+            StringBuffer buildString = new StringBuffer();
+            if(TextUtils.isEmpty(scheme)) {
+                buildString.append("sip:");
+            }else {
+                buildString.append(scheme + ":");
+            }
+            if(!TextUtils.isEmpty(userName)) {
+                buildString.append(encodeUser(userName) + "@");
+            }
+            buildString.append(domain);
             return buildString.toString();
         }
         

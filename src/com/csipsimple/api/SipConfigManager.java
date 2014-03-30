@@ -580,6 +580,13 @@ public class SipConfigManager {
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
     public static final String START_WITH_TEXT_DIALER = "start_with_text_dialer";
+    /**
+     * Starts with rewrite rules enabled in dialer.
+     * By default false
+     * 
+     * @see #setPreferenceBooleanValue(Context, String, boolean)
+     */
+    public static final String REWRITE_RULES_DIALER = "rewrite_rules_dialer";
 
     // NETWORK
     /**
