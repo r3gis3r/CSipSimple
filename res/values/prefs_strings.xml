@@ -67,7 +67,7 @@
     <string name="turn_password">TURN password</string>
     <string name="turn_password_desc">Password for TURN authentication</string>
     <string name="turn_transport">TURN transport</string>
-    <string name="turn_transport_desc">Transport ot use for TURN feature</string>
+    <string name="turn_transport_desc">Transport for TURN feature</string>
     <string name="enable_stun">Enable STUN</string>
     <string name="enable_stun_desc">Turn on STUN feature</string>
     <string name="enable_stun2">Use new STUN format</string>
