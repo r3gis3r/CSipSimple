@@ -64,6 +64,8 @@
   <string name="turn_username_desc">Nom d\'utilisateur pour l\'authentification TURN</string>
   <string name="turn_password">Mot de passe TURN</string>
   <string name="turn_password_desc">Mot de passe pour l\'authentification TURN</string>
+  <string name="turn_transport">Transport TURN</string>
+  <string name="turn_transport_desc">Transport pour la fonctionnalité TURN</string>
   <string name="enable_stun">Activer STUN</string>
   <string name="enable_stun_desc">Activer la fonctionnalité STUN</string>
   <string name="enable_stun2">Utiliser le nouveau format STUN</string>

@@ -619,6 +619,18 @@ public class SipConfigManager {
      * @see #setPreferenceStringValue(Context, String, String)
      */
     public static final String TURN_PASSWORD = "turn_password";
+    
+    /**
+     * Transport to use to reach turn server.<br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjsip/docs/html/structpjsua__media__config.htm#a41572ead73dbe0ac76fda9d7146d5976"
+     * >Pjsip documentation</a>
+     * 
+     * @see #setPreferenceStringValue(Context, String, String)
+     * 0 = pjsip default, 1 = udp, 2 = tcp, 3 = tls.
+     */
+    public static final String TURN_TRANSPORT = "turn_transport";
+    
     /**
      * Enable ICE.<br/>
      * <a target="_blank" href=

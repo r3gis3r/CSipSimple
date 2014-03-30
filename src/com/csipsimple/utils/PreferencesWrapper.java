@@ -110,6 +110,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.TURN_SERVER, "");
 		put(SipConfigManager.TURN_USERNAME, "");
 		put(SipConfigManager.TURN_PASSWORD, "");
+        put(SipConfigManager.TURN_TRANSPORT, "0");
 		put(SipConfigManager.TLS_SERVER_NAME, "");
 		put(SipConfigManager.CA_LIST_FILE, "");
 		put(SipConfigManager.CERT_FILE, "");

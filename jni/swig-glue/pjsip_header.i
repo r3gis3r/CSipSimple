@@ -358,6 +358,27 @@ enum pjsip_transport_type_e
 
 };
 
+// From pjsip/include/pjnath/turn_session.h:139
+enum pj_turn_tp_type
+{
+    /**
+     * UDP transport, which value corresponds to IANA protocol number.
+     */
+    PJ_TURN_TP_UDP = 17,
+
+    /**
+     * TCP transport, which value corresponds to IANA protocol number.
+     */
+    PJ_TURN_TP_TCP = 6,
+
+    /**
+     * TLS transport. The TLS transport will only be used as the connection
+     * type to reach the server and never as the allocation transport type.
+     */
+    PJ_TURN_TP_TLS = 255
+
+};
+
 // From pjsip/include/pjsip-ua/sip_inv.h:87
 enum pjsip_inv_state
 {

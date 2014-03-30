@@ -76,6 +76,7 @@ import org.pjsip.pjsua.dynamic_factory;
 import org.pjsip.pjsua.pj_pool_t;
 import org.pjsip.pjsua.pj_qos_params;
 import org.pjsip.pjsua.pj_str_t;
+import org.pjsip.pjsua.pj_turn_tp_type;
 import org.pjsip.pjsua.pjmedia_srtp_use;
 import org.pjsip.pjsua.pjsip_timer_setting;
 import org.pjsip.pjsua.pjsip_tls_setting;
@@ -525,6 +526,23 @@ public class PjSipService {
                             pjsua.pj_str_copy("*"), creds);
                     // Normally this step is useless as manipulating a pointer in C memory at this point, but in case this changes reassign
                     mediaCfg.setTurn_auth_cred(creds);
+                    int turnTransport = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.TURN_TRANSPORT);
+                    if(turnTransport != 0) {
+                        switch (turnTransport) {
+                            case 1:
+                                mediaCfg.setTurn_conn_type(pj_turn_tp_type.PJ_TURN_TP_UDP);
+                                break;
+                            case 2:
+                                mediaCfg.setTurn_conn_type(pj_turn_tp_type.PJ_TURN_TP_TCP);
+                                break;
+                            case 3:
+                                mediaCfg.setTurn_conn_type(pj_turn_tp_type.PJ_TURN_TP_TLS);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    //mediaCfg.setTurn_conn_type(value);
                 } else {
                     mediaCfg.setEnable_turn(pjsua.PJ_FALSE);
                 }

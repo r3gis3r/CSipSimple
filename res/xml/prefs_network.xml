@@ -192,6 +192,15 @@
             android:summary="@string/turn_password_desc"
             android:title="@string/turn_password" >
         </EditTextPreference>
+
+        <ListPreference
+            android:defaultValue="0"
+            android:dependency="enable_turn"
+            android:entries="@array/transport_choices"
+            android:entryValues="@array/transport_values"
+            android:key="turn_transport"
+            android:summary="@string/turn_transport_desc"
+            android:title="@string/turn_transport" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="for_incoming"
