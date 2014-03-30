@@ -1,8 +1,8 @@
 Index: pjsip/sources/aconfigure
 ===================================================================
---- pjsip.orig/sources/aconfigure	2014-03-01 16:16:18.057813532 +0100
-+++ pjsip/sources/aconfigure	2014-03-01 16:16:17.977806251 +0100
-@@ -630,6 +630,7 @@
+--- pjsip.orig/sources/aconfigure	2014-03-30 20:53:51.855736886 +0200
++++ pjsip/sources/aconfigure	2014-03-30 20:53:51.835735072 +0200
+@@ -650,6 +650,7 @@
  SDL_CONFIG
  ac_resample_dll
  ac_no_ilbc_codec
@@ -10,7 +10,7 @@ Index: pjsip/sources/aconfigure
  ac_no_speex_codec
  ac_no_g7221_codec
  ac_no_g722_codec
-@@ -2459,7 +2460,7 @@
+@@ -2477,7 +2478,7 @@
    program_prefix=${target_alias}-
  ac_config_headers="$ac_config_headers pjlib/include/pj/compat/os_auto.h pjlib/include/pj/compat/m_auto.h pjmedia/include/pjmedia/config_auto.h pjmedia/include/pjmedia-codec/config_auto.h pjsip/include/pjsip/sip_autoconf.h"
  
@@ -19,7 +19,7 @@ Index: pjsip/sources/aconfigure
  
  
  
-@@ -7344,7 +7345,20 @@
+@@ -7369,7 +7370,20 @@
  $as_echo "Skipping Intel IPP settings (not wanted)" >&6; }
  fi
  
@@ -41,7 +41,7 @@ Index: pjsip/sources/aconfigure
  
  
  # Check whether --with-ssl was given.
-@@ -8628,6 +8642,7 @@
+@@ -8641,6 +8655,7 @@
      "pjsip/build/os-auto.mak") CONFIG_FILES="$CONFIG_FILES pjsip/build/os-auto.mak" ;;
      "third_party/build/os-auto.mak") CONFIG_FILES="$CONFIG_FILES third_party/build/os-auto.mak" ;;
      "third_party/build/portaudio/os-auto.mak") CONFIG_FILES="$CONFIG_FILES third_party/build/portaudio/os-auto.mak" ;;
@@ -51,8 +51,8 @@ Index: pjsip/sources/aconfigure
    esac
 Index: pjsip/sources/aconfigure.ac
 ===================================================================
---- pjsip.orig/sources/aconfigure.ac	2014-03-01 16:16:18.057813532 +0100
-+++ pjsip/sources/aconfigure.ac	2014-03-01 16:16:17.981806615 +0100
+--- pjsip.orig/sources/aconfigure.ac	2014-03-30 20:53:51.855736886 +0200
++++ pjsip/sources/aconfigure.ac	2014-03-30 20:53:51.835735072 +0200
 @@ -19,6 +19,7 @@
  		 pjmedia/build/os-auto.mak
  		 pjsip/build/os-auto.mak
@@ -87,9 +87,9 @@ Index: pjsip/sources/aconfigure.ac
  AC_ARG_ENABLE(g711-codec,
 Index: pjsip/sources/build/rules.mak
 ===================================================================
---- pjsip.orig/sources/build/rules.mak	2014-03-01 16:16:18.057813532 +0100
-+++ pjsip/sources/build/rules.mak	2014-03-01 16:16:17.981806615 +0100
-@@ -165,6 +165,11 @@
+--- pjsip.orig/sources/build/rules.mak	2014-03-30 20:53:51.855736886 +0200
++++ pjsip/sources/build/rules.mak	2014-03-30 20:53:51.835735072 +0200
+@@ -167,6 +167,11 @@
  		$(CC_OUT)$(subst /,$(HOST_PSEP),$@) \
  		$(subst /,$(HOST_PSEP),$<) 
  
@@ -103,8 +103,8 @@ Index: pjsip/sources/build/rules.mak
  		$(CC_OUT)$(subst /,$(HOST_PSEP),$@) \
 Index: pjsip/sources/pjmedia/build/os-auto.mak.in
 ===================================================================
---- pjsip.orig/sources/pjmedia/build/os-auto.mak.in	2014-03-01 16:16:18.057813532 +0100
-+++ pjsip/sources/pjmedia/build/os-auto.mak.in	2014-03-01 16:16:17.981806615 +0100
+--- pjsip.orig/sources/pjmedia/build/os-auto.mak.in	2014-03-30 20:53:51.855736886 +0200
++++ pjsip/sources/pjmedia/build/os-auto.mak.in	2014-03-30 20:53:51.835735072 +0200
 @@ -94,6 +94,9 @@
  
  endif
@@ -117,8 +117,8 @@ Index: pjsip/sources/pjmedia/build/os-auto.mak.in
  else
 Index: pjsip/sources/pjmedia/build/os-darwinos.mak
 ===================================================================
---- pjsip.orig/sources/pjmedia/build/os-darwinos.mak	2014-03-01 16:16:18.057813532 +0100
-+++ pjsip/sources/pjmedia/build/os-darwinos.mak	2014-03-01 16:16:17.981806615 +0100
+--- pjsip.orig/sources/pjmedia/build/os-darwinos.mak	2014-03-30 20:53:51.855736886 +0200
++++ pjsip/sources/pjmedia/build/os-darwinos.mak	2014-03-30 20:53:51.835735072 +0200
 @@ -59,6 +59,9 @@
  
  endif
@@ -131,8 +131,8 @@ Index: pjsip/sources/pjmedia/build/os-darwinos.mak
  else
 Index: pjsip/sources/pjmedia/build/os-linux.mak
 ===================================================================
---- pjsip.orig/sources/pjmedia/build/os-linux.mak	2014-03-01 16:16:18.057813532 +0100
-+++ pjsip/sources/pjmedia/build/os-linux.mak	2014-03-01 16:16:17.981806615 +0100
+--- pjsip.orig/sources/pjmedia/build/os-linux.mak	2014-03-30 20:53:51.855736886 +0200
++++ pjsip/sources/pjmedia/build/os-linux.mak	2014-03-30 20:53:51.835735072 +0200
 @@ -53,6 +53,9 @@
  
  endif
@@ -145,8 +145,8 @@ Index: pjsip/sources/pjmedia/build/os-linux.mak
  else
 Index: pjsip/sources/pjmedia/build/os-win32.mak
 ===================================================================
---- pjsip.orig/sources/pjmedia/build/os-win32.mak	2014-03-01 16:16:18.057813532 +0100
-+++ pjsip/sources/pjmedia/build/os-win32.mak	2014-03-01 16:16:17.981806615 +0100
+--- pjsip.orig/sources/pjmedia/build/os-win32.mak	2014-03-30 20:53:51.855736886 +0200
++++ pjsip/sources/pjmedia/build/os-win32.mak	2014-03-30 20:53:51.835735072 +0200
 @@ -55,6 +55,9 @@
  
  endif
@@ -159,8 +159,8 @@ Index: pjsip/sources/pjmedia/build/os-win32.mak
  else
 Index: pjsip/sources/pjmedia/include/pjmedia/echo.h
 ===================================================================
---- pjsip.orig/sources/pjmedia/include/pjmedia/echo.h	2014-03-01 16:16:18.057813532 +0100
-+++ pjsip/sources/pjmedia/include/pjmedia/echo.h	2014-03-01 16:16:17.981806615 +0100
+--- pjsip.orig/sources/pjmedia/include/pjmedia/echo.h	2014-03-30 20:53:51.855736886 +0200
++++ pjsip/sources/pjmedia/include/pjmedia/echo.h	2014-03-30 20:53:51.835735072 +0200
 @@ -78,6 +78,12 @@
       */
      PJMEDIA_ECHO_SIMPLE	= 2,
@@ -176,8 +176,8 @@ Index: pjsip/sources/pjmedia/include/pjmedia/echo.h
       */
 Index: pjsip/sources/pjmedia/src/pjmedia/echo_common.c
 ===================================================================
---- pjsip.orig/sources/pjmedia/src/pjmedia/echo_common.c	2014-03-01 16:16:18.057813532 +0100
-+++ pjsip/sources/pjmedia/src/pjmedia/echo_common.c	2014-03-01 16:16:18.053813168 +0100
+--- pjsip.orig/sources/pjmedia/src/pjmedia/echo_common.c	2014-03-30 20:53:51.855736886 +0200
++++ pjsip/sources/pjmedia/src/pjmedia/echo_common.c	2014-03-30 20:53:51.835735072 +0200
 @@ -125,6 +125,20 @@
  #endif
  
@@ -215,8 +215,8 @@ Index: pjsip/sources/pjmedia/src/pjmedia/echo_common.c
  	       (options & PJMEDIA_ECHO_ALGO_MASK) == PJMEDIA_ECHO_DEFAULT)
 Index: pjsip/sources/pjmedia/src/pjmedia/echo_internal.h
 ===================================================================
---- pjsip.orig/sources/pjmedia/src/pjmedia/echo_internal.h	2014-03-01 16:16:18.057813532 +0100
-+++ pjsip/sources/pjmedia/src/pjmedia/echo_internal.h	2014-03-01 16:16:18.053813168 +0100
+--- pjsip.orig/sources/pjmedia/src/pjmedia/echo_internal.h	2014-03-30 20:53:51.855736886 +0200
++++ pjsip/sources/pjmedia/src/pjmedia/echo_internal.h	2014-03-30 20:53:51.835735072 +0200
 @@ -77,6 +77,20 @@
  					 unsigned options,
  					 void *reserved );
@@ -241,7 +241,7 @@ Index: pjsip/sources/pjmedia/src/pjmedia/echo_internal.h
 Index: pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c	2014-03-01 16:16:18.053813168 +0100
++++ pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c	2014-03-30 20:53:51.851736524 +0200
 @@ -0,0 +1,344 @@
 +/**
 + * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
@@ -589,8 +589,8 @@ Index: pjsip/sources/pjmedia/src/pjmedia/echo_webrtc_aec.c
 +#endif
 Index: pjsip/sources/third_party/build/os-auto.mak.in
 ===================================================================
---- pjsip.orig/sources/third_party/build/os-auto.mak.in	2014-03-01 16:16:18.057813532 +0100
-+++ pjsip/sources/third_party/build/os-auto.mak.in	2014-03-01 16:16:18.053813168 +0100
+--- pjsip.orig/sources/third_party/build/os-auto.mak.in	2014-03-30 20:53:51.855736886 +0200
++++ pjsip/sources/third_party/build/os-auto.mak.in	2014-03-30 20:53:51.851736524 +0200
 @@ -40,3 +40,7 @@
  ifeq (@ac_pjmedia_resample@,libresample)
  DIRS += resample
@@ -602,8 +602,8 @@ Index: pjsip/sources/third_party/build/os-auto.mak.in
 \ No newline at end of file
 Index: pjsip/sources/third_party/build/os-darwinos.mak
 ===================================================================
---- pjsip.orig/sources/third_party/build/os-darwinos.mak	2014-03-01 16:16:18.057813532 +0100
-+++ pjsip/sources/third_party/build/os-darwinos.mak	2014-03-01 16:16:18.053813168 +0100
+--- pjsip.orig/sources/third_party/build/os-darwinos.mak	2014-03-30 20:53:51.855736886 +0200
++++ pjsip/sources/third_party/build/os-darwinos.mak	2014-03-30 20:53:51.851736524 +0200
 @@ -5,5 +5,4 @@
  DIRS += g7221
  DIRS += srtp
@@ -613,8 +613,8 @@ Index: pjsip/sources/third_party/build/os-darwinos.mak
 +DIRS += webrtc
 Index: pjsip/sources/third_party/build/os-linux.mak
 ===================================================================
---- pjsip.orig/sources/third_party/build/os-linux.mak	2014-03-01 16:16:18.057813532 +0100
-+++ pjsip/sources/third_party/build/os-linux.mak	2014-03-01 16:16:18.053813168 +0100
+--- pjsip.orig/sources/third_party/build/os-linux.mak	2014-03-30 20:53:51.855736886 +0200
++++ pjsip/sources/third_party/build/os-linux.mak	2014-03-30 20:53:51.851736524 +0200
 @@ -5,5 +5,5 @@
  DIRS += g7221
  DIRS += srtp
@@ -625,7 +625,7 @@ Index: pjsip/sources/third_party/build/os-linux.mak
 Index: pjsip/sources/third_party/build/webrtc/Makefile
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/third_party/build/webrtc/Makefile	2014-03-01 16:16:18.053813168 +0100
++++ pjsip/sources/third_party/build/webrtc/Makefile	2014-03-30 20:53:51.851736524 +0200
 @@ -0,0 +1,159 @@
 +include ../../../build.mak
 +include ../../../build/common.mak
@@ -789,7 +789,7 @@ Index: pjsip/sources/third_party/build/webrtc/Makefile
 Index: pjsip/sources/third_party/build/webrtc/os-auto.mak.in
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/third_party/build/webrtc/os-auto.mak.in	2014-03-01 16:16:18.057813532 +0100
++++ pjsip/sources/third_party/build/webrtc/os-auto.mak.in	2014-03-30 20:53:51.851736524 +0200
 @@ -0,0 +1,42 @@
 +#@configure_input@
 +
@@ -836,7 +836,7 @@ Index: pjsip/sources/third_party/build/webrtc/os-auto.mak.in
 Index: pjsip/sources/third_party/build/webrtc/os-darwinos.mak
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/third_party/build/webrtc/os-darwinos.mak	2014-03-01 16:16:18.057813532 +0100
++++ pjsip/sources/third_party/build/webrtc/os-darwinos.mak	2014-03-30 20:53:51.855736886 +0200
 @@ -0,0 +1,12 @@
 +
 +export CFLAGS += -DWEBRTC_TARGET_MAC_INTEL -DWEBRTC_MAC_INTEL -DWEBRTC_MAC -DWEBRTC_THREAD_RR -DWEBRTC_CLOCK_TYPE_REALTIME
@@ -853,7 +853,7 @@ Index: pjsip/sources/third_party/build/webrtc/os-darwinos.mak
 Index: pjsip/sources/third_party/build/webrtc/os-linux.mak
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/third_party/build/webrtc/os-linux.mak	2014-03-01 16:16:18.057813532 +0100
++++ pjsip/sources/third_party/build/webrtc/os-linux.mak	2014-03-30 20:53:51.855736886 +0200
 @@ -0,0 +1,10 @@
 +export CFLAGS += -DWEBRTC_TARGET_PC -DWEBRTC_LINUX -DWEBRTC_THREAD_RR
 +export CFLAGS += -pthread
@@ -868,7 +868,7 @@ Index: pjsip/sources/third_party/build/webrtc/os-linux.mak
 Index: pjsip/sources/third_party/build/webrtc/os-win32.mak
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ pjsip/sources/third_party/build/webrtc/os-win32.mak	2014-03-01 16:16:18.057813532 +0100
++++ pjsip/sources/third_party/build/webrtc/os-win32.mak	2014-03-30 20:53:51.855736886 +0200
 @@ -0,0 +1,10 @@
 +export CFLAGS += -DWEBRTC_TARGET_PC -D_WIN32 -D_CRT_SECURE_NO_DEPRECATE -D_SCL_SECURE_NO_DEPRECATE -D__STD_C
 +

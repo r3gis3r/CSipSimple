@@ -1,7 +1,7 @@
 Index: pjsip/sources/pjmedia/src/pjmedia/stream.c
 ===================================================================
---- pjsip.orig/sources/pjmedia/src/pjmedia/stream.c	2014-03-28 00:00:03.696739798 +0100
-+++ pjsip/sources/pjmedia/src/pjmedia/stream.c	2014-03-29 16:41:04.832524005 +0100
+--- pjsip.orig/sources/pjmedia/src/pjmedia/stream.c	2014-03-30 20:54:04.696901459 +0200
++++ pjsip/sources/pjmedia/src/pjmedia/stream.c	2014-03-30 20:54:04.692901096 +0200
 @@ -200,6 +200,8 @@
  					    /**< Counter of remote timestamp
  						 checking */
@@ -21,7 +21,7 @@ Index: pjsip/sources/pjmedia/src/pjmedia/stream.c
      /* Init frame_out buffer. */
      frame_out.buf = ((char*)channel->out_pkt) + sizeof(pjmedia_rtp_hdr);
      frame_out.size = 0;
-@@ -2213,6 +2218,14 @@
+@@ -2214,6 +2219,14 @@
  	stream->rtp_tx_ts_len_per_pkt >>= 1;
      }
  #endif
