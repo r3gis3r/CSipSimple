@@ -1575,11 +1575,17 @@ public class SipProfile implements Parcelable {
      * @return the default domain for this account
      */
     public String getDefaultDomain() {
+        ParsedSipContactInfos parsedAoR = SipUri.parseSipContact(acc_id);
         ParsedSipUriInfos parsedInfo = null;
-        if (!TextUtils.isEmpty(reg_uri)) {
-            parsedInfo = SipUri.parseSipUri(reg_uri);
-        } else if (proxies != null && proxies.length > 0) {
-            parsedInfo = SipUri.parseSipUri(proxies[0]);
+        if(TextUtils.isEmpty(parsedAoR.domain)) {
+            // Try to fallback
+            if (!TextUtils.isEmpty(reg_uri)) {
+                parsedInfo = SipUri.parseSipUri(reg_uri);
+            } else if (proxies != null && proxies.length > 0) {
+                parsedInfo = SipUri.parseSipUri(proxies[0]);
+            }
+        }else {
+            parsedInfo = parsedAoR.getServerSipUri();
         }
 
         if (parsedInfo == null) {

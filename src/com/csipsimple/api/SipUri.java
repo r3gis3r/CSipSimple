@@ -121,6 +121,17 @@ public final class SipUri {
             buildString.append(domain);
             return buildString.toString();
         }
+
+        /**
+         * @return parsed sip server uri
+         */
+        public ParsedSipUriInfos getServerSipUri() {
+            String pScheme = scheme;
+            if(TextUtils.isEmpty(scheme)) {
+                pScheme = SipManager.PROTOCOL_SIP;
+            }
+            return parseSipUri(pScheme + ":" + domain);
+        }
     }
 
     /**
