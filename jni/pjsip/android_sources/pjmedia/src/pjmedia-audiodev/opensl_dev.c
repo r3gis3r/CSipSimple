@@ -35,20 +35,18 @@
 #include <SLES/OpenSLES.h>
 
 #ifdef __ANDROID__
-#include <SLES/OpenSLES_Android.h>
-#include <SLES/OpenSLES_AndroidConfiguration.h>
-#include <sys/system_properties.h>
-#include <android/api-level.h>
+    #include <SLES/OpenSLES_Android.h>
+    #include <SLES/OpenSLES_AndroidConfiguration.h>
+    #include <sys/system_properties.h>
+    #include <android/api-level.h>
 
-#define W_SLBufferQueueItf SLAndroidSimpleBufferQueueItf
-#define W_SLBufferQueueState SLAndroidSimpleBufferQueueState
-#define W_SL_IID_BUFFERQUEUE SL_IID_ANDROIDSIMPLEBUFFERQUEUE
-
+    #define W_SLBufferQueueItf SLAndroidSimpleBufferQueueItf
+    #define W_SLBufferQueueState SLAndroidSimpleBufferQueueState
+    #define W_SL_IID_BUFFERQUEUE SL_IID_ANDROIDSIMPLEBUFFERQUEUE
 #else
-
-#define W_SLBufferQueueItf SLBufferQueueItf
-#define W_SLBufferQueueState SLBufferQueueState
-#define W_SL_IID_BUFFERQUEUE SL_IID_BUFFERQUEUE
+    #define W_SLBufferQueueItf SLBufferQueueItf
+    #define W_SLBufferQueueState SLBufferQueueState
+    #define W_SL_IID_BUFFERQUEUE SL_IID_BUFFERQUEUE
 #endif
 
 /* CSipSimple related */
@@ -89,7 +87,9 @@ struct opensl_aud_stream
     pjmedia_aud_play_cb play_cb;
 
     pj_timestamp	play_timestamp;
+    unsigned long        play_frames;     /* samples_per_frame        */
     pj_timestamp	rec_timestamp;
+    unsigned long        rec_frames;     /* samples_per_frame        */
     
     pj_bool_t		rec_thread_initialized;
     pj_thread_desc	rec_thread_desc;
@@ -114,8 +114,8 @@ struct opensl_aud_stream
     char               *recordBuffer[NUM_BUFFERS];
     int                 recordBufIdx;
 
-    W_SLBufferQueueItf playerBufQ;
-    W_SLBufferQueueItf recordBufQ;
+    W_SLBufferQueueItf  playerBufQ;
+    W_SLBufferQueueItf  recordBufQ;
 };
 
 /* Factory prototypes */
@@ -203,8 +203,7 @@ void bqPlayerCallback(W_SLBufferQueueItf bq, void *context)
         if (status != PJ_SUCCESS || frame.type != PJMEDIA_FRAME_TYPE_AUDIO)
             pj_bzero(buf, stream->playerBufferSize);
         
-        stream->play_timestamp.u64 += stream->param.samples_per_frame /
-                                      stream->param.channel_count;
+        stream->play_timestamp.u64 += stream->play_frames;
         
         result = (*bq)->Enqueue(bq, buf, stream->playerBufferSize);
         if (result != SL_RESULT_SUCCESS) {
@@ -231,6 +230,7 @@ void bqRecorderCallback(W_SLBufferQueueItf bq, void *context)
 	pj_bzero(stream->rec_thread_desc, sizeof(pj_thread_desc));
 	status = pj_thread_register("opensl_rec", stream->rec_thread_desc,
 				    &stream->rec_thread);
+	PJ_UNUSED_ARG(status);  /* Unused for now.. */
 	stream->rec_thread_initialized = 1;
 	PJ_LOG(5, (THIS_FILE, "Recorder thread started")); 
     }
@@ -247,8 +247,7 @@ void bqRecorderCallback(W_SLBufferQueueItf bq, void *context)
         
         status = (*stream->rec_cb)(stream->user_data, &frame);
         
-        stream->rec_timestamp.u64 += stream->param.samples_per_frame /
-                                     stream->param.channel_count;
+        stream->rec_timestamp.u64 += stream->rec_frames;
         
         /* And now enqueue next buffer */
         result = (*bq)->Enqueue(bq, buf, stream->recordBufferSize);
@@ -469,7 +468,8 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
     SLDataLocator_AndroidSimpleBufferQueue loc_bq =
         { SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE, NUM_BUFFERS };
 #else
-		SLDataLocator_BufferQueue loc_bq = { SL_DATALOCATOR_BUFFERQUEUE, NUM_BUFFERS };
+    SLDataLocator_BufferQueue loc_bq =
+        { SL_DATALOCATOR_BUFFERQUEUE, NUM_BUFFERS };
 #endif
     struct opensl_aud_factory *pa = (struct opensl_aud_factory*)f;
     pj_pool_t *pool;
@@ -496,7 +496,13 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
     pj_memcpy(&stream->param, param, sizeof(*param));
     stream->user_data = user_data;
     stream->rec_cb = rec_cb;
+    stream->rec_timestamp.u64 = 0;
+    stream->rec_frames = (unsigned long) param->samples_per_frame /
+            param->channel_count;
     stream->play_cb = play_cb;
+    stream->play_timestamp.u64 = 0;
+    stream->play_frames = (unsigned long) param->samples_per_frame /
+            param->channel_count;
     bufferSize = param->samples_per_frame * param->bits_per_sample / 8;
 
     /* Configure audio PCM format */
@@ -528,16 +534,15 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
         const SLInterfaceID ids[3] = {W_SL_IID_BUFFERQUEUE,
                                       SL_IID_VOLUME,
                                       SL_IID_ANDROIDCONFIGURATION};
-        const SLboolean req[3] = {SL_BOOLEAN_TRUE,
-                                      SL_BOOLEAN_TRUE,
-                                      SL_BOOLEAN_TRUE};
+        const SLboolean req[3] = {SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE,
+                                  SL_BOOLEAN_TRUE};
         SLAndroidConfigurationItf playerConfig;
         SLint32 streamType = SL_ANDROID_STREAM_VOICE;
 #else
-        const SLInterfaceID ids[2] = {W_SL_IID_BUFFERQUEUE,
-                                     SL_IID_VOLUME};
-        const SLboolean req[2] = {SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE};
         int numIface = 2;
+        const SLInterfaceID ids[2] = {W_SL_IID_BUFFERQUEUE,
+                                      SL_IID_VOLUME};
+        const SLboolean req[2] = {SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE};
 #endif
         
         /* Create audio player */
@@ -565,7 +570,7 @@ static pj_status_t opensl_create_stream(pjmedia_aud_dev_factory *f,
                                   "player configuration"));
         }
 #endif
-        
+
         /* Realize the player */
         result = (*stream->playerObj)->Realize(stream->playerObj,
                                                SL_BOOLEAN_FALSE);
@@ -908,14 +913,14 @@ static pj_status_t strm_stop(pjmedia_aud_stream *s)
          * played. This is indicated by waiting for the count member of the
          * SLBufferQueueState to go to zero.
          */
+/*
         SLresult result;
         W_SLBufferQueueState state;
 
         result = (*stream->playerBufQ)->GetState(stream->playerBufQ, &state);
-        //TODO : check error
-        while(state.count){
+        while (state.count) {
             (*stream->playerBufQ)->GetState(stream->playerBufQ, &state);
-        }
+        }*/
         /* Stop player */
         (*stream->playerPlay)->SetPlayState(stream->playerPlay,
                                             SL_PLAYSTATE_STOPPED);
