@@ -33,7 +33,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import com.csipsimple.R;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.ui.incall.IOnCallActionTrigger;
@@ -126,7 +125,6 @@ public class InCallAnswerControls extends RelativeLayout implements IOnLeftRight
                 }
                 lockerWidget.setOnLeftRightListener(this);
                 lockerWidget.setTypeOfLock(TypeOfLock.CALL);
-                lockerWidget.applyTargetTitles(R.array.answer_choices);
                 LayoutParams lp = new LayoutParams(lockerWidget.getLayoutingWidth(), lockerWidget.getLayoutingHeight());
                 if(lockerWidget.getLayoutingHeight() == LayoutParams.WRAP_CONTENT ||
                         lockerWidget.getLayoutingWidth() == LayoutParams.WRAP_CONTENT) {

@@ -1411,7 +1411,8 @@ public class GlowPadView extends View implements IOnLeftRightProvider {
             mOuterRadius = getResources().getDimension(R.dimen.glowpadview_target_placement_radius);
             mSnapMargin = getResources().getDimension(R.dimen.glowpadview_snap_margin);
 
-            setTargetDescriptionsResourceId(R.array.lockscreen_direction_descriptions);
+            setTargetDescriptionsResourceId(R.array.lockscreen_answer_choices);
+            setDirectionDescriptionsResourceId(R.array.lockscreen_direction_descriptions);
             setTargetResources(R.array.lockscreen_targets_when_incall);
 
         }

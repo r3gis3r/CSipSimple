@@ -570,6 +570,8 @@ public class SlidingTab extends ViewGroup implements IOnLeftRightProvider {
                     getContext().getResources().getDrawable(R.drawable.jog_tab_target_red), 
                     getContext().getResources().getDrawable(R.drawable.jog_tab_bar_right_decline), 
                     getContext().getResources().getDrawable(R.drawable.jog_tab_right_decline));
+
+            applyTargetTitles(R.array.answer_choices);
         }
     }
 

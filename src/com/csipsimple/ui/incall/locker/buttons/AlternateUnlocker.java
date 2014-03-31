@@ -106,8 +106,9 @@ public class AlternateUnlocker extends LinearLayout implements IOnLeftRightProvi
      */
     @Override
     public void setTypeOfLock(TypeOfLock lock) {
-        // TODO Auto-generated method stub
-        
+        if(lock == TypeOfLock.CALL) {
+            applyTargetTitles(R.array.answer_choices);
+        }        
     }
 
     /* (non-Javadoc)

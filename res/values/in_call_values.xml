@@ -33,6 +33,12 @@
         <item>@drawable/ic_lockscreen_decline</item>
         <item>@null</item>
     </array>
+    <array name="lockscreen_answer_choices">
+        <item>@string/take_call</item>
+        <item>@null</item>
+        <item>@string/ignore_call</item>
+        <item>@null</item>
+    </array>
 
     <dimen name="incall_bottom_bar_height">80dip</dimen>
 
