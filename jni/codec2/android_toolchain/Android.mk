@@ -20,21 +20,29 @@ LOCAL_C_INCLUDES += $(PJ_DIR)/pjlib/include \
 # codec2
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(CODEC2_PATH)
 LOCAL_SRC_FILES += $(CODEC2_PATH)/dump.c \
-	$(CODEC2_PATH)/lpc.c \
-	$(CODEC2_PATH)/nlp.c \
+	$(CODEC2_PATH)/lpc.c  \
+	$(CODEC2_PATH)/nlp.c  \
 	$(CODEC2_PATH)/postfilter.c \
 	$(CODEC2_PATH)/sine.c \
 	$(CODEC2_PATH)/codec2.c \
-	$(CODEC2_PATH)/fft.c \
+	$(CODEC2_PATH)/fifo.c   \
+	$(CODEC2_PATH)/fdmdv.c  \
 	$(CODEC2_PATH)/kiss_fft.c \
-	$(CODEC2_PATH)/interp.c \
-	$(CODEC2_PATH)/lsp.c \
-	$(CODEC2_PATH)/phase.c \
+	$(CODEC2_PATH)/interp.c   \
+	$(CODEC2_PATH)/lsp.c      \
+	$(CODEC2_PATH)/phase.c    \
 	$(CODEC2_PATH)/quantise.c \
 	$(CODEC2_PATH)/pack.c \
 	$(CODEC2_GEN_PATH)/codebook.c \
 	$(CODEC2_GEN_PATH)/codebookd.c \
-	$(CODEC2_GEN_PATH)/codebookdvq.c
+	$(CODEC2_GEN_PATH)/codebookvq.c \
+	$(CODEC2_GEN_PATH)/codebookjnd.c \
+	$(CODEC2_GEN_PATH)/codebookjvm.c \
+	$(CODEC2_GEN_PATH)/codebookvqanssi.c \
+	$(CODEC2_GEN_PATH)/codebookdt.c \
+	$(CODEC2_GEN_PATH)/codebookge.c \
+	$(CODEC2_PATH)/golay23.c   
+
 # self
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/$(PJ_CODEC2_PATH)
 LOCAL_SRC_FILES += $(PJ_CODEC2_PATH)/pj_codec2.c

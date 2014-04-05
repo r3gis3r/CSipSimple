@@ -1,5 +1,6 @@
 /**
  * Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+ * Copyright (C) 2014 Antonio Eugenio Burriel <aeburriel@gmail.com>
  * This file is part of pjsip_android.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,6 +36,8 @@
 #define PLC_DISABLED	0
 #define THIS_FILE       "codec2.c"
 
+#define CODEC2_BITS_PER_FRAME		48	/* Hardwired for CODEC2_MODE_2400 */
+#define CODEC2_SAMPLES_PER_FRAME	160	/* Hardwired for CODEC2_MODE_2400 */
 #define BITS_SIZE	((CODEC2_BITS_PER_FRAME + 7) / 8)
 
 #include <codec2.h>
@@ -266,8 +269,8 @@ static pj_status_t codec2_default_attr (pjmedia_codec_factory *factory,
     pj_bzero(attr, sizeof(pjmedia_codec_param));
     attr->info.clock_rate = 8000;
     attr->info.channel_cnt = 1;
-    attr->info.avg_bps = 2550;
-    attr->info.max_bps = 2550;
+    attr->info.avg_bps = 2400;
+    attr->info.max_bps = 2400;
     attr->info.pcm_bits_per_sample = 16;
     attr->info.frm_ptime = 20;
     attr->info.pt = PJMEDIA_RTP_PT_CODEC2;
@@ -338,7 +341,7 @@ static pj_status_t codec2_alloc_codec( pjmedia_codec_factory *factory,
 #if !PLC_DISABLED
 	/* Create PLC */
 	status = pjmedia_plc_create(codec2_codec_factory.pool, 8000,
-				    160, 0, &codec2_data->plc);
+				    CODEC2_SAMPLES_PER_FRAME, 0, &codec2_data->plc);
 	if (status != PJ_SUCCESS) {
 	    pj_mutex_unlock(codec2_codec_factory.mutex);
 	    return status;
@@ -347,7 +350,7 @@ static pj_status_t codec2_alloc_codec( pjmedia_codec_factory *factory,
 
 	/* Create silence detector */
 	status = pjmedia_silence_det_create(codec2_codec_factory.pool,
-					    8000, 160,
+					    8000, CODEC2_SAMPLES_PER_FRAME,
 					    &codec2_data->vad);
 	if (status != PJ_SUCCESS) {
 	    pj_mutex_unlock(codec2_codec_factory.mutex);
@@ -415,11 +418,11 @@ static pj_status_t codec2_codec_open( pjmedia_codec *codec,
 
     PJ_LOG(4, (THIS_FILE, "codec2 open !! "));
 
-    codec2_data->encoder = codec2_create();
+    codec2_data->encoder = codec2_create(CODEC2_MODE_2400);
     if (!codec2_data->encoder)
 	return PJMEDIA_CODEC_EFAILED;
 
-    codec2_data->decoder = codec2_create();
+    codec2_data->decoder = codec2_create(CODEC2_MODE_2400);
     if (!codec2_data->decoder)
 	return PJMEDIA_CODEC_EFAILED;
 
@@ -592,7 +595,8 @@ static pj_status_t codec2_codec_decode( pjmedia_codec *codec,
 
     codec2_decode(codec2_data->decoder,
     	  (short int *)output->buf,
- 	      (const unsigned char *)input->buf);
+ 	      (const unsigned char *)input->buf,
+ 	     0.0 /* currently no BER estimate */);
 
     output->size = (CODEC2_SAMPLES_PER_FRAME*2);
     output->type = PJMEDIA_FRAME_TYPE_AUDIO;
