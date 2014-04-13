@@ -1090,6 +1090,18 @@ public class WizardUtils {
                     R.drawable.ic_wizard_gtel, 30,
                     new Locale[] {new Locale("AR", "tn"), new Locale("FR", "tn")}, false, false, 
                     GTel.class));
+            WIZARDS_DICT.put("MANGOTELECOM", new WizardInfo("MANGOTELECOM", "Mango Telecom", 
+                    R.drawable.ic_wizard_mangotelecom, 10, 
+                    new Locale[]{
+                    locale("ru_RU")
+                    }, false, false, 
+                    MangoTelecom.class));
+            WIZARDS_DICT.put("NEOFONTPPL", new WizardInfo("NEOFONTPPL", "Neofon.tp.pl", 
+                    R.drawable.ic_wizard_neofontppl, 10, 
+                    new Locale[]{
+                    new Locale("pl")
+                    }, false, false, 
+                    NeofonTpPl.class));
             
             
 		}else {

@@ -34,5 +34,6 @@
     <string name="email_address">Email address</string>
     <string name="captcha">Captcha</string>
     <string name="country_code">Country code</string>
+    <string name="user_personal_domain">User personal domain</string>
 
 </resources>
