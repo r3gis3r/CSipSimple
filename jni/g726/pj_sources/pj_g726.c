@@ -327,7 +327,7 @@ static pj_status_t g726_enum_codecs( pjmedia_codec_factory *factory,
     unsigned index = 0;
 
     if (index < *count) {
-	pj_bzero(&codecs[2], sizeof(pjmedia_codec_info));
+	pj_bzero(&codecs[index], sizeof(pjmedia_codec_info));
 	codecs[index].encoding_name = pj_str("G726-40");
 	codecs[index].pt            = PJMEDIA_RTP_PT_G726_40;
 	codecs[index].type          = PJMEDIA_TYPE_AUDIO;
