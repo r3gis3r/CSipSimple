@@ -78,13 +78,6 @@ public class ConversationsListFragment extends CSSListFragment implements ViewPa
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
-        ListView lv = getListView();
-
-        if(getListAdapter() == null && mHeaderView != null) {
-            lv.addHeaderView(mHeaderView, null, true);
-        }
-        
-        lv.setOnCreateContextMenuListener(this);
     }
     
     private void attachAdapter() {
@@ -121,6 +114,10 @@ public class ConversationsListFragment extends CSSListFragment implements ViewPa
         // Empty view
         Button bt = (Button) v.findViewById(android.R.id.empty);
         bt.setOnClickListener(addClickButtonListener);
+
+        lv.addHeaderView(mHeaderView, null, true);
+        lv.setOnCreateContextMenuListener(this);
+        
         return v;
     }
     

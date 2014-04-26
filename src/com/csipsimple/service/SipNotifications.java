@@ -365,7 +365,7 @@ public class SipNotifications {
 		// CharSequence tickerText = context.getText(R.string.instance_message);
 		if (!msg.getFrom().equalsIgnoreCase(viewingRemoteFrom)) {
 			String from = formatRemoteContactString(msg.getFullFrom());
-			if(from.equalsIgnoreCase(msg.getFullFrom())) {
+			if(from.equalsIgnoreCase(msg.getFullFrom()) && !from.equals(msg.getDisplayName())) {
 			    from = msg.getDisplayName() + " " + from;
 			}
 			CharSequence tickerText = buildTickerMessage(context, from, msg.getBody());
