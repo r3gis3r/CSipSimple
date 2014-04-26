@@ -30,4 +30,7 @@
   <string name="zrtp_revoke_trusted_remote">Återkalla betrodd fjärr-ZRTP</string>
   <string name="transport_secure_to_server">TLS transport används för omedelbar hoppning</string>
   <string name="transport_secure_full">Ände-till-ände-signalering är påstådd säker</string>
+  <string name="description_direction_right">Höger</string>
+  <string name="description_direction_left">Vänster</string>
+  <string name="description_direction_up">Upp</string>
 </resources>

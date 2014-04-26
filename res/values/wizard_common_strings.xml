@@ -35,5 +35,7 @@
     <string name="captcha">Captcha</string>
     <string name="country_code">Country code</string>
     <string name="user_personal_domain">User personal domain</string>
+    <string name="user_prefix">User prefix</string>
+    <string name="user_suffix">User suffix</string>
 
 </resources>

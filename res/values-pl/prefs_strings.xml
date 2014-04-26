@@ -29,6 +29,8 @@
   <string name="use_3g_disclamer">Twój operator MUSI pozwalać na używanie tej opcji</string>
   <string name="use_edge">Używaj EDGE</string>
   <string name="use_gprs">Używaj GPRS</string>
+  <string name="use_roaming">Używaj w roamingu</string>
+  <string name="use_roaming_desc">Kiedy aplikacja Androida wykryje sytuację roamingu</string>
   <string name="lock_wifi">Utrzymuj WiFi</string>
   <string name="lock_wifi_desc">Zapobiegaj wygaszaniu WiFi gdy SIP jest połączony</string>
   <string name="lock_wifi_perfs">Wysoka wydajność WiFi</string>
@@ -62,6 +64,8 @@
   <string name="turn_username_desc">Nazwa użytkownika uwierzytelniającego na serwerze TURN</string>
   <string name="turn_password">Hasło TURN</string>
   <string name="turn_password_desc">Hasło uwierzytelniające na serwerze TURN</string>
+  <string name="turn_transport">Transport TURN</string>
+  <string name="turn_transport_desc">Transport dla funkcji TURN</string>
   <string name="enable_stun">Włącz STUN</string>
   <string name="enable_stun_desc">Włącza funkcję STUN</string>
   <string name="enable_stun2">Używaj nowego formatu STUN</string>
@@ -278,6 +282,9 @@
   <string name="start_with_text_dialer_desc">Uruchamiaj dialer w trybie tekstowym</string>
   <string name="use_alternate_unlocker">Nie używaj odbierania ślizgiem</string>
   <string name="use_alternate_unlocker_desc">Użyj przycisków zamiast ślizgania przy odbieraniu połączeń</string>
+  <string name="slider">Suwak</string>
+  <string name="buttons">Przyciski</string>
+  <string name="glowpad">GlowPad</string>
   <string name="keep_awake_incall">Nie wygaszaj ekranu podczas połączenia</string>
   <string name="keep_awake_incall_desc">Pomaga przy rwącym dźwięku po wygaszeniu ekranu podczas połączenia WiFi</string>
   <string name="use_partial_wake_lock">Używaj częściowego blokowania wygaszania</string>
@@ -327,6 +334,8 @@
   <string name="vid_out_auto_transmit_desc">Automatycznie wysyłaj wideo z urządzenia </string>
   <string name="use_video">Używaj wideo</string>
   <string name="use_video_desc">Automatycznie wysyłaj wideo z urządzenia </string>
+  <string name="play_waittone_on_hold">Dźwięk czekania przy zawieszeniu</string>
+  <string name="play_waittone_on_hold_desc">Odtwórz dźwięk, gdy cześć zdalny jest zawieszona</string>
   <!--Settings modes-->
   <string name="expert_preferences">Tryb zaawansowany</string>
   <string name="normal_preferences">Tryb normalny</string>

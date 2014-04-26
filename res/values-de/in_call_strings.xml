@@ -30,4 +30,7 @@
   <string name="zrtp_revoke_trusted_remote">Widerrufe vertrauen entfernten ZRTP</string>
   <string name="transport_secure_to_server">TLS Transport wird zum nächstgelegenen Knoten verwendet</string>
   <string name="transport_secure_full">Das Signal soll von Anfang bis Ende sicher sein</string>
+  <string name="description_direction_right">Rechts</string>
+  <string name="description_direction_left">Links</string>
+  <string name="description_direction_up">Oben</string>
 </resources>

@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="w_callcentric_display_name">Kontonamn</string>
-  <string name="w_callcentric_display_name_desc">Visningsnamn för detta konto</string>
   <string name="w_callcentric_phone_number">SIP-telefonnummer</string>
   <string name="w_callcentric_phone_number_desc">SIP-telefonnummer hos Callcentric (1777xxxxxxx)</string>
   <string name="w_callcentric_password">Lösenord</string>

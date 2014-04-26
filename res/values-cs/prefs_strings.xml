@@ -29,6 +29,8 @@
   <string name="use_3g_disclamer">Váš operátor musí tuto službu podporovat</string>
   <string name="use_edge">Používat EDGE</string>
   <string name="use_gprs">Používat GPRS</string>
+  <string name="use_roaming">Použít při roamingu</string>
+  <string name="use_roaming_desc">Pokud android zjistí roamingovou situaci</string>
   <string name="lock_wifi">Uzamknout WiFi připojení</string>
   <string name="lock_wifi_desc">Zamezí vypnutí WiFi pokud je SIP připojený</string>
   <string name="lock_wifi_perfs">Zmčení vysokého výkonu</string>
@@ -62,6 +64,8 @@
   <string name="turn_username_desc">Uživatelské jméno pro TURN ověření</string>
   <string name="turn_password">Turn heslo</string>
   <string name="turn_password_desc">Heslo pro TURN ověření</string>
+  <string name="turn_transport">TURN přenos</string>
+  <string name="turn_transport_desc">Přenos pro TURN funkce</string>
   <string name="enable_stun">Povolit STUN</string>
   <string name="enable_stun_desc">Zapnout STUN funkce</string>
   <string name="enable_stun2">Používat nový STUN formát</string>
@@ -278,6 +282,9 @@
   <string name="start_with_text_dialer_desc">zapnout s textovým vytáčením</string>
   <string name="use_alternate_unlocker">nepoužívat zvedání hovoru tažením</string>
   <string name="use_alternate_unlocker_desc">Použít tlačítka místo tažení pro příchozí hovory</string>
+  <string name="slider">Posuvník</string>
+  <string name="buttons">Tlačítka</string>
+  <string name="glowpad">GlowPad</string>
   <string name="keep_awake_incall">Při hovoru je telefon připraven</string>
   <string name="keep_awake_incall_desc">Opravy, pokud se dostaví trhaný zvuk, když vypnete displej, při hovoru na wifi</string>
   <string name="use_partial_wake_lock">Použít částečné probuzení</string>
@@ -327,6 +334,8 @@
   <string name="vid_out_auto_transmit_desc">Poslat video ze zařízení automaticky</string>
   <string name="use_video">Použít video</string>
   <string name="use_video_desc">Poslat video ze zařízení automaticky</string>
+  <string name="play_waittone_on_hold">Vyčkávací tón při přidržení</string>
+  <string name="play_waittone_on_hold_desc">Přehrát tón při zapnutí vzdáleného přidržení</string>
   <!--Settings modes-->
   <string name="expert_preferences">Režim pro experty</string>
   <string name="normal_preferences">Normální režim</string>

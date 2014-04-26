@@ -81,6 +81,7 @@
   <string name="cant_write_file">Chyba při zápisu souboru</string>
   <string name="info">Info</string>
   <string name="csipsimple_shortcut">CSipSimple zkratky</string>
+  <string name="apply_rewrite">Použít přepisování</string>
   <!--Presence stuff-->
   <string name="online">Online</string>
   <string name="offline">Offline</string>

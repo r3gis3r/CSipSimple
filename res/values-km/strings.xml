@@ -81,6 +81,7 @@
   <string name="cant_write_file">កំហុស​ក្នុង​ការ​សរសេរ​ឯកសារ</string>
   <string name="info">ព័ត៌មាន</string>
   <string name="csipsimple_shortcut">SIP - ផ្លូវកាត់</string>
+  <string name="apply_rewrite">អនុវត្ត​ការ​សរសេរ​ឡើងវិញ</string>
   <!--Presence stuff-->
   <string name="online">លើ​បណ្ដាញ</string>
   <string name="offline">ក្រៅ​បណ្ដាញ</string>

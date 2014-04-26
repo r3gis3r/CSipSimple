@@ -30,4 +30,7 @@
   <string name="zrtp_revoke_trusted_remote">Revocar confianza en ZRTP remoto</string>
   <string name="transport_secure_to_server">Transporte TLS es usado para salto inmediato</string>
   <string name="transport_secure_full">Señalización Fin-Fin es supuesto seguro</string>
+  <string name="description_direction_right">Derecha</string>
+  <string name="description_direction_left">Izquierda</string>
+  <string name="description_direction_up">Arriba</string>
 </resources>

@@ -29,6 +29,8 @@
   <string name="use_3g_disclamer">このオプションは携帯電話会社の許可が必須です</string>
   <string name="use_edge">EDGEを使用</string>
   <string name="use_gprs">GPRSを使用</string>
+  <string name="use_roaming">ローミングを使用する</string>
+  <string name="use_roaming_desc">ローミングの状況である場合</string>
   <string name="lock_wifi">WiFiロック</string>
   <string name="lock_wifi_desc">SIP接続中はWiFiをアイドルにしない</string>
   <string name="lock_wifi_perfs">ハイパフォーマンスロック</string>
@@ -278,6 +280,8 @@
   <string name="start_with_text_dialer_desc">テキストダイヤラーをデフォルト</string>
   <string name="use_alternate_unlocker">スライド応答を使わない</string>
   <string name="use_alternate_unlocker_desc">スライドの代わりにボタンで着信に応答</string>
+  <string name="slider">スライダー</string>
+  <string name="buttons">ボタン</string>
   <string name="keep_awake_incall">通話中のスリープ抑制</string>
   <string name="keep_awake_incall_desc">WiFi使用時に画面オフになった場合、音声の途切れを修正</string>
   <string name="use_partial_wake_lock">起動ロックの部分的使用</string>
@@ -327,6 +331,8 @@
   <string name="vid_out_auto_transmit_desc">この端末のビデオを自動で送信</string>
   <string name="use_video">ビデオを使用</string>
   <string name="use_video_desc">この端末のビデオを自動で送信</string>
+  <string name="play_waittone_on_hold">保留中のトーン音声</string>
+  <string name="play_waittone_on_hold_desc">相手側が保留中にトーンを流す</string>
   <!--Settings modes-->
   <string name="expert_preferences">上級者モード</string>
   <string name="normal_preferences">ノーマルモード</string>

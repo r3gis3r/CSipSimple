@@ -29,6 +29,8 @@
   <string name="use_3g_disclamer">Su compañía DEBE permitirle utilizar esta opción</string>
   <string name="use_edge">Utilizar EDGE</string>
   <string name="use_gprs">Utilizar GPRS</string>
+  <string name="use_roaming">Usar en roaming</string>
+  <string name="use_roaming_desc">Cuando Android detecta una situación de roaming</string>
   <string name="lock_wifi">Bloquear WiFi</string>
   <string name="lock_wifi_desc">Evitar que el WiFi se desconecte cuando el SIP está conectado</string>
   <string name="lock_wifi_perfs">Bloqueo de alto rendimiento</string>
@@ -62,6 +64,8 @@
   <string name="turn_username_desc">Nombre de usuario para la autentificación TURN</string>
   <string name="turn_password">Contraseña TURN</string>
   <string name="turn_password_desc">Contaseña para la autentificación TURN</string>
+  <string name="turn_transport">Transporte TURN</string>
+  <string name="turn_transport_desc">Transporte para la característica TURN</string>
   <string name="enable_stun">Habilitar STUN</string>
   <string name="enable_stun_desc">Activar la funcionalidad STUN</string>
   <string name="enable_stun2">Use nuevo formato STUN</string>
@@ -278,6 +282,9 @@
   <string name="start_with_text_dialer_desc">Iniciar con el marcador telefónico en modo texto</string>
   <string name="use_alternate_unlocker">No utilizar el control deslizante para responder</string>
   <string name="use_alternate_unlocker_desc">Usar botónes en lugar del control deslizante para atender las llamadas entrantes</string>
+  <string name="slider">Deslizador</string>
+  <string name="buttons">Botones</string>
+  <string name="glowpad">Panel luminoso</string>
   <string name="keep_awake_incall">Mantener la iluminación durante las llamadas</string>
   <string name="keep_awake_incall_desc">Corrige el sonido entrecortado que se produce cuando se apaga la pantalla en las llamadas por WiFi</string>
   <string name="use_partial_wake_lock">Utilizar el bloqueo de CPU</string>
@@ -327,6 +334,8 @@
   <string name="vid_out_auto_transmit_desc">Enviar el video desde el dispositivo automáticamente</string>
   <string name="use_video">Utilizar video</string>
   <string name="use_video_desc">Enviar el video desde el dispositivo automáticamente</string>
+  <string name="play_waittone_on_hold">Esperar tono al descolgar</string>
+  <string name="play_waittone_on_hold_desc">Reproducir un tono cuando la parte remota descuelgue</string>
   <!--Settings modes-->
   <string name="expert_preferences">Modo esperto</string>
   <string name="normal_preferences">Modo normal</string>

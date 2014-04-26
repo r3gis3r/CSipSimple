@@ -30,4 +30,7 @@
   <string name="zrtp_revoke_trusted_remote">Zrušit důvěru vzdálené ZRTP</string>
   <string name="transport_secure_to_server">TLS přenos je využíván k okamžitému hopu</string>
   <string name="transport_secure_full">End-to-end zabezpečení se považuje za bezpečné</string>
+  <string name="description_direction_right">Vpravo</string>
+  <string name="description_direction_left">Vlevo</string>
+  <string name="description_direction_up">Nahoru</string>
 </resources>

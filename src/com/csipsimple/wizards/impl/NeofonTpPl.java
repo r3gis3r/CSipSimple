@@ -59,12 +59,12 @@ public class NeofonTpPl extends SimpleImplementation {
             recycle = false;
         }
         
-        CharSequence[] e = new CharSequence[] {"b", "c", "a"};
+        CharSequence[] e = new CharSequence[] {"", "a", "b", "c"};
         
         extensionLetter.setEntries(e);
         extensionLetter.setEntryValues(e);
-        extensionLetter.setDialogTitle("uzupelnij numerem tel. kierunkowym");
-        extensionLetter.setTitle("uzupelnij numerem tel. kierunkowym");
+        extensionLetter.setDialogTitle(R.string.user_prefix);
+        extensionLetter.setTitle(R.string.user_prefix);
         extensionLetter.setDefaultValue("b");
         
         if(!recycle) {
@@ -79,6 +79,8 @@ public class NeofonTpPl extends SimpleImplementation {
                 extensionLetter.setValue("c");
             }else if(username.endsWith("b@"+getDomain())) {
                 extensionLetter.setValue("b");
+            }else {
+                extensionLetter.setValue("");
             }
         }
 	}

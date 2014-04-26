@@ -29,6 +29,8 @@
   <string name="use_3g_disclamer">ក្រុមហ៊ុន​ផ្ដល់​សេវាកម្ម​អនុញ្ញាត​ឲ្យ​អ្នក​ប្រើ​ជម្រើស​នេះ</string>
   <string name="use_edge">ប្រើ EDGE</string>
   <string name="use_gprs">ប្រើ GPRS</string>
+  <string name="use_roaming">ប្រើ​ក្នុងការ​រ៉ូមីង</string>
+  <string name="use_roaming_desc">នៅពេល android រកឃើញស្ថានភាព​រ៉ូមីង</string>
   <string name="lock_wifi">ចាក់សោ WiFi </string>
   <string name="lock_wifi_desc">មិន​ឲ្យ WiFi ទំនេរ នៅ​ពេល​តភ្ជាប់ SIP</string>
   <string name="lock_wifi_perfs">អនុវត្ថ​ចាក់សោ​​សុវត្ថិភាព​ខ្ពស់</string>
@@ -62,6 +64,8 @@
   <string name="turn_username_desc">ឈ្មោះ​អ្នក​ប្រើ​សម្រាប់​ផ្ទៀងផ្ទាត់ TURN</string>
   <string name="turn_password">ពាក្យ​សម្ងាត់ TURN</string>
   <string name="turn_password_desc">ពាក្យ​សម្ងាត់​សម្រាប់​​ផ្ទៀងផ្ទាត់ TURN</string>
+  <string name="turn_transport">​ការ​បញ្ជូន TURN</string>
+  <string name="turn_transport_desc">បញ្ជូន​សម្រាប់​លក្ខណៈ TURN</string>
   <string name="enable_stun">បើក STUN</string>
   <string name="enable_stun_desc">បើក​លក្ខណ​ពិសេស STUN</string>
   <string name="enable_stun2">ប្រើ​ទ្រង់ទ្រាយ STUN ថ្មី</string>
@@ -278,6 +282,9 @@
   <string name="start_with_text_dialer_desc">ចាប់ផ្ដើម​​ដោយ​មាន​បន្ទះ​លេខ</string>
   <string name="use_alternate_unlocker">កុំ​ប្រើ​ការ​ឆ្លើយ​តប​ដោយ​​រុញ</string>
   <string name="use_alternate_unlocker_desc">ប្រើ​ប៊ូតុង​ជំនួស​ការ​រុញ​ដើម្បី​ការ​ហៅ​ចូល</string>
+  <string name="slider">គ្រាប់រំកិល</string>
+  <string name="buttons">ប៊ូតុង</string>
+  <string name="glowpad">GlowPad</string>
   <string name="keep_awake_incall">នៅ​តែ​ដំណើរការ​នៅ​ពេល​ហៅ</string>
   <string name="keep_awake_incall_desc">កំណត់ បើ​​មាន​សំឡេង នៅ​ពេល​​អេក្រង់​បិទ​ខណៈ​ពេល​ហៅ​តាម​ WIFI</string>
   <string name="use_partial_wake_lock">Use partial wake lock</string>
@@ -327,6 +334,8 @@
   <string name="vid_out_auto_transmit_desc">ផ្ញើ​វីដេអូ​ពី​​ឧបករណ៍​ស្វ័យប្រវត្តិ​</string>
   <string name="use_video">ប្រើ​វីដេអូ</string>
   <string name="use_video_desc">ផ្ញើ​វីដេអូ​ពី​ឧបករណ៍​ស្វ័យប្រវត្តិ</string>
+  <string name="play_waittone_on_hold">សំឡេង​រង់ចាំ</string>
+  <string name="play_waittone_on_hold_desc">បន្លឺ​សំឡេង​ពេល​រង់ចាំ</string>
   <!--Settings modes-->
   <string name="expert_preferences">របៀប​ជំនាញ</string>
   <string name="normal_preferences">របៀប​ធម្មតា</string>

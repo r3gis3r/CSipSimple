@@ -81,6 +81,7 @@
   <string name="cant_write_file">Błąd podczas zapisu pliku</string>
   <string name="info">Informacje</string>
   <string name="csipsimple_shortcut">Skrót CSipSimple</string>
+  <string name="apply_rewrite">Zastosuj przepisywanie</string>
   <!--Presence stuff-->
   <string name="online">Dostępny</string>
   <string name="offline">Rozłączony</string>

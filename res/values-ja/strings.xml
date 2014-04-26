@@ -81,6 +81,7 @@
   <string name="cant_write_file">ファイルを書き込めませんでした。</string>
   <string name="info">情報</string>
   <string name="csipsimple_shortcut">CSipSimple ショートカット</string>
+  <string name="apply_rewrite">置き換えを適用</string>
   <!--Presence stuff-->
   <string name="online">オンライン</string>
   <string name="offline">オフライン</string>

@@ -30,4 +30,7 @@
   <string name="zrtp_revoke_trusted_remote">信認しているZRTPの通信先を取り消し</string>
   <string name="transport_secure_to_server">TLS暗号通信は、直接接続しているサーバーの間に対して行われます。</string>
   <string name="transport_secure_full">末端間の通信のやりとりは、安全だと考えられています。</string>
+  <string name="description_direction_right">右</string>
+  <string name="description_direction_left">左</string>
+  <string name="description_direction_up">上</string>
 </resources>

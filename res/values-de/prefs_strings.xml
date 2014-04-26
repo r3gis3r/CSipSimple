@@ -29,6 +29,8 @@
   <string name="use_3g_disclamer">Dein Provider MUSS die Verwendung von VoIP über UMTS/EDGE/GPRS erlauben</string>
   <string name="use_edge">Verwende EDGE</string>
   <string name="use_gprs">Verwende GPRS</string>
+  <string name="use_roaming">Verwende im Roaming</string>
+  <string name="use_roaming_desc">Wenn das Android-Gerät eine Roaming-Situation erkennt</string>
   <string name="lock_wifi">WLAN Leistung</string>
   <string name="lock_wifi_desc">Verhindere WiFi-Standby wenn SIP über WLAN verbunden ist</string>
   <string name="lock_wifi_perfs">Im High-Performance-Modus einrasten</string>
@@ -62,6 +64,8 @@
   <string name="turn_username_desc">Benutzername für TURN Authentifizierung</string>
   <string name="turn_password">TURN Kennwort</string>
   <string name="turn_password_desc">Kennwort für TURN Authentifizierung</string>
+  <string name="turn_transport">TURN Protokoll</string>
+  <string name="turn_transport_desc">Protokoll der TURN Funktionalität</string>
   <string name="enable_stun">Aktiviere STUN</string>
   <string name="enable_stun_desc">Aktiviert die STUN Funktionalität</string>
   <string name="enable_stun2">Verwende neues STUN-Format</string>
@@ -278,6 +282,9 @@
   <string name="start_with_text_dialer_desc">Startet mit Textwähler</string>
   <string name="use_alternate_unlocker">Alternative Rufannahme</string>
   <string name="use_alternate_unlocker_desc">Verwende Schaltfächen anstelle von Wischgesten zum Annehmen von eingehenden Anrufen</string>
+  <string name="slider">Slider</string>
+  <string name="buttons">Schaltflächen</string>
+  <string name="glowpad">GlowPad</string>
   <string name="keep_awake_incall">Display während Anruf nicht ausschalten</string>
   <string name="keep_awake_incall_desc">Beim Telefonieren das Einschlafen verhindern. (Behebt Probleme mit abgehacktem Audio.)</string>
   <string name="use_partial_wake_lock">Verhindere CPU-Standby</string>
@@ -327,6 +334,8 @@
   <string name="vid_out_auto_transmit_desc">Sende Video automatisch</string>
   <string name="use_video">Benutze Video</string>
   <string name="use_video_desc">Sende Video automatisch</string>
+  <string name="play_waittone_on_hold">Warteton beim Halten des Gesprächs</string>
+  <string name="play_waittone_on_hold_desc">Einen Ton wiedergeben, wenn der entfernte Partner das Gespräch hält</string>
   <!--Settings modes-->
   <string name="expert_preferences">Experten Modus</string>
   <string name="normal_preferences">Normaler Modus</string>

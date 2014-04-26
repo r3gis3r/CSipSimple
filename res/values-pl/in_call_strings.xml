@@ -30,4 +30,7 @@
   <string name="zrtp_revoke_trusted_remote">Odwołaj zdalnego zaufanego ZRTP</string>
   <string name="transport_secure_to_server">Transport TLS używany jest dla najbliższego węzła</string>
   <string name="transport_secure_full">Sygnał powinien być bezpieczny od początku do końca</string>
+  <string name="description_direction_right">Prawo</string>
+  <string name="description_direction_left">Lewo</string>
+  <string name="description_direction_up">Góra</string>
 </resources>

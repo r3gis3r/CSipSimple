@@ -81,6 +81,7 @@
   <string name="cant_write_file">Fehler beim Schreiben der Datei</string>
   <string name="info">Information</string>
   <string name="csipsimple_shortcut">SIP - Verknüpfung</string>
+  <string name="apply_rewrite">Umschreiben anwenden</string>
   <!--Presence stuff-->
   <string name="online">Online</string>
   <string name="offline">Offline</string>
