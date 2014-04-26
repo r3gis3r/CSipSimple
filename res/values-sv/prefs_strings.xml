@@ -340,7 +340,7 @@
     <string name="play_waittone_on_hold">Väntton vid parkering</string>
     <string name="play_waittone_on_hold_desc">Spela en ton när motparten parkerar samtalet</string>
     <!-- Settings modes -->
-    <string name="expert_preferences">Expertläga</string>
+    <string name="expert_preferences">Expertläge</string>
     <string name="normal_preferences">Vanligt läge</string>
     <!-- Generic -->
     <string name="leave_minus_1_default">Ange -1 för standard</string>
