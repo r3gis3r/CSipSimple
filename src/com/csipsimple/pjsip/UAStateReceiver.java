@@ -212,8 +212,10 @@ public class UAStateReceiver extends Callback {
             // If disconnected immediate stop required stuffs
             if (callState == SipCallSession.InvState.DISCONNECTED) {
                 if (pjService.mediaManager != null) {
-                    pjService.mediaManager.stopRingAndUnfocus();
-                    pjService.mediaManager.resetSettings();
+                    if(getRingingCall() == null) {
+                        pjService.mediaManager.stopRingAndUnfocus();
+                        pjService.mediaManager.resetSettings();
+                    }
                 }
                 if (ongoingCallLock != null && ongoingCallLock.isHeld()) {
                     ongoingCallLock.release();
@@ -678,10 +680,12 @@ public class UAStateReceiver extends Callback {
         if (callsList != null) {
             List<SipCallSessionImpl> calls = new ArrayList<SipCallSessionImpl>();
 
-            for (int i = 0; i < callsList.size(); i++) {
-                SipCallSessionImpl callInfo = getCallInfo(i);
-                if (callInfo != null) {
-                    calls.add(callInfo);
+            synchronized (callsList) {
+                for (int i = 0; i < callsList.size(); i++) {
+                    SipCallSessionImpl callInfo = getCallInfo(i);
+                    if (callInfo != null) {
+                        calls.add(callInfo);
+                    }
                 }
             }
             return calls.toArray(new SipCallSessionImpl[calls.size()]);
@@ -760,11 +764,10 @@ public class UAStateReceiver extends Callback {
                             }
                             break;
                         case SipCallSession.InvState.DISCONNECTED:
-                            if (stateReceiver.pjService.mediaManager != null) {
+                            if (stateReceiver.pjService.mediaManager != null && stateReceiver.getRingingCall() == null) {
                                 stateReceiver.pjService.mediaManager.stopRing();
                             }
 
-                            Log.d(THIS_FILE, "Finish call2");
                             stateReceiver.broadCastAndroidCallState("IDLE",
                                     callInfo.getRemoteContact());
 
@@ -1006,10 +1009,12 @@ public class UAStateReceiver extends Callback {
      */
     public SipCallSession getActiveCallInProgress() {
         // Go through the whole list of calls and find the first active state.
-        for (int i = 0; i < callsList.size(); i++) {
-            SipCallSession callInfo = getCallInfo(i);
-            if (callInfo != null && callInfo.isActive()) {
-                return callInfo;
+        synchronized (callsList) {
+            for (int i = 0; i < callsList.size(); i++) {
+                SipCallSession callInfo = getCallInfo(i);
+                if (callInfo != null && callInfo.isActive()) {
+                    return callInfo;
+                }
             }
         }
         return null;
@@ -1022,13 +1027,29 @@ public class UAStateReceiver extends Callback {
      */
     public SipCallSession getActiveCallOngoing() {
         // Go through the whole list of calls and find the first active state.
-        for (int i = 0; i < callsList.size(); i++) {
-            SipCallSession callInfo = getCallInfo(i);
-            if (callInfo != null && callInfo.isActive() && callInfo.isOngoing()) {
-                return callInfo;
+        synchronized (callsList) {
+            for (int i = 0; i < callsList.size(); i++) {
+                SipCallSession callInfo = getCallInfo(i);
+                if (callInfo != null && callInfo.isActive() && callInfo.isOngoing()) {
+                    return callInfo;
+                }
             }
         }
         return null;
+    }
+    
+    public SipCallSession getRingingCall() {
+        // Go through the whole list of calls and find the first ringing state.
+        synchronized (callsList) {
+            for (int i = 0; i < callsList.size(); i++) {
+                SipCallSession callInfo = getCallInfo(i);
+                if (callInfo != null && callInfo.isActive() && callInfo.isBeforeConfirmed() && callInfo.isIncoming()) {
+                    return callInfo;
+                }
+            }
+        }
+        return null;
+        
     }
 
     /**
