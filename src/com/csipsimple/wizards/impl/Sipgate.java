@@ -87,9 +87,11 @@ public class Sipgate extends AlternateServerImplementation {
         
         String currentProxy = account.getProxyAddress();
         String currentServer = account.getSipDomain();
-        if(!TextUtils.isEmpty(currentProxy) && !TextUtils.isEmpty(currentServer)
-                && !currentProxy.equalsIgnoreCase(currentServer)) {
-            accountProxy.setText(currentProxy);
+        if(!TextUtils.isEmpty(currentProxy) && !TextUtils.isEmpty(currentServer)) {
+          String currentProxyServer = currentProxy.replace("sip:", "");
+                if(!currentProxyServer.equalsIgnoreCase(currentServer)) {
+                    accountProxy.setText(currentProxyServer);
+                }
         }
 
 		
