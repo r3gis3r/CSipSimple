@@ -73,8 +73,8 @@ public class VoipMS extends SimpleImplementation {
         put("Washington, DC", "washington.voip.ms");
         put("Washington 2, DC", "washington2.voip.ms");
 		put("London, UK", "london.voip.ms");
-        put("London, UK", "vancouver..voip.ms");
-        put("London, UK", "vancouver2.voip.ms");
+        put("Vancouver", "vancouver.voip.ms");
+        put("Vancouver 2", "vancouver2.voip.ms");
 	}
 	};
 
