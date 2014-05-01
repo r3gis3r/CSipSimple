@@ -59,7 +59,7 @@ public class NeofonTpPl extends SimpleImplementation {
             recycle = false;
         }
         
-        CharSequence[] e = new CharSequence[] {"", "a", "b", "c"};
+        CharSequence[] e = new CharSequence[] {"", "b", "c", "d"};
         
         extensionLetter.setEntries(e);
         extensionLetter.setEntryValues(e);
@@ -73,12 +73,12 @@ public class NeofonTpPl extends SimpleImplementation {
         
         String username = account.username;
         if( !TextUtils.isEmpty(username)) {
-            if(username.endsWith("a@"+getDomain())) {
-                extensionLetter.setValue("a");
+            if(username.endsWith("b@"+getDomain())) {
+                extensionLetter.setValue("b");
             }else if(username.endsWith("c@"+getDomain())) {
                 extensionLetter.setValue("c");
-            }else if(username.endsWith("b@"+getDomain())) {
-                extensionLetter.setValue("b");
+            }else if(username.endsWith("d@"+getDomain())) {
+                extensionLetter.setValue("d");
             }else {
                 extensionLetter.setValue("");
             }
