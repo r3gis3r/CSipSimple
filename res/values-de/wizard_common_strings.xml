@@ -17,4 +17,7 @@
   <string name="email_address">E-Mail</string>
   <string name="captcha">Captcha</string>
   <string name="country_code">Ländercode</string>
+  <string name="user_personal_domain">Persönliche Benutzerdomain</string>
+  <string name="user_prefix">Benutzerpräfix</string>
+  <string name="user_suffix">Benutzersuffix</string>
 </resources>

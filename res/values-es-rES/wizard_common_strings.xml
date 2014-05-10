@@ -1,20 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_common_display_name">Nombre de la cuenta</string>
-  <string name="w_common_display_name_desc">Nombre para mostrar de esta cuenta</string>
+  <string name="w_common_display_name_desc">Nombre a mostrar para esta cuenta</string>
   <string name="w_common_username">Nombre de usuario</string>
   <string name="w_common_username_desc">Inicio de sesión de la cuenta SIP (no escribir @sip.server)</string>
   <string name="w_common_phone_number">Número de teléfono</string>
-  <string name="w_common_phone_number_desc">Número de telefono suministrado por su proveedor SIP</string>
+  <string name="w_common_phone_number_desc">Número de teléfono SIP suministrado por su proveedor</string>
   <string name="w_common_password">Contraseña</string>
   <string name="w_common_password_desc">Contraseña para su cuenta</string>
   <string name="w_common_server">Servidor</string>
-  <string name="w_common_server_desc">Dominio/IP del servidor SIP[:puerto]</string>
-  <string name="create_account">Crear una cuenta</string>
+  <string name="w_common_server_desc">Dominio/IP[:puerto] del servidor SIP</string>
+  <string name="create_account">Crear cuenta</string>
   <string name="already_have_account">Ya tengo una cuenta</string>
   <string name="first_name">Nombre</string>
   <string name="last_name">Apellidos</string>
   <string name="email_address">Dirección de correo electrónico</string>
-  <string name="captcha">Código de verificación</string>
+  <string name="captcha">Verificación (CAPTCHA)</string>
   <string name="country_code">Código del país</string>
+  <string name="user_personal_domain">Dominio personal del usuario</string>
+  <string name="user_prefix">Prefijo del usuario</string>
+  <string name="user_suffix">Sufijo del usuario</string>
 </resources>

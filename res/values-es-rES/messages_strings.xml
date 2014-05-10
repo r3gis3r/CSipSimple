@@ -5,7 +5,7 @@
   <!--Command name to open a Compose screen; displays in conversation list-->
   <string name="new_message">Nuevo mensaje</string>
   <!--Summary text under "New Message" command; displays in conversation list-->
-  <string name="create_new_message">Redactar un nuevo mensaje</string>
+  <string name="create_new_message">Redactar nuevo mensaje</string>
   <!--Menu item for starting a new conversation-->
   <string name="menu_compose_new">Redactar</string>
   <!--Menu item to call the recipient of the conversation on the phone (imperative verb)-->
@@ -13,22 +13,22 @@
   <!--Menu item for deleting all conversations-->
   <string name="menu_delete_all">Eliminar las conversaciones</string>
   <!--Context menu item on an individual conversation for deleting that conversation-->
-  <string name="menu_delete">Eliminar la conversación</string>
+  <string name="menu_delete">Eliminar conversación</string>
   <!--Context menu item on an individual conversation for viewing that conversation-->
-  <string name="menu_view">Ver la conversación</string>
+  <string name="menu_view">Ver conversación</string>
   <!--Name to use when we have an unspecified sender-->
   <string name="anonymous_recipient">Anónimo</string>
   <!--Name of the local user when displaying sender of an outgoing message (personal pronoun)-->
   <string name="messagelist_sender_self">Yo</string>
-  <string name="delete_message">Borrar el mensaje</string>
+  <string name="delete_message">Borrar mensaje</string>
   <!--Abbreviation for "kilobyte"-->
   <string name="kilobyte">KB</string>
   <!--Dialog box title brought up when warning the user that a message could not be delivered-->
   <string name="undelivered_msg_dialog_title">Mensaje sin entregar</string>
   <!--Dialog box message indicating that a message could not be delivered-->
-  <string name="undelivered_sms_dialog_body">Nose ha podido enviar el mensaje</string>
+  <string name="undelivered_sms_dialog_body">No se pudo enviar este mensaje</string>
   <!--Menu item for deleting the entire conversation currently being viewed-->
-  <string name="delete_thread">Borrar la conversación</string>
+  <string name="delete_thread">Borrar conversación</string>
   <!--Text of a button appearing for MMS messages that have not yet been downloaded, causing the message
          to be downloaded (imperative verb)-->
   <string name="download">Descargar</string>
@@ -52,22 +52,22 @@
   <!--Menu item in conversation screen for returning to the conversation list-->
   <string name="all_threads">Todas las conversaciones</string>
   <!--Hint text in message body field when keyboard is exposed-->
-  <string name="type_to_compose_text_enter_to_send">Escribir</string>
+  <string name="type_to_compose_text_enter_to_send">Escriba para redactar</string>
   <!--Hint text in message body field when keyboard is hidden-->
   <string name="open_keyboard_to_compose_message">Abrir el teclado para redactar el mensaje</string>
   <!--Dialog title for warning the user that the picture they are trying to attach is too large-->
-  <string name="image_too_large">Imágen demasiado grande</string>
+  <string name="image_too_large">Imagen demasiado grande</string>
   <!--Dialog message text asking the user if he wants to resize the picture being attached-->
-  <string name="ask_for_automatically_resize">Redimensionar la imágen automáticamente antes de enviar?</string>
+  <string name="ask_for_automatically_resize">¿Cambiar automáticamente el tamaño de la imagen la imagen antes de enviar?</string>
   <!--Toast message while an image is being resized-->
-  <string name="compressing">Imágen demasiado grande. Comprimiendo…</string>
+  <string name="compressing">Imagen demasiado grande. Comprimiendo…</string>
   <!--Context menu item on a message recipient for viewing their contact info-->
   <string name="menu_view_contact">Ver contacto</string>
   <!--Context menu item on a message recipient for adding them to the user's
          contacts (used if the recipient is not already in the address book)-->
   <string name="menu_add_to_contacts">Añadir a Contactos</string>
   <!--Sender to be used if the sender address has been hidden-->
-  <string name="hidden_sender_address">Ocultar la dirección del remitente</string>
+  <string name="hidden_sender_address">Ocultar dirección del remitente</string>
   <!--Text to be used for affirmative response button in dialog boxes-->
   <string name="yes">Aceptar</string>
   <!--Text to be used for negative response button in dialog boxes-->

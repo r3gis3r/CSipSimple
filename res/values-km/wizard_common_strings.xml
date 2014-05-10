@@ -17,4 +17,7 @@
   <string name="email_address">អាសយដ្ឋាន​អ៊ីមែល</string>
   <string name="captcha">Captcha</string>
   <string name="country_code">កូដ​ប្រទេស</string>
+  <string name="user_personal_domain">ដែន​ផ្ទាល់ខ្លួន​របស់​អ្នកប្រើ</string>
+  <string name="user_prefix">បុព្វបទ​អ្នកប្រើ</string>
+  <string name="user_suffix">បច្ច័យ​អ្នកប្រើ</string>
 </resources>

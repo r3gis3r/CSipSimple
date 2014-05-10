@@ -4,10 +4,10 @@
   <string name="type_incoming">Entrante</string>
   <string name="type_outgoing">Saliente</string>
   <string name="type_missed">Perdida</string>
-  <string name="callBack">Devolver la llamada</string>
+  <string name="callBack">Devolver llamada</string>
   <string name="callAgain">Volver a llamar</string>
-  <string name="returnCall">Devolver la llamada</string>
+  <string name="returnCall">Llamada de respuesta</string>
   <string name="call">Llamar</string>
   <string name="sip_call">Llamada SIP</string>
-  <string name="no_call_history">Ningún registro</string>
+  <string name="no_call_history">No hay historial de llamadas</string>
 </resources>

@@ -9,4 +9,14 @@
   <string name="w_common_password_desc">Пароль к Вашему аккаунту</string>
   <string name="w_common_server">Сервер</string>
   <string name="w_common_server_desc">SIP сервер домен/IP[:порт]</string>
+  <string name="create_account">Создать аккаунт</string>
+  <string name="already_have_account">У меня уже есть аккаунт</string>
+  <string name="first_name">Имя</string>
+  <string name="last_name">Фамилия</string>
+  <string name="email_address">Адрес электронной почты</string>
+  <string name="captcha">Капча</string>
+  <string name="country_code">Код страны</string>
+  <string name="user_personal_domain">Домен пользователя</string>
+  <string name="user_prefix">Префикс пользователя</string>
+  <string name="user_suffix">Суффикс пользователя</string>
 </resources>

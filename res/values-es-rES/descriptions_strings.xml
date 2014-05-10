@@ -67,7 +67,7 @@
   <!--String describing the Dial Video ImageButton
 
          Used by AccessibilityService to announce the purpose of the button.-->
-  <string name="description_dial_video_button">Videollamada</string>
+  <string name="description_dial_video_button">videollamada</string>
   <!--String describing the Delete/Backspace ImageButton
 
          Used by AccessibilityService to announce the purpose of the button.-->
@@ -75,5 +75,5 @@
   <!--String describing the digits text box containing the number to dial.
 
          Used by AccessibilityService to announce the purpose of the view.-->
-  <string name="description_digits_edittext">Número para llamar</string>
+  <string name="description_digits_edittext">número a llamar</string>
 </resources>
