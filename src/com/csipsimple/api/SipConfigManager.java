@@ -647,6 +647,16 @@ public class SipConfigManager {
      * @see #setPreferenceBooleanValue(Context, String, boolean)
      */
     public static final String ENABLE_ICE = "enable_ice";
+    
+    /**
+     * Aggressive ICE nomination.<br/>
+     * Specify whether to use aggressive nomination. <br/>
+     * <a target="_blank" href=
+     * "http://www.pjsip.org/pjnath/docs/html/structpj__ice__sess__options.htm#ac8cc479ffdceffe057e4b1f9f823d531"
+     * >Pjsip documentation</a>
+     * 
+     */
+    public static final String ICE_AGGRESSIVE = "ice_aggressive";
     /**
      * Enable STUN.<br/>
      * <a target="_blank" href=

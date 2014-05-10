@@ -148,6 +148,12 @@
             android:summary="@string/enable_ice_desc"
             android:title="@string/enable_ice" />
         <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="enable_ice"
+            android:key="ice_aggressive"
+            android:summary="@string/ice_aggressive_desc"
+            android:title="@string/ice_aggressive" />
+        <CheckBoxPreference
             android:defaultValue="false"
             android:key="enable_stun"
             android:summary="@string/enable_stun_desc"

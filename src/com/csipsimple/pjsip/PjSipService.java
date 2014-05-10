@@ -72,6 +72,7 @@ import com.csipsimple.wizards.WizardUtils;
 import org.pjsip.pjsua.SWIGTYPE_p_pj_stun_auth_cred;
 import org.pjsip.pjsua.csipsimple_config;
 import org.pjsip.pjsua.dynamic_factory;
+import org.pjsip.pjsua.pj_ice_sess_options;
 import org.pjsip.pjsua.pj_pool_t;
 import org.pjsip.pjsua.pj_qos_params;
 import org.pjsip.pjsua.pj_str_t;
@@ -440,8 +441,8 @@ public class PjSipService {
                     }
                 }
                 // STUN
-                int isStunEnabled = prefsWrapper.getStunEnabled();
-                if (isStunEnabled == 1) {
+                boolean isStunEnabled = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ENABLE_STUN);
+                if (isStunEnabled) {
                     String[] servers = prefsWrapper.getPreferenceStringValue(
                             SipConfigManager.STUN_SERVER).split(",");
                     cfg.setStun_srv_cnt(servers.length);
@@ -452,9 +453,8 @@ public class PjSipService {
                         stunServersCount++;
                     }
                     cfg.setStun_srv(stunServers);
-                    cfg.setStun_map_use_stun2(prefsWrapper
-                            .getPreferenceBooleanValue(SipConfigManager.ENABLE_STUN2) ? pjsuaConstants.PJ_TRUE
-                            : pjsuaConstants.PJ_FALSE);
+                    cfg.setStun_map_use_stun2(boolToPjsuaConstant(prefsWrapper
+                            .getPreferenceBooleanValue(SipConfigManager.ENABLE_STUN2)));
                 }
 
                 // LOGGING CONFIG
@@ -488,8 +488,8 @@ public class PjSipService {
                     echoMode = SipConfigManager.ECHO_MODE_SIMPLE;
                 }
                 mediaCfg.setEc_options(echoMode);
-                mediaCfg.setNo_vad(prefsWrapper
-                        .getPreferenceBooleanValue(SipConfigManager.ENABLE_VAD) ? 0 : 1);
+                mediaCfg.setNo_vad(boolToPjsuaConstant(!prefsWrapper
+                        .getPreferenceBooleanValue(SipConfigManager.ENABLE_VAD)));
                 mediaCfg.setQuality(prefsWrapper.getMediaQuality());
                 mediaCfg.setClock_rate(clockRate);
                 mediaCfg.setAudio_frame_ptime(prefsWrapper
@@ -506,16 +506,22 @@ public class PjSipService {
                     // Global thread count is 0, so don't use sip one anyway
                     hasOwnIoQueue = false;
                 }
-                mediaCfg.setHas_ioqueue(hasOwnIoQueue ? 1 : 0);
+                mediaCfg.setHas_ioqueue(boolToPjsuaConstant(hasOwnIoQueue));
 
                 // ICE
-                mediaCfg.setEnable_ice(prefsWrapper.getIceEnabled());
-
+                boolean iceEnabled = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ENABLE_ICE);
+                mediaCfg.setEnable_ice(boolToPjsuaConstant(iceEnabled));
+                if(iceEnabled) {
+                    pj_ice_sess_options iceOpts = mediaCfg.getIce_opt();
+                    boolean aggressiveIce = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ICE_AGGRESSIVE);
+                    iceOpts.setAggressive(boolToPjsuaConstant(aggressiveIce));
+                }
+                
                 // TURN
-                int isTurnEnabled = prefsWrapper.getTurnEnabled();
-                if (isTurnEnabled == 1) {
+                boolean isTurnEnabled = prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ENABLE_TURN);
+                if (isTurnEnabled) {
                     SWIGTYPE_p_pj_stun_auth_cred creds = mediaCfg.getTurn_auth_cred();
-                    mediaCfg.setEnable_turn(isTurnEnabled);
+                    mediaCfg.setEnable_turn(boolToPjsuaConstant(isTurnEnabled));
                     mediaCfg.setTurn_server(pjsua.pj_str_copy(prefsWrapper.getTurnServer()));
                     pjsua.set_turn_credentials(
                             pjsua.pj_str_copy(prefsWrapper
@@ -2364,6 +2370,8 @@ public class PjSipService {
         pjsua.vid_set_android_capturer((Object) window);
     }
 
-
+    private static int boolToPjsuaConstant(boolean v) {
+        return v ? pjsuaConstants.PJ_TRUE : pjsuaConstants.PJ_FALSE;
+    }
 
 }

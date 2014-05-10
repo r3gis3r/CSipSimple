@@ -529,24 +529,6 @@ public class PreferencesProviderWrapper {
     }
 
     /**
-     * Get whether ice is enabled
-     * 
-     * @return 1 if enabled (pjstyle)
-     */
-    public int getIceEnabled() {
-        return getPreferenceBooleanValue(SipConfigManager.ENABLE_ICE) ? 1 : 0;
-    }
-
-    /**
-     * Get whether turn is enabled
-     * 
-     * @return 1 if enabled (pjstyle)
-     */
-    public int getTurnEnabled() {
-        return getPreferenceBooleanValue(SipConfigManager.ENABLE_TURN) ? 1 : 0;
-    }
-
-    /**
      * Get whether turn is enabled
      * 
      * @return 1 if enabled (pjstyle)

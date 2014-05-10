@@ -153,6 +153,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.USE_IPV6, false);
 		put(SipConfigManager.ENABLE_DNS_SRV, false);
 		put(SipConfigManager.ENABLE_ICE, false);
+        put(SipConfigManager.ICE_AGGRESSIVE, true);
 		put(SipConfigManager.ENABLE_TURN, false);
 		put(SipConfigManager.ENABLE_STUN, false);
         put(SipConfigManager.ENABLE_STUN2, false);

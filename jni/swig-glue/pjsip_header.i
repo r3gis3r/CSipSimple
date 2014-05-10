@@ -946,3 +946,13 @@ struct pjsip_auth_clt_pref
     pj_str_t    algorithm;
 
 };
+
+/* From ice_session.h */
+struct pj_ice_sess_options
+{
+    pj_bool_t aggressive;
+    
+    unsigned nominated_check_delay;
+    
+    int controlled_agent_want_nom_timeout;
+};

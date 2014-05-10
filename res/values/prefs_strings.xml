@@ -58,6 +58,8 @@
     <string name="nat_traversal">NAT traversal</string>
     <string name="enable_ice">Enable ICE</string>
     <string name="enable_ice_desc">Turn on ICE feature</string>
+    <string name="ice_aggressive">Aggressive ICE</string>
+    <string name="ice_aggressive_desc">Whether to use aggressive nomination</string>
     <string name="enable_turn">Enable TURN</string>
     <string name="enable_turn_desc">Turn on TURN feature</string>
     <string name="turn_server">Turn server</string>
