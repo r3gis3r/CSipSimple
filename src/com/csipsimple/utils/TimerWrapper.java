@@ -193,8 +193,9 @@ public class TimerWrapper extends BroadcastReceiver {
         if(existingReg != -1) {
             scheduleEntries.remove(existingReg);
             scheduleTimes.remove(existingReg);
+            return 1;
         }
-		return 1;
+		return 0;
 	}
 	
 	
@@ -324,9 +325,9 @@ public class TimerWrapper extends BroadcastReceiver {
 			        if(existingReg != -1) {
 			            if(scheduleTimes.get(existingReg) == fireTime) {
 			                doFire = true;
+	                        scheduleEntries.remove(existingReg);
+	                        scheduleTimes.remove(existingReg);
 			            }
-			            scheduleEntries.remove(existingReg);
-			            scheduleTimes.remove(existingReg);
 			        }
                 }
 			    if(doFire) {
