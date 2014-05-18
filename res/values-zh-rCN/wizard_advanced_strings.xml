@@ -12,5 +12,4 @@
   <string name="w_advanced_proxy">代理服务器</string>
   <string name="w_advanced_proxy_desc">代理域名/IP[:端口] (可选，不一定需要)</string>
   <string name="w_advanced_auth_id">SIP验证ID</string>
-  <string name="w_advanced_auth_id_desc">留空如果和用户名相同</string>
 </resources>

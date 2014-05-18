@@ -1,41 +1,42 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="accounts">Hesaplar</string>
-  <string name="other_accounts">Diğer hesaplar</string>
-  <string name="save">Kaydet</string>
-  <string name="cancel">İptal</string>
-  <string name="activate_account">Hesabınızı etkinleştirin</string>
-  <string name="deactivate_account">Hesabını kapatınız</string>
-  <string name="delete_account">Hesabı sil</string>
-  <string name="add_account">Hesap ekle</string>
-  <string name="choose_wizard">Sihirbaz seçin</string>
-  <string name="use">kullanım</string>
-  <string name="use_pstn">Mobil kullanımı</string>
-  <string name="ongoing_call">Arama devam ediyor</string>
-  <string name="missed_call">Cevapsız çağrı</string>
-  <string name="recentCalls_empty">Hiçbir çağrı kaydı yok</string>
-  <string name="filters">Filtreler</string>
-  <string name="delete_filter">Filtre Sil</string>
-  <string name="callLog_delete_entry">Bu çağrıyı sil</string>
-  <string name="callLog_delete_all">Tüm çağrıları sil</string>
-  <string name="callLog_delDialog_title">Çağrı kayıtlarını sil</string>
-  <string name="callLog_delDialog_yes">Evet</string>
-  <string name="callLog_delDialog_no">Hayır</string>
-  <string name="gsm">Cep</string>
-  <string name="dial_tab_name_text">Numara Çevir</string>
-  <string name="messages_tab_name_text">Mesajlar</string>
-  <string name="service_ticker_registered_text">SIP Kayıtlı</string>
-  <string name="outgoing_call_chooser_call_text">Çağrı</string>
-  <string name="reorder">Yeniden düzenle</string>
-  <string name="faq">S.S.S</string>
-  <string name="help">Yardım</string>
-  <string name="ok">TAMAM</string>
-  <string name="warning">UYARI</string>
-  <string name="choose_phone">Telefon seçin</string>
-  <string name="show_password">Parolayı göster</string>
-  <!--Presence stuff-->
-  <string name="online">Çevrimiçi</string>
-  <string name="offline">Çevrimdışı</string>
-  <string name="away">Uzakta</string>
-  <string name="busy">Meşgu</string>
+
+    <string name="accounts">Hesaplar</string>
+    <string name="other_accounts">Diğer hesaplar</string>
+    <string name="save">Kaydet</string>
+    <string name="cancel">İptal</string>
+    <string name="activate_account">Hesabınızı etkinleştirin</string>
+    <string name="deactivate_account">Hesabını kapatınız</string>
+    <string name="delete_account">Hesabı sil</string>
+    <string name="add_account">Hesap ekle</string>
+    <string name="choose_wizard">Sihirbaz seçin</string>
+    <string name="use">kullanım</string>
+    <string name="use_pstn">Mobil kullanımı</string>
+    <string name="ongoing_call">Arama devam ediyor</string>
+    <string name="missed_call">Cevapsız çağrı</string>
+    <string name="recentCalls_empty">Hiçbir çağrı kaydı yok</string>
+    <string name="filters">Filtreler</string>
+    <string name="delete_filter">Filtre Sil</string>
+    <string name="callLog_delete_entry">Bu çağrıyı sil</string>
+    <string name="callLog_delete_all">Tüm çağrıları sil</string>
+    <string name="callLog_delDialog_title">Çağrı kayıtlarını sil</string>
+    <string name="callLog_delDialog_yes">Evet</string>
+    <string name="callLog_delDialog_no">Hayır</string>
+    <string name="gsm">Cep</string>
+    <string name="dial_tab_name_text">Numara Çevir</string>
+    <string name="messages_tab_name_text">Mesajlar</string>
+    <string name="service_ticker_registered_text">SIP Kayıtlı</string>
+    <string name="outgoing_call_chooser_call_text">Çağrı</string>
+    <string name="reorder">Yeniden düzenle</string>
+    <string name="faq">S.S.S</string>
+    <string name="help">Yardım</string>
+    <string name="ok">TAMAM</string>
+    <string name="warning">UYARI</string>
+    <string name="show_password">Parolayı göster</string>
+    <!-- Presence stuff -->
+    <string name="online">Çevrimiçi</string>
+    <string name="offline">Çevrimdışı</string>
+    <string name="away">Uzakta</string>
+    <string name="busy">Meşgu</string>
+
 </resources>

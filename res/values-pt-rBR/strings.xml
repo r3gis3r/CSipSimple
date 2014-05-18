@@ -57,7 +57,6 @@
   <string name="display_icon_in_status_bar_desc">A aplicação deve mostrar um ícone na barra de status quando registrada</string>
   <string name="display_icon_in_status_bar">Mostrar ícone na barra de status</string>
   <string name="another_application_use_sip_port">Outra aplicação está utilizando a porta SIP! Impossível iniciar !!!</string>
-  <string name="choose_phone">Escolha o telefone</string>
   <string name="no_phone_found">Nenhum telefone encontrado para este contato</string>
   <string name="show_password">Mostrar senha</string>
   <string name="this_codec_is_not_free">**Este code não é gratuíto !!!**\nPor favor certifique-se que alguém (seu provedor SIP ou você) comprou uma licença que habilita o uso deste codec! Nós (no papel de distribuidores da aplicação) não somos responsáveis pelo uso ilegal deste codec.\nDepende de você a certeza de que está autorizado a usar este codec. Em caso de dúvida não utilize.\nLink para compra:</string>

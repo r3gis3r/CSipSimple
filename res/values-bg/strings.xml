@@ -57,7 +57,6 @@
   <string name="display_icon_in_status_bar_desc">Да се показва ли иконата на CSipSimple, при регистриран профил</string>
   <string name="display_icon_in_status_bar">Икона в лентата за състояние</string>
   <string name="another_application_use_sip_port">В момента друго приложение зползва SIP порта! Стартирането не е възможно!!!</string>
-  <string name="choose_phone">Изберете телефон</string>
   <string name="no_phone_found">Няма намерен телефон за този контакт</string>
   <string name="show_password">Показване на паролата</string>
   <string name="this_codec_is_not_free">** Този кодек не е безплатен!!!***</string>

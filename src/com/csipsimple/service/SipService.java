@@ -21,6 +21,7 @@
 
 package com.csipsimple.service;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -258,14 +259,46 @@ public class SipService extends Service {
                     return;
                 }
             }
-            getExecutor().execute(new SipRunnable() {
-                @Override
-                protected void doRun() throws SameThreadException {
-                    pjService.makeCall(callee, accountId, options);
-                }
-            });
+            
+            Intent intent = new Intent(SipManager.ACTION_SIP_CALL_LAUNCH);
+            intent.putExtra(SipProfile.FIELD_ID, accountId);
+            intent.putExtra(SipManager.EXTRA_SIP_CALL_TARGET, callee);
+            intent.putExtra(SipManager.EXTRA_SIP_CALL_OPTIONS, options);
+            sendOrderedBroadcast (intent , SipManager.PERMISSION_USE_SIP, mPlaceCallResultReceiver, null,  Activity.RESULT_OK, null, null);
+            
         }
 		
+        private BroadcastReceiver mPlaceCallResultReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, final Intent intent) {
+                final Bundle extras =  intent.getExtras();
+                final String action = intent.getAction();
+                if(extras == null) {
+                    Log.e(THIS_FILE, "No data in intent retrieved for call");
+                    return;
+                }
+                if(!SipManager.ACTION_SIP_CALL_LAUNCH.equals(action)) {
+                    Log.e(THIS_FILE, "Received invalid action " + action);
+                    return;
+                }
+
+                final int accountId = extras.getInt(SipProfile.FIELD_ID, -2);
+                final String callee = extras.getString(SipManager.EXTRA_SIP_CALL_TARGET);
+                final Bundle options = extras.getBundle(SipManager.EXTRA_SIP_CALL_OPTIONS);
+                if(accountId == -2 || callee == null) {
+                    Log.e(THIS_FILE, "Invalid rewrite " + accountId);
+                    return;
+                }
+                
+                getExecutor().execute(new SipRunnable() {
+                    @Override
+                    protected void doRun() throws SameThreadException {
+                        pjService.makeCall(callee, accountId, options);
+                    }
+                });
+            }
+        };
 		
 		/**
 		 * {@inheritDoc}

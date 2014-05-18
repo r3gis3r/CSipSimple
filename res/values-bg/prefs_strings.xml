@@ -62,6 +62,8 @@
   <string name="turn_username_desc">Потребителско име за TURN оторизация</string>
   <string name="turn_password">TURN парола</string>
   <string name="turn_password_desc">Парола за TURN оторизация</string>
+  <string name="turn_transport">TURN транспорт</string>
+  <string name="turn_transport_desc">Транспорт за TURN функционалността</string>
   <string name="enable_stun">Активиране на STUN</string>
   <string name="enable_stun_desc">Включване на функцията STUN</string>
   <string name="stun_server">STUN сървъри</string>
@@ -230,6 +232,8 @@
   <string name="start_with_text_dialer_desc">Старт с текстово набиране</string>
   <string name="use_alternate_unlocker">Не ползвай плъзгач за отговаряне</string>
   <string name="use_alternate_unlocker_desc">Приемане на входящите обаждания с бутон вместо с плъзгач</string>
+  <string name="slider">Плъзгач</string>
+  <string name="buttons">Бутони</string>
   <string name="keep_awake_incall">Без изключване на дисплея по време на разговор</string>
   <string name="keep_awake_incall_desc">Премахва влошаването на звука при изключване на екрана по време на разговор през WiFi</string>
   <string name="use_partial_wake_lock">Използване на частично заключване</string>

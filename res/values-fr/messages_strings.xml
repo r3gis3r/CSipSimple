@@ -3,11 +3,11 @@
   <!--The name of the SMS/MMS app as it appears to the user in the Home screen, task switcher, etc.-->
   <string name="app_label">Messagerie</string>
   <!--Command name to open a Compose screen; displays in conversation list-->
-  <string name="new_message">Nouveau Message</string>
+  <string name="new_message">Nouveau message</string>
   <!--Summary text under "New Message" command; displays in conversation list-->
-  <string name="create_new_message">Ecrire un message</string>
+  <string name="create_new_message">Écrire un nouveau message</string>
   <!--Menu item for starting a new conversation-->
-  <string name="menu_compose_new">Ecrire</string>
+  <string name="menu_compose_new">Écrire</string>
   <!--Menu item to call the recipient of the conversation on the phone (imperative verb)-->
   <string name="menu_call">Appeler</string>
   <!--Menu item for deleting all conversations-->
@@ -24,9 +24,9 @@
   <!--Abbreviation for "kilobyte"-->
   <string name="kilobyte">Ko</string>
   <!--Dialog box title brought up when warning the user that a message could not be delivered-->
-  <string name="undelivered_msg_dialog_title">Messages non délivré</string>
+  <string name="undelivered_msg_dialog_title">Message non délivré</string>
   <!--Dialog box message indicating that a message could not be delivered-->
-  <string name="undelivered_sms_dialog_body">Ce message n\'a pu être envoyé</string>
+  <string name="undelivered_sms_dialog_body">Impossible d\'envoyer ce message</string>
   <!--Menu item for deleting the entire conversation currently being viewed-->
   <string name="delete_thread">Supprimer le fil de discussion</string>
   <!--Text of a button appearing for MMS messages that have not yet been downloaded, causing the message
@@ -34,15 +34,15 @@
   <string name="download">Télécharger</string>
   <!--Message displayed in place of the "download message" button once it has been pressed,
          indicating that the download is in progress-->
-  <string name="downloading">En téléchargement</string>
+  <string name="downloading">Téléchargement</string>
   <!--Individual message context menu item-->
-  <string name="copy_message_text">Copier le message</string>
+  <string name="copy_message_text">Copier le texte du message</string>
   <!--Header for context menu on an individual message-->
   <string name="message_options">Options du message</string>
   <!--Button text on edit slide screen indicating the user wants to finish editing that slide-->
   <string name="done">Terminé</string>
   <!--Title bar displayed in compose message activity before a recipient has been selected-->
-  <string name="compose_title">Ecrire</string>
+  <string name="compose_title">Écrire</string>
   <!--Menu item in conversation screen for attaching something to the message being composed-->
   <string name="add_attachment">Joindre</string>
   <!--Button next to an attachment during message composition to view the attachment (imperative verb)-->
@@ -52,15 +52,15 @@
   <!--Menu item in conversation screen for returning to the conversation list-->
   <string name="all_threads">Tous les sujets</string>
   <!--Hint text in message body field when keyboard is exposed-->
-  <string name="type_to_compose_text_enter_to_send">Ecrire</string>
+  <string name="type_to_compose_text_enter_to_send">Écrire</string>
   <!--Hint text in message body field when keyboard is hidden-->
   <string name="open_keyboard_to_compose_message">Ouvrir le clavier pour écrire</string>
   <!--Dialog title for warning the user that the picture they are trying to attach is too large-->
   <string name="image_too_large">Image trop grande</string>
   <!--Dialog message text asking the user if he wants to resize the picture being attached-->
-  <string name="ask_for_automatically_resize">Redimensionner les images avant envoi ?</string>
+  <string name="ask_for_automatically_resize">Redimensionner les images avant l\'envoi ?</string>
   <!--Toast message while an image is being resized-->
-  <string name="compressing">Image trop grande, compression …</string>
+  <string name="compressing">Image trop grande, compression…</string>
   <!--Context menu item on a message recipient for viewing their contact info-->
   <string name="menu_view_contact">Voir le contact</string>
   <!--Context menu item on a message recipient for adding them to the user's
@@ -73,7 +73,7 @@
   <!--Text to be used for negative response button in dialog boxes-->
   <string name="no">Annuler</string>
   <!--Button text used for editing a slideshow (imperative verb)-->
-  <string name="edit">Editer</string>
+  <string name="edit">Modifier</string>
   <!--Settings screen menu item for restoring all settings to default-->
   <string name="restore_default">Restaurer les paramètres par défaut</string>
   <!--Confirm Delete-->
@@ -84,11 +84,11 @@
   <!--Delete all threads confirmation dialog message-->
   <string name="confirm_delete_all_conversations">Tous les sujets seront supprimés</string>
   <!--Delete message confirmation dialog message-->
-  <string name="confirm_delete_message">Le message complet sera supprimé</string>
+  <string name="confirm_delete_message">Le message sera supprimé.</string>
   <!--Delete message confirmation dialog message for a locked message-->
-  <string name="confirm_delete_locked_message">Voulez vous vraiment supprimer ce message verrouillé ?</string>
+  <string name="confirm_delete_locked_message">Voulez-vous vraiment supprimer ce message verrouillé ?</string>
   <!--Delete entire thread confirmation dialog message-->
-  <string name="confirm_delete_all_messages">le sujet complet sera effacé</string>
+  <string name="confirm_delete_all_messages">Le sujet complet sera effacé</string>
   <!--Delete button title-->
   <string name="delete">Supprimer</string>
   <!--Status in "Report" window-->
@@ -98,19 +98,19 @@
   <!--Status in "Report" window-->
   <string name="status_received">Reçu</string>
   <!--Status in "Report" window-->
-  <string name="status_failed">Echec</string>
+  <string name="status_failed">Échec</string>
   <!--Status in "Report" window-->
   <string name="status_unread">Non lu</string>
   <!--Status in "Report" window-->
   <string name="status_rejected">Rejeté</string>
   <!--Label in "Report" window-->
-  <string name="recipient_label">Destinataires:</string>
+  <string name="recipient_label">Destinataire :</string>
   <!--Label in "Report" window-->
-  <string name="status_label">Statut:</string>
+  <string name="status_label">État :</string>
   <!--Menu item-->
   <string name="menu_insert_smiley">Insérer une frimousse</string>
   <!--Label for the "Me" number of this phone.-->
   <string name="me">Moi</string>
   <!--Brief small label shown to right of message when it is being sent.-->
-  <string name="sending_message">Envoi …</string>
+  <string name="sending_message">Envoi…</string>
 </resources>

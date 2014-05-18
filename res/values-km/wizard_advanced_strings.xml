@@ -12,5 +12,4 @@
   <string name="w_advanced_proxy">ប្រូកស៊ី</string>
   <string name="w_advanced_proxy_desc">ដែន​ប្រូកស៊ី/IP[:port] (ជា​ជម្រើស មិន​ត្រូវ​ការ​ជា​និច្ច​ឡើយ)</string>
   <string name="w_advanced_auth_id">លេខ​សម្គាល់​​ផ្ទៀងផ្ទាត់ Sip</string>
-  <string name="w_advanced_auth_id_desc">ទុក​ឲ្យ​នៅ​ទទេ ចំពោះ​​អ្នក​ប្រើ​ដែល​មាន​​​ឈ្មោះ​​ដូច​គ្នា</string>
 </resources>

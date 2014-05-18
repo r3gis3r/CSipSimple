@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="w_sipgate_display_name">Nom du compte</string>
-  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_display_name_desc" ns0:ignore="UnusedResources">Nom d\'affichage du compte</string>
+  <string name="w_sipgate_display_name_desc" tools:ignore="UnusedResources">Nom d\'affichage de ce compte</string>
   <string name="w_sipgate_username">ID SIP</string>
-  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_username_desc" ns0:ignore="UnusedResources">Différent de votre login Sipgate! Verifiez sur le site de Sipgate votre SIP-ID</string>
-  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_password" ns0:ignore="UnusedResources">Mot de passe SIP</string>
-  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_password_desc" ns0:ignore="UnusedResources">Différent de votre mot de passe ! Verifiez sur le site de Sipgate votre SIP Password</string>
-  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_server_desc" ns0:ignore="UnusedResources">Quelquechose comme : sipgate.co.uk</string>
+  <string name="w_sipgate_username_desc" tools:ignore="UnusedResources">Différent de votre nom de connexion Sipgate ! Vérifiez sur le site Web de Sipgate votre ID-SIP</string>
+  <string name="w_sipgate_password" tools:ignore="UnusedResources">Mot de passe SIP</string>
+  <string name="w_sipgate_password_desc" tools:ignore="UnusedResources">Différent de votre mot de passe ! Vérifiez sur le site Web de Sipgate votre mot de passe SIP </string>
+  <string name="w_sipgate_server_desc" tools:ignore="UnusedResources">Quelque chose comme : sipgate.co.uk</string>
 </resources>

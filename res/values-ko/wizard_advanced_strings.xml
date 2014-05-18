@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_advanced_display_name">계정 이름</string>
   <string name="w_advanced_display_name_desc">계정에 사용할 닉네임</string>

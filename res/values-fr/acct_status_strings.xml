@@ -6,5 +6,5 @@
   <string name="acct_registering">Enregistrement…</string>
   <string name="acct_registered">Enregistré</string>
   <string name="acct_regerror">Erreur lors de l\'enregistrement</string>
-  <string name="acct_regfailed">Echec d\'enregistrement - Vérifiez votre configuration</string>
+  <string name="acct_regfailed">Échec d\'enregistrement - Vérifiez votre configuration</string>
 </resources>

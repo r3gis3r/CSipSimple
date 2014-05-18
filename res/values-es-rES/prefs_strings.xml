@@ -56,6 +56,8 @@
   <string name="nat_traversal">NAT transversal</string>
   <string name="enable_ice">Habilitar ICE</string>
   <string name="enable_ice_desc">Activa la funcionalidad ICE (establecimiento interactivo de conectividad)</string>
+  <string name="ice_aggressive">ICE agresivo</string>
+  <string name="ice_aggressive_desc">Si se usa o no asignación (para NAT) agresiva </string>
   <string name="enable_turn">Habilitar TURN</string>
   <string name="enable_turn_desc">Activa la funcionalidad TURN (transversal usando repetidores rodeando NAT)</string>
   <string name="turn_server">Servidor TURN</string>

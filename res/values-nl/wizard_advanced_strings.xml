@@ -12,5 +12,4 @@
   <string name="w_advanced_proxy">Proxy</string>
   <string name="w_advanced_proxy_desc">Proxy domein/IP[:poort] (optioneel, niet altijd nodig)</string>
   <string name="w_advanced_auth_id">Sip authentificatie ID</string>
-  <string name="w_advanced_auth_id_desc">Leeg laten indien gelijk aan Gebruikersnaam</string>
 </resources>

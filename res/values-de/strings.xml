@@ -57,7 +57,6 @@
   <string name="display_icon_in_status_bar_desc">Icon in der Statuszeile anzeigen, wenn ein SIP-Account registriert ist</string>
   <string name="display_icon_in_status_bar">Platziere ein Icon in der Statuszeile</string>
   <string name="another_application_use_sip_port">Eine andere Anwendung belegt den SIP-Port. Kann deshalb nicht starten!</string>
-  <string name="choose_phone">Wähle Telefon aus</string>
   <string name="no_phone_found">Kein Telefon für diesen Kontakt gefunden</string>
   <string name="show_password">Passwort anzeigen</string>
   <string name="this_codec_is_not_free">**Dieser Codec ist nicht kostenfrei!**\nBitte stelle sicher, dass entweder du oder dein SIP-Provider eine Lizenz für diesen Codec erworben haben. Wir als Bereitsteller dieser Anwendung sind nicht für eine illegale Nutzung dieses Codecs verantwortlich.\nDie Lizenz für den Codec kann hier erworben werden:</string>

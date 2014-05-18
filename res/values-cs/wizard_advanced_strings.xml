@@ -12,5 +12,4 @@
   <string name="w_advanced_proxy">Proxy</string>
   <string name="w_advanced_proxy_desc">Proxy Doména/IP[:port] (volitelné, není vždy potřeba)</string>
   <string name="w_advanced_auth_id">ID autentizace Sip</string>
-  <string name="w_advanced_auth_id_desc">Ponechte prázdné pokud je jméno stejné</string>
 </resources>

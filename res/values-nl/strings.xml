@@ -57,7 +57,6 @@
   <string name="display_icon_in_status_bar_desc">Moet de applicatie een icoon in de statusbalk tonen wanneer geregistreerd</string>
   <string name="display_icon_in_status_bar">Toon icoon in de statusbalk</string>
   <string name="another_application_use_sip_port">Een andere applicatie gebruikt nu de SIP-poort! Kan niet starten !!!</string>
-  <string name="choose_phone">Kies telefoonnummer</string>
   <string name="no_phone_found">Geen telefoonnummer gevonden voor dit contact</string>
   <string name="show_password">Toon wachtwoord</string>
   <string name="this_codec_is_not_free">**Deze codec is niet gratis !!!**\nControleer of iemand (uw SIP-provider of uzelf) een licentie heeft gekocht die het gebruik van deze codec toestaat! Wij (als applicatie-distributeurs) zijn niet verantwoordelijk voor illegaal gebruik van deze codec.\nHet is aan u om zeker te stellen dat u bent geautoriseerd om deze codec te gebruiken.\nLink om te kopen :</string>

@@ -52,7 +52,6 @@
   <string name="pickup_sip_uri">Seleccione el contacto SIP</string>
   <string name="display_icon_in_status_bar">Mostrar icono en la barra de estado</string>
   <string name="another_application_use_sip_port">Otra aplicación está usando el puerto SIP, no se puede iniciar.</string>
-  <string name="choose_phone">Elegir teléfono</string>
   <string name="no_phone_found">Teléfono no encontrado para este contacto</string>
   <string name="show_password">Mostrar contraseña</string>
   <string name="voice_mail">Correo de voz</string>

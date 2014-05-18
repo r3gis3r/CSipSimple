@@ -57,7 +57,6 @@
   <string name="display_icon_in_status_bar_desc">Wyświetl ikonę w pasku stanu przy zarejestrowaniu</string>
   <string name="display_icon_in_status_bar">Wyświetl ikonę w pasku stanu</string>
   <string name="another_application_use_sip_port">Inna aplikacja obecnie korzysta z portu SIP! Nie można uruchomić aplikacji !!!</string>
-  <string name="choose_phone">Wybierz telefon</string>
   <string name="no_phone_found">Nie znaleziono telefonu dla tego kontaktu</string>
   <string name="show_password">Pokaż hasło</string>
   <string name="this_codec_is_not_free">**Ten kodek nie jest za darmo !!!**\nProsimy upewnij się, czy ktoś (twój dostawca SIP lub ty sam) zakupił licencję, która pozwalają korzystać z tego kodeka! My (jako dystrybutorzy tej aplikacji) nie odpowiadamy za nielegalne korzystanie z tego kodeka.\nTo do Ciebie należy, aby upewnić się, czy posiadasz uprawnienia do korzystania z tego kodeku.\nLink zakupu : </string>

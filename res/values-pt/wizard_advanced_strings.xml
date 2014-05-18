@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="w_advanced_display_name">Nome da conta</string>
   <string name="w_advanced_display_name_desc">Nome a ser mostrado para esta conta</string>

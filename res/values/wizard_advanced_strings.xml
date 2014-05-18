@@ -31,6 +31,6 @@
     <string name="w_advanced_proxy">Proxy</string>
     <string name="w_advanced_proxy_desc">Proxy domain/IP[:port] (optional, not always needed)</string>
     <string name="w_advanced_auth_id">Sip authentication ID</string>
-    <string name="w_advanced_auth_id_desc">Leave blank for same than Username</string>
+    <string name="w_advanced_auth_id_desc">Leave blank for same as Username</string>
 
 </resources>

@@ -12,5 +12,4 @@
   <string name="w_advanced_proxy">Vekil Sunucu (proxy)</string>
   <string name="w_advanced_proxy_desc">Vekil sunucu alan adı/IP[:port] (isteğe bağlı, her zaman gerekmez)</string>
   <string name="w_advanced_auth_id">Sip kimlik doğrulama ID</string>
-  <string name="w_advanced_auth_id_desc">Kullanıcı adı ile aynı ise boş bırakın</string>
 </resources>

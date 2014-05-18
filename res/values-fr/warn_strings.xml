@@ -2,20 +2,20 @@
 <resources>
   <string name="warn_ignore">Ignorer</string>
   <!--STUN enabled-->
-  <string name="warn_no_stun">STUN non activé</string>
+  <string name="warn_no_stun">STUN désactivé</string>
   <string name="warn_no_stun_description">Si vous n\'avez pas de son entrant lors d\'un appel, c\'est probablement car vous êtes dans un réseau NATé et votre fournisseur SIP ne le gère pas de son côté.\n\nPour s\'en sortir dans ce cas, il est quelquefois utile d\'activer l\'option STUN.\n\nSi vous avez du son entrant, ignorez cette avertissement.\n\nSi vous êtes dans un pays avec un réseau public séparé des autres réseaux public, vous devriez sûrement changer le serveur STUN.\n\nUtiliser le STUN consomme également un peu plus de batterie.</string>
-  <string name="warn_no_stun_enable">Je n\'ai pas de son</string>
-  <string name="warn_no_stun_ignore">Mes appels sont bon</string>
+  <string name="warn_no_stun_enable">Je n\'ai pas de son lors des appels</string>
+  <string name="warn_no_stun_ignore">Mes appels sont bons</string>
   <!--Vpn on android 4.0-->
   <string name="warn_vpn_ics">Changement de VPN pour 4.0</string>
-  <string name="warn_vpn_ics_description">Vous êtes sous android 4.0 qui ne notifie pas le statut VPN.\n\nUne solution est de vérifier les routes à intervalle régulier.</string>
+  <string name="warn_vpn_ics_description">Vous êtes sous Android 4.0 qui ne notifie pas l\'état VPN.\n\nUne solution est de vérifier les routes à intervalles réguliers.</string>
   <string name="warn_vpn_ics_1">Vérifier toutes les 1 minute</string>
   <string name="warn_vpn_ics_5">Vérifier toute les 5 minutes</string>
   <!--Privileged intent-->
   <string name="warn_priv_int">Intégration à la téléphonie</string>
-  <string name="warn_priv_int_description">Il semble que d\'autres applications installée sur le téléphone essaient également de s\'intégrer à Android.\n\nElles font cela d\'une façon qui ne permet pas de fournir les fonctionnalités de Filtrage/Réécriture.\n\nVous avez deux choix :\n\nContinuer à utiliser notre intégration et installer des plugins pour supporter les autres applications (cela permettra d\'utiliser les règles de réécriture pour ces applications aussi).\nPour cela choisissez de toujours choisir le mobile en utilisant la checkbox quand vous ferez le prochain appel.</string>
-  <string name="warn_priv_int_description2">Une seconde solution est de faire en sorte que l\'application s\'intègre de la même façon non intelligente que les autres applications.\n\nCette option est supportée par l\'application mais découragée car moins intelligente et fourni une expérience utilisateur moins bonne.</string>
+  <string name="warn_priv_int_description">Il semble que d\'autres applications installées sur le téléphone essaient également de s\'intégrer à Android.\n\nElles font cela d\'une façon qui ne permet pas de fournir les fonctionnalités de Filtrage/Réécriture.\n\nVous avez deux choix :\n\nContinuer à utiliser notre intégration et installer des greffons pour prendre en charge les autres applications (cela permettra d\'utiliser les règles de réécriture pour ces applications aussi).\nPour cela, choisissez de toujours choisir le mobile en utilisant la case à cocher quand vous ferez le prochain appel.</string>
+  <string name="warn_priv_int_description2">Une seconde solution est de faire en sorte que l\'application s\'intègre de la même façon non intelligente que les autres applications.\n\nCette option est prise en charge par l\'application mais non recommandée car moins intelligente et fourni une expérience utilisateur moindre.</string>
   <string name="warn_priv_int_register">Utiliser l\'intégration non intelligente</string>
   <string name="warn_sdcard">Installation sur la carte SD</string>
-  <string name="warn_sdcard_description">Vous avez configuré l\'application pour être disponible pour les appels entrants. Mais vous avez déplacé l\'application sur la carte SD.\nCeci est découragé, vous devriez laisser l\'application sur le stockage interne.</string>
+  <string name="warn_sdcard_description">Vous avez configuré l\'application pour être disponible pour les appels entrants. Mais vous avez déplacé l\'application sur la carte SD.\nCeci n\'est pas recommandé, vous devriez laisser l\'application sur le stockage interne.</string>
 </resources>

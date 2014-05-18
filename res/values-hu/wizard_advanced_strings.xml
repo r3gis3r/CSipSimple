@@ -12,5 +12,4 @@
   <string name="w_advanced_proxy">Proxy</string>
   <string name="w_advanced_proxy_desc">Proxy domain/IP[:port] (opcionális, nem minden SIP fiókhoz szükséges)</string>
   <string name="w_advanced_auth_id">SIP Autentikációs ID</string>
-  <string name="w_advanced_auth_id_desc">Hagyd üresen ha megegyezik a Felhasználónévvel</string>
 </resources>

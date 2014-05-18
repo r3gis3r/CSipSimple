@@ -142,6 +142,13 @@ public final class SipManager {
     
     // SERVICE BROADCASTS
     /**
+     * Broadcastsent when a call is about to be launched.
+     * <p>
+     * Receiver of this ordered broadcast might rewrite and add new headers.
+     * </p>
+     */
+    public static final String ACTION_SIP_CALL_LAUNCH = "com.csipsimple.service.CALL_LAUNCHED";
+    /**
      * Broadcast sent when call state has changed.
      * <p>
      * Provided extras :
@@ -439,6 +446,17 @@ public final class SipManager {
     public static final String EXTRA_FILE_PATH = "file_path";
     
     /**
+     * Target in a sip launched call.
+     * @see #ACTION_SIP_CALL_LAUNCH
+     */
+    public static final String EXTRA_SIP_CALL_TARGET = "call_target";
+    /**
+     * Options of a sip launched call.
+     * @see #ACTION_SIP_CALL_LAUNCH
+     */
+    public static final String EXTRA_SIP_CALL_OPTIONS = "call_options";
+    
+    /**
      * Extra key to contain behavior of outgoing call chooser activity.<br/>
      * In case an account is specified in the outgoing call intent with {@link SipProfile#FIELD_ACC_ID}
      * and the application doesn't find this account,
@@ -506,7 +524,7 @@ public final class SipManager {
      * Major version x 1000 + minor version. <br/>
      * Major version are backward compatible.
      */
-    public static final int CURRENT_API = 2004;
+    public static final int CURRENT_API = 2005;
 
     /**
      * Ensure capability of the remote sip service to reply our requests <br/>

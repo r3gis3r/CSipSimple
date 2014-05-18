@@ -56,7 +56,6 @@
   <string name="display_icon_in_status_bar_desc">האם היישום יציג סמל בשורת המצב כאשר רשום</string>
   <string name="display_icon_in_status_bar">הצג סמל בשורת המצב</string>
   <string name="another_application_use_sip_port">אין אפשרות להפעיל!!! יישום אחר משתמש כעת ביציאת הסיפ!</string>
-  <string name="choose_phone">בחר טלפון</string>
   <string name="no_phone_found">לא נמצא טלפון לאיש קשר זה</string>
   <string name="show_password">הצגת ססמה</string>
   <string name="this_codec_is_not_free">** קודק זה אינו בחינם !!!**\nאנא ודא כי מישהו (ספקית ה־SIP שלך או אתה בעצמך) רכש רישיון אשר מאפשר לך להשתמש בקודק! אני (בתור מפיציי היישום) איננו אחראים לשימוש בלתי חוקי של רכיב זה.\nזה תלוי בך כדי להיות בטוח שאתה מורשה להשתמש בקודק.\nקישור לרכישה:</string>

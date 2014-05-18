@@ -54,7 +54,6 @@
   <string name="display_icon_in_status_bar_desc">등록 시, 상태 표시줄에 아이콘이 디스플레이됩니다</string>
   <string name="display_icon_in_status_bar">상태 표시줄에 아이콘 디스트레이</string>
   <string name="another_application_use_sip_port">현재 다른 응용프로그램이 SIP를 사용하고 있어 원하는 서비스를 개시할 수 없습니다.</string>
-  <string name="choose_phone">전화 선택</string>
   <string name="no_phone_found">이 연락 번호에 해당하는 전화기가 없습니다</string>
   <string name="show_password">비밀 번호 보기</string>
   <string name="this_codec_is_not_free">**This codec is not free !!!**\nPlease ensure that somebody (your SIP provider or yourself) have purchased a license that allow you to use this codec! We (as application distributors) are not responsible for an illegal use of this codec.\nIt\'s up to you to be sure that you are authorized to use this codec.\nPurchase link :</string>

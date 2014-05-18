@@ -12,5 +12,4 @@
   <string name="w_advanced_proxy">Serwer proxy</string>
   <string name="w_advanced_proxy_desc">Domena Proxy/IP[:port] (opcjonalne, nie zawsze potrzebne)</string>
   <string name="w_advanced_auth_id">Identyfikator uwierzytelniania Sip</string>
-  <string name="w_advanced_auth_id_desc">Pozostaw puste dla tego samego jak Nazwa użytkownika</string>
 </resources>

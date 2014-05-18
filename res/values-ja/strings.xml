@@ -57,7 +57,6 @@
   <string name="display_icon_in_status_bar_desc">SIPに登録完了した場合にステータスバーにアイコンを表示</string>
   <string name="display_icon_in_status_bar">ステータスバーのアイコン表示</string>
   <string name="another_application_use_sip_port">他のアプリケーションがSIPポートを使用しています。開始出来ません。</string>
-  <string name="choose_phone">電話選択</string>
   <string name="no_phone_found">このコンタクトには電話番号がありません。</string>
   <string name="show_password">パスワードを表示</string>
   <string name="this_codec_is_not_free">**このコーデックは無料ではありません！**\nSIPプロバイダーまたはあなたがライセンスを購入済みで利用可能であること。\nアプリケーションの開発者または配布者はこのコーデックの使用に関して責任を負いません。\nこのコーデックの使用が許可されているか確認するのはあなたの責任です。\n購入リンク : </string>

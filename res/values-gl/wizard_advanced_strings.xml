@@ -8,5 +8,4 @@
   <string name="w_advanced_password_desc">Contrasinal para a autenticación do servidor SIP</string>
   <string name="w_advanced_use_tcp">Usar TCP (non UDP)</string>
   <string name="w_advanced_proxy">Proxy</string>
-  <string name="w_advanced_auth_id_desc">Deixar en branco se é igual que o nome de usuario</string>
 </resources>

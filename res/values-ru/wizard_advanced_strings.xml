@@ -12,5 +12,4 @@
   <string name="w_advanced_proxy">Прокси</string>
   <string name="w_advanced_proxy_desc">Прокси-сервер /IP[:порт] (опционально; не всегда требуется)</string>
   <string name="w_advanced_auth_id">Sip идентификатор</string>
-  <string name="w_advanced_auth_id_desc">Оставьте пустым, чтобы было идентично Имени пользователя</string>
 </resources>

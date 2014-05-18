@@ -12,5 +12,4 @@
   <string name="w_advanced_proxy">Прокси</string>
   <string name="w_advanced_proxy_desc">Прокси домейн/IP[:порт] (по избор, не винаги е необходимо)</string>
   <string name="w_advanced_auth_id">Идентификатор (ID) за оторизация</string>
-  <string name="w_advanced_auth_id_desc">Оставете празно, ако съвпада с потребителското име</string>
 </resources>

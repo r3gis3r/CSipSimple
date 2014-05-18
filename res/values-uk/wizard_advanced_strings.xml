@@ -12,5 +12,4 @@
   <string name="w_advanced_proxy">Проксі-сервер</string>
   <string name="w_advanced_proxy_desc">Проксі домен / IP [: порт] (опційно, не завжди необхідно)</string>
   <string name="w_advanced_auth_id">ID Sip аутентифікації</string>
-  <string name="w_advanced_auth_id_desc">Залишити пустим якщо схоже з Іменем користувача</string>
 </resources>

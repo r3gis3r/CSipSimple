@@ -12,5 +12,4 @@
   <string name="w_advanced_proxy">プロキシ</string>
   <string name="w_advanced_proxy_desc">プロキシ ドメイン/IP[:ポート] (オプション, 必須ではありません)</string>
   <string name="w_advanced_auth_id">SIP認証ID</string>
-  <string name="w_advanced_auth_id_desc">空白でユーザ名を使用</string>
 </resources>
