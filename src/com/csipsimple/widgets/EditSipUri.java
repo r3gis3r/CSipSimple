@@ -77,7 +77,9 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
                 if (account != null) {
                     accId = account.id;
                 }
-                contactsAdapter.setSelectedAccount(accId);
+                if(contactsAdapter != null) {
+                    contactsAdapter.setSelectedAccount(accId);
+                }
             }
         });
         dialUser.addTextChangedListener(this);
@@ -149,7 +151,9 @@ public class EditSipUri extends LinearLayout implements TextWatcher, OnItemClick
     private void updateDialTextHelper() {
 
         String dialUserValue = dialUser.getText().toString();
-        contactsAdapter.setSelectedText(dialUserValue);
+        if(contactsAdapter != null) {
+            contactsAdapter.setSelectedText(dialUserValue);
+        }
         accountChooserButtonText.setChangeable(TextUtils.isEmpty(dialUserValue));
 
         SipProfile acc = accountChooserButtonText.getSelectedAccount();
