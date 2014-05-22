@@ -1102,6 +1102,10 @@ public class WizardUtils {
                     new Locale("pl")
                     }, false, false, 
                     NeofonTpPl.class));
+            WIZARDS_DICT.put("YESCALL", new WizardInfo("YESCALL", "YesCall", 
+                    R.drawable.ic_wizard_yescall, 9, 
+                    new Locale[]{ locale("zh_CN"), locale("zh_TW")}, false, false, 
+                    YesCall.class));
             
             
 		}else {
