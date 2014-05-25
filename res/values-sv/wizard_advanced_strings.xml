@@ -12,4 +12,5 @@
   <string name="w_advanced_proxy">Proxy</string>
   <string name="w_advanced_proxy_desc">Domän för proxy/IP[:port] (valfritt, behövs inte alltid)</string>
   <string name="w_advanced_auth_id">ID för autentisering till SIP</string>
+  <string name="w_advanced_auth_id_desc">Lämna tomt för att använda samma som Användarnamn</string>
 </resources>

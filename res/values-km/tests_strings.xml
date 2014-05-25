@@ -2,6 +2,5 @@
 <resources>
   <string name="test_audio">សាកល្បង​អូឌីយ៉ូ</string>
   <string name="test_audio_prepare">កំពុង​រៀបចំ​សាកល្បង​អូឌីយ៉ូ...</string>
-  <string name="test_audio_ongoing">កំពុង​សាកល្បង… \nនិយាយ​ដាក់​មីក្រូហ្វូន ហើយ​ស្ដាប់​កាស</string>
   <string name="test_audio_network_failure">ការ​សាកល្បង​បរាជ័យ៖ \nប្ដូរ​ទៅ​បណ្ដាញ​ត្រឹមត្រូវ​សិន</string>
 </resources>

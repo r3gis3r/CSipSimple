@@ -2,6 +2,5 @@
 <resources>
   <string name="test_audio">בדיקת קול</string>
   <string name="test_audio_prepare">מכין בדיקת קול…</string>
-  <string name="test_audio_ongoing">בדיקה בביצוע…\nנא לדבר למיקרופון ולהאזין באוזניה. </string>
   <string name="test_audio_network_failure">בדיקה נכשלה:\nנא לעבור קודם כל לרשת תקנית</string>
 </resources>

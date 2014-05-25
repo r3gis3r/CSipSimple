@@ -2,6 +2,5 @@
 <resources>
   <string name="test_audio">Test de audio</string>
   <string name="test_audio_prepare">Preparando o test de audio</string>
-  <string name="test_audio_ongoing">Test en curso...\nFálelle ao micrófono e escoite polo auricular</string>
   <string name="test_audio_network_failure">Fallo no test:\nCambie a unha rede válida antes de iniciar a proba</string>
 </resources>

@@ -2,6 +2,6 @@
 <resources>
   <string name="test_audio">Testljud</string>
   <string name="test_audio_prepare">Förbereder testljud...</string>
-  <string name="test_audio_ongoing">Test pågår...\nPrata i mikrofon och lyssna i högtalare</string>
+  <string name="test_audio_ongoing">Test pågår...\nPrata i mikrofonen och lyssna i hörluren</string>
   <string name="test_audio_network_failure">Test misslyckades:\nByt först till ett giltigt nätverk</string>
 </resources>

@@ -2,6 +2,5 @@
 <resources>
   <string name="test_audio">オーディオテスト</string>
   <string name="test_audio_prepare">オーディオテストの準備中...</string>
-  <string name="test_audio_ongoing">テストを実行中...\nマイクに向かって話しながら音声が聞こえるか確認してください。</string>
   <string name="test_audio_network_failure">テスト失敗:\n有効なネットワークに切り換えてください。</string>
 </resources>
