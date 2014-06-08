@@ -21,6 +21,7 @@
 
 package com.csipsimple.ui.calllog;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -146,6 +147,7 @@ public class CallLogListFragment extends CSSListFragment implements ViewPagerVis
 
     boolean alreadyLoaded = false;
     
+    @SuppressLint("NewApi")
     @Override
     public void onVisibilityChanged(boolean visible) {
         if (mShowOptionsMenu != visible) {

@@ -139,8 +139,8 @@ PJ_DECL(pj_str_t) call_secure_media_info(pjsua_call_id call_id) {
 
 								pj_ansi_snprintf(msg, sizeof(msg), "ZRTP - %s\n%.*s\n%.*s",
 										info.sas_verified ? "Verified": "Not verified",
-										info.sas.slen, info.sas.ptr,
-										info.cipher.slen, info.cipher.ptr);
+										(int)info.sas.slen, info.sas.ptr,
+										(int)info.cipher.slen, info.cipher.ptr);
 
 								pj_strdup2_with_null(css_var.pool, &result, msg);
 								break;
@@ -384,9 +384,9 @@ PJ_DECL(void*) get_library_factory(dynamic_factory *impl) {
 	char init_name[512];
 	FILE* file;
 	pj_ansi_snprintf(lib_path, sizeof(lib_path), "%.*s",
-			impl->shared_lib_path.slen, impl->shared_lib_path.ptr);
+			(int)impl->shared_lib_path.slen, impl->shared_lib_path.ptr);
 	pj_ansi_snprintf(init_name, sizeof(init_name), "%.*s",
-			impl->init_factory_name.slen, impl->init_factory_name.ptr);
+			(int)impl->init_factory_name.slen, impl->init_factory_name.ptr);
 
 	void* handle = dlopen(lib_path, RTLD_LAZY);
 	if (handle != NULL) {
@@ -499,7 +499,7 @@ PJ_DECL(pj_status_t) csipsimple_init(pjsua_config *ua_cfg,
 
 #if defined(PJMEDIA_HAS_ZRTP) && PJMEDIA_HAS_ZRTP!=0
 	pj_ansi_snprintf(css_var.zid_file, sizeof(css_var.zid_file),
-			"%.*s/simple.zid", css_cfg->storage_folder.slen,
+			"%.*s/simple.zid", (int)css_cfg->storage_folder.slen,
 			css_cfg->storage_folder.ptr);
 #endif
 
