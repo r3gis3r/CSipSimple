@@ -12,11 +12,19 @@ LOCAL_CFLAGS_32 := $(openssl_cflags_static_32)
 LOCAL_CFLAGS_64 := $(openssl_cflags_static_64)
 
 LOCAL_MODULE := crypto_static
-LOCAL_CFLAGS +=  -DOPENSSL_CPUID_OBJ
 
-LOCAL_C_INCLUDES = $(common_c_includes:external/openssl/%=$(LOCAL_PATH)/%)  
+ifneq ($(TARGET_ARCH),mips)
+LOCAL_CFLAGS +=  -DOPENSSL_CPUID_OBJ
+endif
+
+LOCAL_C_INCLUDES = $(common_c_includes:external/openssl/%=$(LOCAL_PATH)/%)
 LOCAL_SRC_FILES := $(LOCAL_SRC_FILES_$(TARGET_ARCH))
 LOCAL_SRC_FILES_$(TARGET_ARCH) := 
+LOCAL_CFLAGS += $(LOCAL_CFLAGS_$(TARGET_ARCH))
+LOCAL_SRC_FILES_x86_64 :=
+LOCAL_SRC_FILES_arm :=
+LOCAL_SRC_FILES_x86 :=
+LOCAL_SRC_FILES_mips :=
 
 include $(BUILD_STATIC_LIBRARY)
 
