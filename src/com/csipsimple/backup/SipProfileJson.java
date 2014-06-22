@@ -62,8 +62,7 @@ public final class SipProfileJson {
     private static JSONObject serializeBaseSipProfile(SipProfile profile) {
 
         ContentValues cv = profile.getDbContentValues();
-        Columns cols = new Columns(DBProvider.ACCOUNT_FULL_PROJECTION,
-                DBProvider.ACCOUNT_FULL_PROJECTION_TYPES);
+        Columns cols = getSipProfileColumns(true);
         return cols.contentValueToJSON(cv);
     }
 
@@ -201,8 +200,7 @@ public final class SipProfileJson {
         Columns cols;
         ContentValues cv;
 
-        cols = new Columns(DBProvider.ACCOUNT_FULL_PROJECTION,
-                DBProvider.ACCOUNT_FULL_PROJECTION_TYPES);
+        cols = getSipProfileColumns(false);
         cv = cols.jsonToContentValues(jsonObj);
 
         long profileId = cv.getAsLong(SipProfile.FIELD_ID);
@@ -311,5 +309,15 @@ public final class SipProfileJson {
                 Log.e(THIS_FILE, "Unable to parse item " + i, e);
             }
         }
+    }
+    
+    private static Columns getSipProfileColumns(boolean only_secure) {
+        Columns cols = new Columns(DBProvider.ACCOUNT_FULL_PROJECTION,
+                DBProvider.ACCOUNT_FULL_PROJECTION_TYPES);
+        if(only_secure) {
+            // Never backup password
+            cols.removeColumn(SipProfile.FIELD_DATA);
+        }
+        return cols;
     }
 }

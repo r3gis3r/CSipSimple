@@ -25,44 +25,57 @@
 
 package com.csipsimple.backup;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.csipsimple.utils.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Columns {
 
-	private String[] names;
+	private ArrayList<String> names;
 
 	private enum Type {
 		STRING, INT, LONG, FLOAT, DOUBLE, BOOLEAN
 	}
 
-	private Type[] types;
+	private ArrayList<Type> types;
 
 	public Columns(String[] names, Class<?>[] classes) {
-		this.names = names;
-		types = new Type[names.length];
+		this.names = new ArrayList<String>(Arrays.asList(names));
+		types = new ArrayList<Type>(names.length);
 		for (int i = 0; i < names.length; i++) {
 
 			if (classes[i] == String.class) {
-				types[i] = Type.STRING;
+				types.add(i, Type.STRING);
 			} else if (classes[i] == Integer.TYPE || classes[i] == Integer.class) {
-				types[i] = Type.INT;
+				types.add(i, Type.INT);
 			} else if (classes[i] == Long.TYPE || classes[i] == Long.class) {
-				types[i] = Type.LONG;
+				types.add(i, Type.LONG);
 			} else if (classes[i] == Float.TYPE || classes[i] == Float.class) {
-				types[i] = Type.FLOAT;
+				types.add(i, Type.FLOAT);
 			} else if (classes[i] == Double.TYPE || classes[i] == Double.class) {
-				types[i] = Type.DOUBLE;
+				types.add(i, Type.DOUBLE);
 			} else if (classes[i] == Boolean.TYPE || classes[i] == Boolean.class) {
-				types[i] = Type.BOOLEAN;
+				types.add(i, Type.BOOLEAN);
 			}
 		}
 	}
+	
+    public boolean removeColumn(String columnName) {
+            int index = names.indexOf(columnName);
+            if(index < 0) {
+                return false;
+            }
+            names.remove(index);
+            types.remove(index);
+            return true;
+    }
 
 	public boolean hasField(Cursor c, String name) {
 		int i = c.getColumnIndex(name);
@@ -71,32 +84,33 @@ public class Columns {
 
 	public JSONObject contentValueToJSON(ContentValues cv) {
 		JSONObject json = new JSONObject();
-		for (int i = 0; i < names.length; i++) {
-			if (!cv.containsKey(names[i])) {
+		for (int i = 0; i < names.size(); i++) {
+			if (!cv.containsKey(names.get(i))) {
 				continue;
 			}
 			try {
-				switch (types[i]) {
+			    String name = names.get(i);
+				switch (types.get(i)) {
 				case STRING:
-					json.put(names[i], cv.getAsString(names[i]));
+					json.put(name, cv.getAsString(name));
 					break;
 				case INT:
-					json.put(names[i], cv.getAsInteger(names[i]));
+					json.put(name, cv.getAsInteger(name));
 					break;
 				case LONG:
-					json.put(names[i], cv.getAsLong(names[i]));
+					json.put(name, cv.getAsLong(name));
 					break;
 				case FLOAT:
-					json.put(names[i], cv.getAsFloat(names[i]));
+					json.put(name, cv.getAsFloat(name));
 					break;
 				case DOUBLE:
-					json.put(names[i], cv.getAsDouble(names[i]));
+					json.put(name, cv.getAsDouble(name));
 					break;
 				case BOOLEAN:
-					json.put(names[i], cv.getAsBoolean(names[i]));
+					json.put(name, cv.getAsBoolean(name));
 					break;
 				default:
-					Log.w("Col", "Invalid type, can't unserialize " + types[i]);
+					Log.w("Col", "Invalid type, can't unserialize " + types.get(i));
 				}
 			} catch (JSONException e) {
 				Log.e("Col", "Invalid type, can't unserialize ", e);
@@ -108,25 +122,26 @@ public class Columns {
 
 	public ContentValues jsonToContentValues(JSONObject j) {
 		ContentValues cv = new ContentValues();
-		for (int i = 0; i < names.length; i++) {
-			switch (types[i]) {
+		for (int i = 0; i < names.size(); i++) {
+            String name = names.get(i);
+			switch (types.get(i)) {
 			case STRING:
-				j2cvString(j, cv, names[i]);
+				j2cvString(j, cv, name);
 				break;
 			case INT:
-				j2cvInt(j, cv, names[i]);
+				j2cvInt(j, cv, name);
 				break;
 			case LONG:
-				j2cvLong(j, cv, names[i]);
+				j2cvLong(j, cv, name);
 				break;
 			case FLOAT:
-				j2cvFloat(j, cv, names[i]);
+				j2cvFloat(j, cv, name);
 				break;
 			case DOUBLE:
-				j2cvDouble(j, cv, names[i]);
+				j2cvDouble(j, cv, name);
 				break;
 			case BOOLEAN:
-				j2cvBoolean(j, cv, names[i]);
+				j2cvBoolean(j, cv, name);
 			}
 		}
 
@@ -180,4 +195,5 @@ public class Columns {
 		} catch (JSONException e) {
 		}
 	}
+	
 }
