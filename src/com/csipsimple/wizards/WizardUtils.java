@@ -1106,6 +1106,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_yescall, 9, 
                     new Locale[]{ locale("zh_CN"), locale("zh_TW")}, false, false, 
                     YesCall.class));
+            WIZARDS_DICT.put("FERAREDIALER", new WizardInfo("FERAREDIALER", "Ferare Dialer", 
+                    R.drawable.ic_wizard_ferare, 10, 
+                    new Locale[] {new Locale("sr")}, false, false, 
+                    FerareDialer.class));
             
             
 		}else {
