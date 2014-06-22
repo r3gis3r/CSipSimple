@@ -158,7 +158,8 @@ public final class Compatibility {
                 android.os.Build.DEVICE.equalsIgnoreCase("U8120") ||
                 android.os.Build.DEVICE.equalsIgnoreCase("U8100") ||
                 android.os.Build.DEVICE.toUpperCase().startsWith("U8836") ||
-                android.os.Build.PRODUCT.equalsIgnoreCase("U8655")) {
+                android.os.Build.PRODUCT.equalsIgnoreCase("U8655") ||
+                android.os.Build.DEVICE.toUpperCase().startsWith("HWU9700")) {
             return true;
         }
 
@@ -948,6 +949,12 @@ public final class Compatibility {
         if(lastSeenVersion < 2348) {
             if (android.os.Build.DEVICE.toLowerCase().startsWith("g2")
                     && android.os.Build.BRAND.toLowerCase().startsWith("lge")) {
+                prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
+                        shouldUseModeApi());
+            }
+        }
+        if(lastSeenVersion < 2418) {
+            if (android.os.Build.DEVICE.toUpperCase().startsWith("HWU9700")) {
                 prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
                         shouldUseModeApi());
             }

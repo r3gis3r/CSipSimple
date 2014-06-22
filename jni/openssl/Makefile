@@ -1,5 +1,5 @@
 # This makefile aim is only for now to address source checkout and patch
-openssl_tag := 25321eef00fc544861e22ddb0a8341781d3a12c0
+openssl_tag := fa610339baf67da107ba040930352c974b38256f
 
 all :
 	# For now we do nothing to build - it's made by android_toolchain
