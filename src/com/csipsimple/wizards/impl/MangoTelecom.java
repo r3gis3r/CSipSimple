@@ -33,15 +33,6 @@ public class MangoTelecom extends AlternateServerImplementation {
     static final String DEFAULT_DOMAIN = "mangosip.ru";
 	
 	@Override
-	protected String getDomain() {
-	    String thirdDomain = accountServer.getText();
-	    if(!TextUtils.isEmpty(thirdDomain)) {
-	        return thirdDomain.trim() + "." + DEFAULT_DOMAIN;
-	    }
-		return DEFAULT_DOMAIN;
-	}
-	
-	@Override
 	protected String getDefaultName() {
 		return "Mango Telecom";
 	}
@@ -60,13 +51,8 @@ public class MangoTelecom extends AlternateServerImplementation {
 	@Override
 	public void fillLayout(final SipProfile account) {
 		super.fillLayout(account);
-		String sipDomain = account.getSipDomain();
-		if(!TextUtils.isEmpty(sipDomain)) {
-		    if(!sipDomain.equals(DEFAULT_DOMAIN)) {
-		        accountServer.setText(sipDomain.replace("."+DEFAULT_DOMAIN, ""));
-		    }else {
-		        accountServer.setText("");
-		    }
+		if(TextUtils.isEmpty(account.getSipDomain())) {
+	        accountServer.setText(DEFAULT_DOMAIN);
 		}
         accountServer.setTitle(R.string.user_personal_domain);
         accountServer.setDialogTitle(R.string.user_personal_domain);
