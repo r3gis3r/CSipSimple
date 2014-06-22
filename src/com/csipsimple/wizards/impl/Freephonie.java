@@ -68,6 +68,8 @@ public class Freephonie extends SimpleImplementation {
 		account.transport = SipProfile.TRANSPORT_UDP;
 		account.vm_nbr = "**1";
 		account.mwi_enabled = false;
+		account.ice_cfg_use = 1;
+		account.ice_cfg_enable = 0;
 		return account;
 	}
 	
