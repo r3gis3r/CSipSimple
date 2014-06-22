@@ -211,12 +211,11 @@ public class AccountsEditListFragment extends CSSListFragment implements /*OnQui
                         builder.setItems(fItems, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int item) {
                                 if (item == 0) {
-                                    SipProfileJson.saveSipConfiguration(getActivity());
+                                    SipProfileJson.saveSipConfiguration(getActivity(), "");
                                 } else {
                                     File fileToRestore = new File(backupDir + File.separator
                                             + fItems[item]);
-                                    SipProfileJson.restoreSipConfiguration(getActivity(),
-                                            fileToRestore);
+                                    SipProfileJson.restoreSipConfiguration(getActivity(), fileToRestore, "");
                                 }
                             }
                         });

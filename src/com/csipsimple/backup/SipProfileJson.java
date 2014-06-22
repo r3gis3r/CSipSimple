@@ -27,6 +27,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 
 import com.csipsimple.api.SipManager;
@@ -44,12 +45,24 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Map;
+
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 
 public final class SipProfileJson {
 
@@ -157,7 +170,7 @@ public final class SipProfileJson {
      * @param ctxt
      * @return
      */
-    public static boolean saveSipConfiguration(Context ctxt) {
+    public static boolean saveSipConfiguration(Context ctxt, String filePassword) {
         File dir = PreferencesWrapper.getConfigFolder(ctxt);
         if (dir != null) {
             Date d = new Date();
@@ -179,6 +192,22 @@ public final class SipProfileJson {
 
             try {
                 // Create file
+                OutputStream fos = new FileOutputStream(file);
+                if(!TextUtils.isEmpty(filePassword)) {
+                    Cipher c;
+                    try {
+                        c = Cipher.getInstance("AES");
+                        SecretKeySpec k = new SecretKeySpec(filePassword.getBytes(), "AES");
+                        c.init(Cipher.ENCRYPT_MODE, k);
+                        fos = new CipherOutputStream(fos, c);
+                    } catch (NoSuchAlgorithmException e) {
+                        Log.e(THIS_FILE, "NoSuchAlgorithmException :: ", e);
+                    } catch (NoSuchPaddingException e) {
+                        Log.e(THIS_FILE, "NoSuchPaddingException :: ", e);
+                    } catch (InvalidKeyException e) {
+                        Log.e(THIS_FILE, "InvalidKeyException :: ", e);
+                    }
+                }
                 FileWriter fstream = new FileWriter(file.getAbsoluteFile());
                 BufferedWriter out = new BufferedWriter(fstream);
                 out.write(configChain.toString(2));
@@ -242,7 +271,7 @@ public final class SipProfileJson {
      * @param fileToRestore
      * @return
      */
-    public static boolean restoreSipConfiguration(Context ctxt, File fileToRestore) {
+    public static boolean restoreSipConfiguration(Context ctxt, File fileToRestore, String filePassword) {
         if (fileToRestore == null || !fileToRestore.isFile()) {
             return false;
         }
@@ -252,7 +281,24 @@ public final class SipProfileJson {
         try {
             BufferedReader buf;
             String line;
-            FileReader fr = new FileReader(fileToRestore);
+            InputStream is = new FileInputStream(fileToRestore);
+            if(!TextUtils.isEmpty(filePassword)) {
+                Cipher c;
+                try {
+                    c = Cipher.getInstance("AES");
+                    SecretKeySpec k = new SecretKeySpec(filePassword.getBytes(), "AES");
+                    c.init(Cipher.ENCRYPT_MODE, k);
+                    is = new CipherInputStream(is, c);
+                } catch (NoSuchAlgorithmException e) {
+                    Log.e(THIS_FILE, "NoSuchAlgorithmException :: ", e);
+                } catch (NoSuchPaddingException e) {
+                    Log.e(THIS_FILE, "NoSuchPaddingException :: ", e);
+                } catch (InvalidKeyException e) {
+                    Log.e(THIS_FILE, "InvalidKeyException :: ", e);
+                }
+            }
+            
+            InputStreamReader fr = new InputStreamReader(is);
             buf = new BufferedReader(fr);
             while ((line = buf.readLine()) != null) {
                 contentBuf.append(line);
