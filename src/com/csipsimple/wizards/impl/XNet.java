@@ -64,7 +64,7 @@ public class XNet extends AuthorizationImplementation {
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
 		//Ensure registration timeout value
-		account.proxies = new String[] {"sip:58.28.20.150"};
+		account.proxies = new String[] {"sip:pan.wxnz.net"};
 		account.transport = SipProfile.TRANSPORT_UDP;
 		return account;
 	}
