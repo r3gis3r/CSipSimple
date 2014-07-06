@@ -24,7 +24,6 @@ MY_USE_VIDEO := 1
 
 MY_USE_TLS := 1
 MY_USE_ZRTP := 1
-MY_USE_STATIC_SSL := 1
 
 #############################################################
 # Do not change behind this line the are flags for pj build #

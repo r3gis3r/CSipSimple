@@ -1,8 +1,13 @@
 LOCAL_PATH := $(call my-dir)/../sources
 
+include $(LOCAL_PATH)/build-config-64.mk
+include $(LOCAL_PATH)/build-config-32.mk
+
+
 #######################################
 # target crypto static library
 include $(CLEAR_VARS)
+LOCAL_MODULE := crypto_static
 
 include $(LOCAL_PATH)/Crypto-config-target.mk
 include $(LOCAL_PATH)/android-config.mk
@@ -11,27 +16,51 @@ include $(LOCAL_PATH)/android-config.mk
 LOCAL_CFLAGS_32 := $(openssl_cflags_static_32)
 LOCAL_CFLAGS_64 := $(openssl_cflags_static_64)
 
-LOCAL_MODULE := crypto_static
-
-ifneq ($(TARGET_ARCH),mips)
-LOCAL_CFLAGS +=  -DOPENSSL_CPUID_OBJ
-endif
+LOCAL_CFLAGS += $(openssl_cflags_static_32)
+# From DEPFLAG=
+LOCAL_CFLAGS += -DOPENSSL_NO_CMS  -DOPENSSL_NO_SRP
+# -DOPENSSL_NO_ENGINE
+# Extra
+LOCAL_CFLAGS += -DOPENSSL_NO_HW -DZLIB
 
 LOCAL_C_INCLUDES = $(common_c_includes:external/openssl/%=$(LOCAL_PATH)/%)
+
+# Replace with our armcap that does not crash on android < 9
+LOCAL_SRC_FILES_arm := $(filter-out crypto/armcap.c,$(LOCAL_SRC_FILES_arm) ../android_sources/armcap.c)
+
 LOCAL_SRC_FILES := $(LOCAL_SRC_FILES_$(TARGET_ARCH))
+# Remove disabled modules
+ LOCAL_SRC_FILES := $(filter-out crypto/cms/% crypto/srp/%, $(LOCAL_SRC_FILES))
+ # crypto/engine/%
+ 
+ # remove transitional var that might be interpr by ndk
 LOCAL_SRC_FILES_$(TARGET_ARCH) := 
-LOCAL_CFLAGS += $(LOCAL_CFLAGS_$(TARGET_ARCH))
 LOCAL_SRC_FILES_x86_64 :=
 LOCAL_SRC_FILES_arm :=
 LOCAL_SRC_FILES_x86 :=
 LOCAL_SRC_FILES_mips :=
+
+# Add cflags for target (probably unecessary, but duplicate are not pb)
+LOCAL_CFLAGS += $(LOCAL_CFLAGS_$(TARGET_ARCH))
 
 include $(BUILD_STATIC_LIBRARY)
 
 ## Additional target for ssl static
 include $(CLEAR_VARS)
 LOCAL_MODULE:= ssl_static
+
 include $(LOCAL_PATH)/android-config.mk
+
+# Replace cflags with static-specific cflags so we dont build in libdl deps
+LOCAL_CFLAGS_32 := $(openssl_cflags_static_32)
+LOCAL_CFLAGS_64 := $(openssl_cflags_static_64)
+
+LOCAL_CFLAGS += $(openssl_cflags_static_32)
+# From DEPFLAG=
+LOCAL_CFLAGS += -DOPENSSL_NO_CMS  -DOPENSSL_NO_SRP
+#-DOPENSSL_NO_ENGINE
+# Extra
+LOCAL_CFLAGS += -DOPENSSL_NO_HW -DZLIB
 
 ssl_c_includes := \
 	$(LOCAL_PATH) \
