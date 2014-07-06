@@ -1903,7 +1903,7 @@ public class PjSipService {
                 pjsipAccountId = pjsua.acc_find_for_outgoing(pjsua.pj_str_copy(finalCallee
                         .toString(false)));
             }
-            return new ToCall(pjsipAccountId, finalCallee.toString(false), digitsToAdd);
+            return new ToCall(pjsipAccountId, finalCallee.toString(true), digitsToAdd);
         }
 
         return null;

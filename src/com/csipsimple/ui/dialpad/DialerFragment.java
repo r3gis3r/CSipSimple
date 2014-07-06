@@ -901,6 +901,9 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
             return "";
         }
         ParsedSipContactInfos finalCallee = acc.formatCalleeNumber(numberRewrite);
+        if(!TextUtils.isEmpty(finalCallee.displayName)) {
+            return finalCallee.toString();
+        }
         return finalCallee.getReadableSipUri();
     }
     
