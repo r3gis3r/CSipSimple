@@ -20,12 +20,14 @@
         <!-- <item>Ext aka</item> -->
     </string-array>
     <string-array name="clock_rate_values">
+        <item>0</item>
         <item>8000</item>
         <item>16000</item>
         <item>32000</item>
         <item>44100</item>
     </string-array>
     <string-array name="clock_rate_choices">
+        <item>@string/auto</item>
         <item>8KHz</item>
         <item>16KHz</item>
         <item>32KHz</item>

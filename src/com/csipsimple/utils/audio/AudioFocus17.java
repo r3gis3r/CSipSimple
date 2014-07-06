@@ -21,37 +21,21 @@
 
 package com.csipsimple.utils.audio;
 
-import android.media.AudioManager;
+import android.annotation.TargetApi;
 
-import com.csipsimple.service.SipService;
-import com.csipsimple.utils.Compatibility;
 
-public abstract class AudioFocusWrapper {
-    private static AudioFocusWrapper instance;
-
-    public static AudioFocusWrapper getInstance() {
-        if (instance == null) {
-            if (Compatibility.isCompatible(17)) {
-                instance = new com.csipsimple.utils.audio.AudioFocus17();
-            } else if (Compatibility.isCompatible(8)) {
-                instance = new com.csipsimple.utils.audio.AudioFocus8();
-            } else {
-                instance = new com.csipsimple.utils.audio.AudioFocus3();
-            }
-        }
-
-        return instance;
-    }
-
-    protected AudioFocusWrapper() {
-    }
-
-    public abstract void init(SipService service, AudioManager manager);
-
-    public abstract void focus(boolean userWantsBluetooth);
-
-    public abstract void unFocus();
-
-    public abstract String getProperty(String property);
+@TargetApi(17)
+public class AudioFocus17 extends AudioFocus8{
+	
+	
+	protected static final String THIS_FILE = "AudioFocus 17";
+	
+	/* (non-Javadoc)
+	 * @see com.csipsimple.utils.audio.AudioFocusWrapper#getProperty(java.lang.String)
+	 */
+	@Override
+	public String getProperty(String property) {
+	    return audioManager.getProperty(property);
+	}
 
 }

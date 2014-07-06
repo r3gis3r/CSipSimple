@@ -35,6 +35,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.csipsimple.api.SipConfigManager;
+import com.csipsimple.service.MediaManager;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -293,17 +294,23 @@ public class PreferencesProviderWrapper {
 
     /**
      * Get current clock rate
+     * @param mediaManager 
      * 
      * @return clock rate in Hz
      */
-    public long getClockRate() {
+    public long getClockRate(MediaManager mediaManager) {
         String clockRate = getPreferenceStringValue(SipConfigManager.SND_CLOCK_RATE);
+        long defaultRate = 16000;
         try {
-            return Integer.parseInt(clockRate);
+            long rate = Integer.parseInt(clockRate);
+            if(rate == 0) {
+                return mediaManager.getBestSampleRate(defaultRate);
+            }
+            return rate;
         } catch (NumberFormatException e) {
             Log.e(THIS_FILE, "Clock rate " + clockRate + " not well formated");
         }
-        return 16000;
+        return defaultRate;
     }
 
     public boolean useRoutingApi() {

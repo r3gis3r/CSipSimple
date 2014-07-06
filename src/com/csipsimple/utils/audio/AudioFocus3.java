@@ -21,14 +21,14 @@
 
 package com.csipsimple.utils.audio;
 
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.AudioManager;
+
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.service.HeadsetButtonReceiver;
 import com.csipsimple.service.SipService;
 import com.csipsimple.utils.Log;
-
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.media.AudioManager;
 
 public class AudioFocus3 extends AudioFocusWrapper {
 	
@@ -100,5 +100,12 @@ public class AudioFocus3 extends AudioFocusWrapper {
 		}catch(Exception e) {
 			//Nothing to do else. just consider it has not been registered
 		}
+	}
+	/* (non-Javadoc)
+	 * @see com.csipsimple.utils.audio.AudioFocusWrapper#getProperty(java.lang.String)
+	 */
+	@Override
+	public String getProperty(String property) {
+	    return null;
 	}
 }

@@ -481,7 +481,7 @@ public class PjSipService {
                 // Echo cancellation
                 mediaCfg.setEc_tail_len(prefsWrapper.getEchoCancellationTail());
                 int echoMode = prefsWrapper.getPreferenceIntegerValue(SipConfigManager.ECHO_MODE);
-                long clockRate = prefsWrapper.getClockRate();
+                long clockRate = prefsWrapper.getClockRate(mediaManager);
                 if (clockRate > 16000 && echoMode == SipConfigManager.ECHO_MODE_WEBRTC_M) {
                     // WebRTC mobile does not allow higher that 16kHz for now
                     // TODO : warn user about this point

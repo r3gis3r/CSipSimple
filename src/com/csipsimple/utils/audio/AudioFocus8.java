@@ -37,7 +37,7 @@ public class AudioFocus8 extends AudioFocusWrapper{
 	
 	
 	protected static final String THIS_FILE = "AudioFocus 8";
-	private AudioManager audioManager;
+	protected AudioManager audioManager;
 	private SipService service;
 	private ComponentName headsetButtonReceiverName;
 	
@@ -79,5 +79,13 @@ public class AudioFocus8 extends AudioFocusWrapper{
 			isFocused = false;
 		}
 	}
+	
+    /* (non-Javadoc)
+     * @see com.csipsimple.utils.audio.AudioFocusWrapper#getProperty(java.lang.String)
+     */
+    @Override
+    public String getProperty(String property) {
+        return null;
+    }
 
 }

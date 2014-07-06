@@ -21,6 +21,7 @@
 
 package com.csipsimple.service;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -49,6 +50,7 @@ import com.csipsimple.utils.audio.AudioFocusWrapper;
 import com.csipsimple.utils.bluetooth.BluetoothWrapper;
 import com.csipsimple.utils.bluetooth.BluetoothWrapper.BluetoothChangeListener;
 
+@SuppressLint("InlinedApi")
 public class MediaManager implements BluetoothChangeListener {
 	
 	final private static String THIS_FILE = "MediaManager";
@@ -778,6 +780,19 @@ public class MediaManager implements BluetoothChangeListener {
     }
 
 
-
+    /**
+     * @param defaultRate
+     * @return
+     */
+    public long getBestSampleRate(long defaultRate) {
+        if (Compatibility.isCompatible(android.os.Build.VERSION_CODES.JELLY_BEAN_MR1)) {
+            
+            String sampleRateString = audioFocusWrapper.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
+            return (sampleRateString == null ?
+                    defaultRate : Integer.parseInt(sampleRateString));
+        } else {
+            return defaultRate;
+        }
+    }
 
 }
