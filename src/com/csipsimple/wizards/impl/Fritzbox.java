@@ -78,6 +78,12 @@ public class Fritzbox extends AlternateServerImplementation {
 		account.allow_contact_rewrite = false;
 		return account;
 	}
-	
+	/* (non-Javadoc)
+	 * @see com.csipsimple.wizards.impl.SimpleImplementation#canTcp()
+	 */
+	@Override
+	protected boolean canTcp() {
+	    return true;
+	}
 	
 }

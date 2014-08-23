@@ -461,10 +461,14 @@ public class WizardUtils {
 					R.drawable.ic_wizard_planetphone, 10, 
 					new Locale[]{ locale("bg_BG") }, false, false, 
 					PlanetPhone.class));
-			WIZARDS_DICT.put("SIPGATE", new WizardInfo("SIPGATE", "Sipgate", 
+			WIZARDS_DICT.put("SIPGATE", new WizardInfo("SIPGATE", "Sipgate DE", 
 					R.drawable.ic_wizard_sipgate, 10, 
-					new Locale[]{Locale.US, Locale.UK, Locale.GERMANY}, false, false, 
+					new Locale[]{Locale.GERMANY}, false, false, 
 					Sipgate.class));
+            WIZARDS_DICT.put("SIPGATEUK", new WizardInfo("SIPGATEUK", "Sipgate UK", 
+                    R.drawable.ic_wizard_sipgate_uk, 10, 
+                    new Locale[]{}, false, true, 
+                    SipgateUK.class));
 			WIZARDS_DICT.put("PENNYTEL", new WizardInfo("PENNYTEL", "Pennytel", 
 					R.drawable.ic_wizard_pennytel, 10, 
 					new Locale[]{ locale("en_AU") }, false, false, 
@@ -1110,7 +1114,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_ferare, 10, 
                     new Locale[] {new Locale("sr")}, false, false, 
                     FerareDialer.class));
-            
+            WIZARDS_DICT.put("CARDTEL", new WizardInfo("CARDTEL", "CardTel", 
+                    R.drawable.ic_wizard_cardtel, 10, 
+                    new Locale[] {new Locale("RU"), new Locale("BG"), new Locale("UA"), new Locale("RF"), new Locale("KZ"), new Locale("BY"), new Locale("MK"),  new Locale("UK")}, false, false, 
+                    CardTel.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
