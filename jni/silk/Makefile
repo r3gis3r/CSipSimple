@@ -15,10 +15,10 @@ sources : sources/SILK_SDK_SRC_ARM_$(silk_version)
 	# source checkout done
 	
 sources/SILK_SDK_SRC_ARM_$(silk_version) :
-	@wget --no-check-certificate $(silk_repo); \
-	unzip -d $< sources -q $(silk_remote_folder).zip; \
-	rm $(silk_remote_folder).zip
-	@# Needed for 1.0.8 // todo test
+	$(warning You must retrieve a valid silk sdk souce folder. Currently microsoft does not give a way to download from their website)
+	@#wget --no-check-certificate $(silk_repo); \
+	#unzip -d $< sources -q $(silk_remote_folder).zip; \
+	#rm $(silk_remote_folder).zip
 	@#@mv sources/SILK_SDK_SRC_$(silk_version)/* sources/
 
 update : sources/SILK_SDK_SRC_ARM_$(silk_version)
