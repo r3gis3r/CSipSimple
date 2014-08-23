@@ -231,18 +231,14 @@ static int PJ_THREAD_FUNC AndroidRecorderCallback(void* userData){
 	// A cool solution would be to port (if possible) the code from the android os regarding set_sched groups
 	set_android_thread_priority(THREAD_PRIORITY_URGENT_AUDIO);
 
-	buf = jni_env->GetByteArrayElements(inputBuffer, 0);
-
 	//Init everything
 	tstamp.u64 = 0;
-	pj_bzero (buf, size);
 
 
 	jni_env->CallVoidMethod(stream->record, record_method);
 	pj_get_timestamp(&last_frame);
 
 	while ( !stream->quit_flag ) {
-		pj_bzero (buf, size);
 
 #if COMPATIBLE_ALSA
 		pj_get_timestamp(&now);
@@ -271,19 +267,6 @@ static int PJ_THREAD_FUNC AndroidRecorderCallback(void* userData){
 				}
 			//}
 		}
-/*
-		//PJ_LOG (4, (THIS_FILE, "Next frame %d", next_frame_in));
-		if (next_frame_in-2 > 0) {
-			//PJ_LOG (4, (THIS_FILE, "Wait for buffer %d", next_frame_in));
-			pj_thread_sleep(next_frame_in-5);
-			//Reset the delay we have regarding next frame
-			retard = 0;
-		}else{
-			if(next_frame_in < 0){
-				retard += next_frame_in;
-			}
-		}
-*/
 #endif
 
 		bytesRead = jni_env->CallIntMethod(stream->record, read_method,
@@ -304,27 +287,21 @@ static int PJ_THREAD_FUNC AndroidRecorderCallback(void* userData){
 			continue;
 		}
 
-	//	PJ_LOG(4,(THIS_FILE, "Valid record frame read"));
-		//jni_env->GetByteArrayRegion(inputBuffer, 0, size, buf );
-
 		pjmedia_frame frame;
 
+	    buf = jni_env->GetByteArrayElements(inputBuffer, 0);
 		frame.type = PJMEDIA_FRAME_TYPE_AUDIO;
 		frame.size =  size;
 		frame.bit_info = 0;
 		frame.buf = (void*) buf;
 		frame.timestamp.u64 = tstamp.u64;
 
-	//	PJ_LOG(3, (THIS_FILE, "New audio record frame to treat : %d <size : %d>", frame.type, frame.size));
-
 		status = (*stream->rec_cb)(stream->user_data, &frame);
-	//	PJ_LOG(4,(THIS_FILE, "Valid record frame sent to network stack"));
-
+		jni_env->ReleaseByteArrayElements(inputBuffer, buf, JNI_ABORT);
 		if (status != PJ_SUCCESS){
 			PJ_LOG(1, (THIS_FILE, "Error in record callback"));
 			goto on_finish;
 		}
-
 
 		//Update for next step
 		tstamp.u64 += nframes;
@@ -332,7 +309,6 @@ static int PJ_THREAD_FUNC AndroidRecorderCallback(void* userData){
 
 
 	on_finish:
-		jni_env->ReleaseByteArrayElements(inputBuffer, buf, 0);
 		jni_env->DeleteLocalRef(inputBuffer);
 
 	on_break:
@@ -367,19 +343,6 @@ static int PJ_THREAD_FUNC AndroidTrackCallback(void* userData){
 	//Get methods ids
 	write_method = jni_env->GetMethodID(stream->track_class,"write", "([BII)I");
 	play_method = jni_env->GetMethodID(stream->track_class,"play", "()V");
-	/*
-	get_state_method =  jni_env->GetMethodID(stream->track_class,"getState", "()I");
-	if(get_state_method==0) {
-		goto on_break;
-	}*/
-
-	/*
-	track_state = jni_env->CallIntMethod(stream->track, get_state_method);
-	PJ_LOG(3,(THIS_FILE, "Player state is now %d", track_state));
-	if((int)track_state != 1){
-		PJ_LOG(1, (THIS_FILE, "Bad player state !!! %d", track_state));
-		goto on_break;
-	}*/
 
 	outputBuffer = jni_env->NewByteArray(size);
 	if (outputBuffer == 0) {
@@ -390,7 +353,6 @@ static int PJ_THREAD_FUNC AndroidTrackCallback(void* userData){
 	buf = jni_env->GetByteArrayElements(outputBuffer, 0);
 
 	set_android_thread_priority(THREAD_PRIORITY_URGENT_AUDIO);
-	//setpriority(PRIO_PROCESS, 0, -19 /*ANDROID_PRIORITY_URGENT_AUDIO*/);
 
 	//start playing
 	jni_env->CallVoidMethod(stream->track, play_method);
@@ -413,6 +375,7 @@ static int PJ_THREAD_FUNC AndroidTrackCallback(void* userData){
 
 		//Fill frame from pj
 		status = (*stream->play_cb)(stream->user_data, &frame);
+
 		if (status != PJ_SUCCESS){
 			goto on_finish;
 		}
@@ -420,19 +383,11 @@ static int PJ_THREAD_FUNC AndroidTrackCallback(void* userData){
 		if (frame.type != PJMEDIA_FRAME_TYPE_AUDIO){
 			pj_bzero(frame.buf, frame.size);
 			PJ_LOG(3, (THIS_FILE, "Hey, not an audio frame !!!"));
+	        jni_env->ReleaseByteArrayElements(outputBuffer, buf, JNI_COMMIT);
 			continue;
 		}
 
-	//	PJ_LOG(4,(THIS_FILE, "Valid play frame get from network stack"));
-		/*
-		if(size != frame.size){
-			PJ_LOG(2, (THIS_FILE, "Frame size doesn't match : %d vs %d", frame.size, size) );
-		}
-		*/
-		//PJ_LOG(4, (THIS_FILE, "New audio track frame to treat : %d <size : %d>", frame.type, frame.size));
-
-		//Write to the java buffer
-		//jni_env->SetByteArrayRegion(outputBuffer, 0, frame.size, (jbyte*)frame.buf);
+        jni_env->ReleaseByteArrayElements(outputBuffer, buf, JNI_COMMIT);
 
 		//Write to the device output
 		status = jni_env->CallIntMethod(stream->track, write_method,
@@ -448,13 +403,10 @@ static int PJ_THREAD_FUNC AndroidTrackCallback(void* userData){
 			PJ_LOG(2, (THIS_FILE, "Not everything written"));
 		}
 
-	//	PJ_LOG(4,(THIS_FILE, "Valid play frame sent to the audio layer"));
-
 		tstamp.u64 += nframes;
 	};
 
 	on_finish:
-	jni_env->ReleaseByteArrayElements(outputBuffer, buf, 0);
 		jni_env->DeleteLocalRef(outputBuffer);
 
 
