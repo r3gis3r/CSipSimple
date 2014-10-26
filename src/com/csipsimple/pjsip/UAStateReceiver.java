@@ -491,6 +491,7 @@ public class UAStateReceiver extends Callback {
         // mime_type.getPtr() + " | " + body.getPtr());
 
         boolean hasMessage = false;
+        boolean hasSomeNumberOfMessage = false;
         int numberOfMessages = 0;
         // String accountNbr = "";
 
@@ -505,6 +506,8 @@ public class UAStateReceiver extends Callback {
         // Pattern.CASE_INSENSITIVE);
         Pattern messVoiceNbrPattern = Pattern.compile(
                 ".*Voice-Message[ \t]?:[ \t]?([0-9]*)/[0-9]*.*", Pattern.CASE_INSENSITIVE);
+        Pattern messFaxNbrPattern = Pattern.compile(
+                ".*Fax-Message[ \t]?:[ \t]?([0-9]*)/[0-9]*.*", Pattern.CASE_INSENSITIVE);
 
         for (String line : lines) {
             Matcher m;
@@ -527,15 +530,19 @@ public class UAStateReceiver extends Callback {
             if (m.matches()) {
                 try {
                     numberOfMessages = Integer.parseInt(m.group(1));
+                    hasSomeNumberOfMessage = true;
                 } catch (NumberFormatException e) {
                     Log.w(THIS_FILE, "Not well formated number " + m.group(1));
                 }
                 Log.d(THIS_FILE, "Nbr : " + numberOfMessages);
                 continue;
             }
+            if(messFaxNbrPattern.matcher(line).matches()) {
+                hasSomeNumberOfMessage = true;
+            }
         }
 
-        if (hasMessage && numberOfMessages > 0) {
+        if (hasMessage && (numberOfMessages > 0 || !hasSomeNumberOfMessage)) {
             SipProfile acc = pjService.getAccountForPjsipId(acc_id);
             if (acc != null) {
                 Log.d(THIS_FILE, acc_id + " -> Has found account " + acc.getDefaultDomain() + " "

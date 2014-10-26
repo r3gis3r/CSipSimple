@@ -422,10 +422,15 @@ public class SipNotifications {
 
         String messageText = "";
         if (acc != null) {
-            messageText += acc.getProfileName() + " : ";
+            messageText += acc.getProfileName();
+            if(numberOfMessages>0) {
+                messageText += " : ";
+            }
         }
-        messageText += Integer.toString(numberOfMessages);
-
+        if(numberOfMessages > 0) {
+            messageText += Integer.toString(numberOfMessages);
+        }
+        
         messageVoicemail.setContentTitle(context.getString(R.string.voice_mail));
         messageVoicemail.setContentText(messageText);
         if (contentIntent != null) {
