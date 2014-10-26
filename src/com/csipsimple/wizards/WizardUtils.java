@@ -421,6 +421,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_sipalo, 30, 
                     new Locale[]{ }, false, true, 
                     Sipalo.class));
+            WIZARDS_DICT.put("ALONIA", new WizardInfo("ALONIA", "Alonia", 
+                    R.drawable.ic_wizard_alonia, 30, 
+                    new Locale[]{ }, false, true, 
+                    Alonia.class));
             
 			
 			//Locales
