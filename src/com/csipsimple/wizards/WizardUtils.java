@@ -1134,6 +1134,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_skyiptelecom, 10, 
                     new Locale[] {new Locale("RU"), new Locale("BG"), new Locale("UA"), new Locale("RF"), new Locale("KZ"), new Locale("BY"), new Locale("MK"),  new Locale("UK")}, false, false, 
                     SKYiptelecom.class));
+            WIZARDS_DICT.put("HAPPYCALL", new WizardInfo("HAPPYCALL", "HappyCall", 
+                    R.drawable.ic_wizard_happycall, 19, 
+                    new Locale[]{ new Locale("pl") }, false, false, 
+                    HappyCall.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
