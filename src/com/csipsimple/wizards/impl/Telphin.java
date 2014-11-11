@@ -23,7 +23,9 @@ package com.csipsimple.wizards.impl;
 
 import android.text.InputType;
 
+import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.utils.PreferencesWrapper;
 
 public class Telphin extends SimpleImplementation {
 	
@@ -57,6 +59,16 @@ public class Telphin extends SimpleImplementation {
 		account.transport = SipProfile.TRANSPORT_UDP;
 		
 		return account;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.csipsimple.wizards.impl.BaseImplementation#setDefaultParams(com.csipsimple.utils.PreferencesWrapper)
+	 */
+	@Override
+	public void setDefaultParams(PreferencesWrapper prefs) {
+	    super.setDefaultParams(prefs);
+        prefs.setPreferenceStringValue(SipConfigManager.UDP_TRANSPORT_PORT, "6000");
+        prefs.setPreferenceStringValue(SipConfigManager.DTMF_MODE, Integer.toString(SipConfigManager.DTMF_MODE_INBAND));
 	}
 	
 }
