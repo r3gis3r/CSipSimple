@@ -1136,20 +1136,28 @@ public class WizardUtils {
                     HappyCall.class));
             WIZARDS_DICT.put("SPIKON", new WizardInfo("SPIKON", "Spikon", 
                     R.drawable.ic_wizard_spikon, 19, 
-                    new Locale[]{
-                    new Locale("pl")
-                    }, false, false, 
+                    new Locale[]{ new Locale("pl")  }, false, false, 
                     Spikon.class));
             WIZARDS_DICT.put("BRVOZ", new WizardInfo("BRVOZ", "BRVOZ Telecom", 
                     R.drawable.ic_wizard_brvoz, 19, 
-                    new Locale[]{
-                    new Locale("PT", "br"), new Locale("PT", "pt")
-                    }, false, false, 
+                    new Locale[]{ new Locale("PT", "br"), new Locale("PT", "pt")  }, false, false, 
                     Brvoz.class));
             WIZARDS_DICT.put("VOSTRON", new WizardInfo("VOSTRON", "Vostron", 
                     R.drawable.ic_wizard_vostron, 30, 
                     new Locale[]{Locale.UK }, false, false, 
                     Vostron.class));
+            WIZARDS_DICT.put("BRASILVOIP", new WizardInfo("BRASILVOIP", "BrasilVoip", 
+                    R.drawable.ic_wizard_brasilvoip, 19, 
+                    new Locale[]{new Locale("PT", "br")}, false, false, 
+                    BrasilVoip.class));
+            WIZARDS_DICT.put("FALETEL", new WizardInfo("FALETEL", "Faletel", 
+                    R.drawable.ic_wizard_faletel, 19, 
+                    new Locale[]{new Locale("PT", "br")}, false, false, 
+                    Faletel.class));
+            WIZARDS_DICT.put("TELEFONET", new WizardInfo("TELEFONET", "Telefonet", 
+                    R.drawable.ic_wizard_telefonet, 19, 
+                    new Locale[]{new Locale("PT", "br")}, false, false, 
+                    Telefonet.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
