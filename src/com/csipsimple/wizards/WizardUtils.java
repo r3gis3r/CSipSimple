@@ -413,10 +413,6 @@ public class WizardUtils {
                     R.drawable.ic_wizard_kurira, 30, 
                     new Locale[]{ }, false, true, 
                     Kurira.class));
-            WIZARDS_DICT.put("VOSTRON", new WizardInfo("VOSTRON", "Vostron", 
-                    R.drawable.ic_wizard_vostron, 30, 
-                    new Locale[]{ }, false, true, 
-                    Vostron.class));
             WIZARDS_DICT.put("SIPALO", new WizardInfo("SIPALO", "Sipalo", 
                     R.drawable.ic_wizard_sipalo, 30, 
                     new Locale[]{ }, false, true, 
@@ -1150,6 +1146,10 @@ public class WizardUtils {
                     new Locale("PT", "br"), new Locale("PT", "pt")
                     }, false, false, 
                     Brvoz.class));
+            WIZARDS_DICT.put("VOSTRON", new WizardInfo("VOSTRON", "Vostron", 
+                    R.drawable.ic_wizard_vostron, 30, 
+                    new Locale[]{Locale.UK }, false, false, 
+                    Vostron.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
