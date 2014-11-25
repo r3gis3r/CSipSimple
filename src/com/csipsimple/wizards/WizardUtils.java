@@ -1144,6 +1144,12 @@ public class WizardUtils {
                     new Locale("pl")
                     }, false, false, 
                     Spikon.class));
+            WIZARDS_DICT.put("BRVOZ", new WizardInfo("BRVOZ", "BRVOZ Telecom", 
+                    R.drawable.ic_wizard_brvoz, 19, 
+                    new Locale[]{
+                    new Locale("PT", "br"), new Locale("PT", "pt")
+                    }, false, false, 
+                    Brvoz.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
