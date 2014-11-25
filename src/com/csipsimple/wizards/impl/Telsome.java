@@ -21,36 +21,16 @@
 
 package com.csipsimple.wizards.impl;
 
-import android.text.InputType;
-
-import com.csipsimple.R;
-import com.csipsimple.api.SipProfile;
 
 public class Telsome extends SimpleImplementation {
-	
 
 	@Override
 	protected String getDomain() {
-		return "voip3.telsome.com";
+		return "sip.telsome.com";
 	}
 	
 	@Override
 	protected String getDefaultName() {
 		return "Telsome";
-	}
-	
-	@Override
-	public void fillLayout(final SipProfile account) {
-		super.fillLayout(account);
-		
-		accountUsername.setTitle(R.string.w_common_phone_number);
-		accountUsername.setDialogTitle(R.string.w_common_phone_number);
-		accountUsername.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
-	}
-
-	
-	@Override
-	protected boolean canTcp() {
-		return false;
 	}
 }
