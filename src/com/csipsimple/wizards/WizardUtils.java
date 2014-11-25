@@ -1138,6 +1138,12 @@ public class WizardUtils {
                     R.drawable.ic_wizard_happycall, 19, 
                     new Locale[]{ new Locale("pl") }, false, false, 
                     HappyCall.class));
+            WIZARDS_DICT.put("SPIKON", new WizardInfo("SPIKON", "Spikon", 
+                    R.drawable.ic_wizard_spikon, 19, 
+                    new Locale[]{
+                    new Locale("pl")
+                    }, false, false, 
+                    Spikon.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
