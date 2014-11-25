@@ -49,11 +49,14 @@ public class Telphin extends SimpleImplementation {
 
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
-		account.proxies = new String[] {"sip:voice.telphin.com:5068"};
+		String server = "sip:voice.telphin.com:5068";
+		account.proxies = new String[] {server};
+		account.reg_uri = server;
 		account.reg_timeout = 60;
 		account.sip_stun_use = 0;
 		account.media_stun_use = 0;
-		account.try_clean_registers = 0;
+		account.try_clean_registers = 1;
+		account.allow_contact_rewrite = false;
 		account.publish_enabled = 0;
 		account.mwi_enabled = false;
 		account.transport = SipProfile.TRANSPORT_UDP;
@@ -68,7 +71,36 @@ public class Telphin extends SimpleImplementation {
 	public void setDefaultParams(PreferencesWrapper prefs) {
 	    super.setDefaultParams(prefs);
         prefs.setPreferenceStringValue(SipConfigManager.UDP_TRANSPORT_PORT, "6000");
-        prefs.setPreferenceStringValue(SipConfigManager.DTMF_MODE, Integer.toString(SipConfigManager.DTMF_MODE_INBAND));
+        prefs.setPreferenceStringValue(SipConfigManager.DTMF_MODE, Integer.toString(SipConfigManager.DTMF_MODE_RTP));
+        
+
+        // Prefer pcmu/pcma
+        prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_WB,"239");
+        prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_WB,"230");
+        prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_WB,"0");
+        prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_WB,"0");
+        prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_WB,"0");
+        prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_WB,"0");
+        prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_WB,"0");
+        prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_WB, "0");
+        prefs.setCodecPriority("SILK/8000/1", SipConfigManager.CODEC_WB, "0");
+        prefs.setCodecPriority("SILK/12000/1", SipConfigManager.CODEC_WB, "0");
+        prefs.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_WB, "0");
+        prefs.setCodecPriority("SILK/24000/1", SipConfigManager.CODEC_WB, "0");
+
+        // Prefer pcmu/pcma
+        prefs.setCodecPriority("PCMU/8000/1", SipConfigManager.CODEC_NB,"239");
+        prefs.setCodecPriority("PCMA/8000/1", SipConfigManager.CODEC_NB,"230");
+        prefs.setCodecPriority("G722/16000/1", SipConfigManager.CODEC_NB,"0");
+        prefs.setCodecPriority("iLBC/8000/1", SipConfigManager.CODEC_NB,"0");
+        prefs.setCodecPriority("speex/8000/1", SipConfigManager.CODEC_NB,"0");
+        prefs.setCodecPriority("speex/16000/1", SipConfigManager.CODEC_NB,"0");
+        prefs.setCodecPriority("speex/32000/1", SipConfigManager.CODEC_NB,"0");
+        prefs.setCodecPriority("GSM/8000/1", SipConfigManager.CODEC_NB, "0");
+        prefs.setCodecPriority("SILK/8000/1", SipConfigManager.CODEC_NB, "0");
+        prefs.setCodecPriority("SILK/12000/1", SipConfigManager.CODEC_NB, "0");
+        prefs.setCodecPriority("SILK/16000/1", SipConfigManager.CODEC_NB, "0");
+        prefs.setCodecPriority("SILK/24000/1", SipConfigManager.CODEC_NB, "0");
 	}
 	
 }
