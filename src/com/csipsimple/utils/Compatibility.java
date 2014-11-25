@@ -433,6 +433,9 @@ public final class Compatibility {
         if (android.os.Build.DEVICE.equalsIgnoreCase("u8510") && Compatibility.isCompatible(10)) {
             return SipConfigManager.AUDIO_IMPLEMENTATION_OPENSLES;
         }
+        if (android.os.Build.DEVICE.toLowerCase().startsWith("rk31sdk")) {
+            return SipConfigManager.AUDIO_IMPLEMENTATION_JAVA;
+        }
         return SipConfigManager.AUDIO_IMPLEMENTATION_JAVA;
     }
 
@@ -957,6 +960,12 @@ public final class Compatibility {
             if (android.os.Build.DEVICE.toUpperCase().startsWith("HWU9700")) {
                 prefWrapper.setPreferenceBooleanValue(SipConfigManager.USE_MODE_API,
                         shouldUseModeApi());
+            }
+        }
+        if(lastSeenVersion < 2442) {
+            if (android.os.Build.DEVICE.toLowerCase().startsWith("rk31sdk")) {
+                prefWrapper.setPreferenceStringValue(SipConfigManager.AUDIO_IMPLEMENTATION,
+                        Integer.toString(getDefaultAudioImplementation()));
             }
         }
         prefWrapper.endEditing();
