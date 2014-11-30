@@ -62,6 +62,9 @@
 		<antcall target="use_arch" >
 			<param name="css.arch" value="armeabi-v7a"/>
 		</antcall>
+        <antcall target="use_arch" >
+            <param name="css.arch" value="x86"/>
+        </antcall>
 		<antcall target="flag_channel" >
 			<param name="css.channel" value="trunk"/>
 		</antcall>

@@ -3,7 +3,7 @@
     package="com.csipsimple"
     android:installLocation="auto"
     android:versionCode="2417"
-    android:versionName="1.02.02" >
+    android:versionName="1.02.03" >
 
     <supports-screens
         android:anyDensity="true"
