@@ -107,7 +107,9 @@ public class OutgoingCallListFragment extends CSSListFragment {
             try {
                 String toCall = c.getString(c.getColumnIndex(AccountsLoader.FIELD_NBR_TO_CALL));
                 service.makeCall(toCall, (int) accountId);
-                superActivity.finishServiceIfNeeded(true);
+                if(superActivity != null) {
+                    superActivity.finishServiceIfNeeded(true);
+                }
                 return true;
             } catch (RemoteException e) {
                 Log.e(THIS_FILE, "Unable to make the call", e);
@@ -165,7 +167,9 @@ public class OutgoingCallListFragment extends CSSListFragment {
             } catch (CanceledException e) {
                 Log.e(THIS_FILE, "Pending intent cancelled", e);
             }
-            superActivity.finishServiceIfNeeded(false);
+            if(superActivity != null) {
+                superActivity.finishServiceIfNeeded(false);
+            }
         }
     }
 
