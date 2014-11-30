@@ -1525,7 +1525,7 @@ public class SipService extends Service {
 
 		// Handle status bar notification
 		if (activeProfilesState.size() > 0 && 
-				prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ICON_IN_STATUS_BAR)) {
+				prefsWrapper.getPreferenceBooleanValue(SipConfigManager.ICON_IN_STATUS_BAR, true)) {
 		// Testing memory / CPU leak as per issue 676
 		//	for(int i=0; i < 10; i++) {
 		//		Log.d(THIS_FILE, "Notify ...");

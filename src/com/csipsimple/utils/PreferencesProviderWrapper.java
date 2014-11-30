@@ -76,7 +76,7 @@ public class PreferencesProviderWrapper {
         return SipConfigManager.getPreferenceBooleanValue(context, string, b);
     }
 
-    public boolean getPreferenceBooleanValue(String string) {
+    public Boolean getPreferenceBooleanValue(String string) {
         return SipConfigManager.getPreferenceBooleanValue(context, string);
     }
 
