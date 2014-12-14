@@ -31,7 +31,7 @@ public class Telphin extends SimpleImplementation {
 	
 	@Override
 	protected String getDomain() {
-		return "voice.telphin.com";
+		return "sip.telphin.com";
 	}
 	
 	@Override
@@ -49,9 +49,9 @@ public class Telphin extends SimpleImplementation {
 
 	public SipProfile buildAccount(SipProfile account) {
 		account = super.buildAccount(account);
-		String server = "sip:voice.telphin.com:5068";
-		account.proxies = new String[] {server};
-		account.reg_uri = server;
+		account.proxies = new String[] {"sip:voice.telphin.com:5068"};
+		account.reg_uri = "sip:sip.telphin.com";
+		account.realm = "sip.telphin.com";
 		account.reg_timeout = 60;
 		account.sip_stun_use = 0;
 		account.media_stun_use = 0;
