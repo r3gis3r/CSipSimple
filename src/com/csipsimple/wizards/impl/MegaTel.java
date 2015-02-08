@@ -33,7 +33,7 @@ public class MegaTel extends SimpleImplementation {
      */
 	@Override
 	protected String getDomain() {
-		return "sip.sipsip.eu:6000";
+		return "sip.sipsip.eu";
 	}
 	
 	/*
