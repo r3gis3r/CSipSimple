@@ -1170,6 +1170,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_avanvoip, 20, 
                     new Locale[]{ new Locale("ES", "es") }, false, false, 
                     AVANVOIP.class));
+            WIZARDS_DICT.put("SOLIDVOICE", new WizardInfo("SOLIDVOICE", "solidvoice", 
+                    R.drawable.ic_wizard_solidvoice, 30, 
+                    new Locale[]{ Locale.US}, false, false, 
+                    SolidVoice.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
