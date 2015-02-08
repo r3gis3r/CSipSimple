@@ -1172,7 +1172,7 @@ public class WizardUtils {
                     AVANVOIP.class));
             WIZARDS_DICT.put("SOLIDVOICE", new WizardInfo("SOLIDVOICE", "solidvoice", 
                     R.drawable.ic_wizard_solidvoice, 30, 
-                    new Locale[]{ Locale.US}, false, false, 
+                    new Locale[]{ Locale.US, new Locale("EN", "cm")}, false, false, 
                     SolidVoice.class));
             
 		}else {
