@@ -421,6 +421,10 @@ public class WizardUtils {
                     R.drawable.ic_wizard_alonia, 30, 
                     new Locale[]{ }, false, true, 
                     Alonia.class));
+            WIZARDS_DICT.put("VOIP2GO", new WizardInfo("VOIP2GO", "voip2go", 
+                    R.drawable.ic_wizard_voip2go, 30, 
+                    new Locale[]{ }, false, true, 
+                    Voip2go.class));
             
 			
 			//Locales
