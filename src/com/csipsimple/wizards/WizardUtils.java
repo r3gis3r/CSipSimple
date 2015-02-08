@@ -1158,6 +1158,14 @@ public class WizardUtils {
                     R.drawable.ic_wizard_telefonet, 19, 
                     new Locale[]{new Locale("PT", "br")}, false, false, 
                     Telefonet.class));
+            WIZARDS_DICT.put("DIALSPORATEL", new WizardInfo("DIALSPORATEL", "Dialsporatel", 
+                    R.drawable.ic_wizard_basic, 20, 
+                    new Locale[]{ Locale.UK }, false, false, 
+                    DialsporaTel.class));
+            WIZARDS_DICT.put("AVANVOIP", new WizardInfo("AVANVOIP", "AVANVOIP", 
+                    R.drawable.ic_wizard_avanvoip, 20, 
+                    new Locale[]{ new Locale("ES", "es") }, false, false, 
+                    AVANVOIP.class));
             
 		}else {
 			WizardInfo info = CustomDistribution.getCustomDistributionWizard();
