@@ -100,5 +100,13 @@ public class MegaTel extends SimpleImplementation {
         prefs.setCodecPriority("SILK/24000/1", SipConfigManager.CODEC_NB, "0");
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.csipsimple.wizards.impl.SimpleImplementation#needRestart()
+	 */
+	@Override
+	public boolean needRestart() {
+	    return true;
+	}
+	
 	
 }
