@@ -313,7 +313,9 @@ public class PjSipService {
                 Map<String, DynCodecInfos> availableCodecs = ExtraPlugins.getDynCodecPlugins(
                         service, SipManager.ACTION_GET_EXTRA_CODECS);
                 dynamic_factory[] cssCodecs = cssCfg.getExtra_aud_codecs();
+                
                 int i = 0;
+                /*
                 for (Entry<String, DynCodecInfos> availableCodec : availableCodecs.entrySet()) {
                     DynCodecInfos dyn = availableCodec.getValue();
                     if (!TextUtils.isEmpty(dyn.libraryPath)) {
@@ -323,6 +325,7 @@ public class PjSipService {
                     }
                 }
                 cssCfg.setExtra_aud_codecs_cnt(i);
+                */
 
                 // Audio implementation
                 int implementation = prefsWrapper

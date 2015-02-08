@@ -1,0 +1,396 @@
+Index: webrtc/sources/modules/audio_processing/aecm/Android.mk
+===================================================================
+--- webrtc.orig/sources/modules/audio_processing/aecm/Android.mk	(revision 3040)
++++ webrtc/sources/modules/audio_processing/aecm/Android.mk	(working copy)
+@@ -56,20 +56,18 @@
+ LOCAL_MODULE := libwebrtc_aecm_neon
+ LOCAL_MODULE_TAGS := optional
+ 
+-GEN := $(LOCAL_PATH)/aecm_core_neon_offsets.h
++AECM_ASM_HEADER := $(intermediates)/aecm_core_neon_offsets.h
++AECM_ASM_HEADER_DIR := $(intermediates)
+ 
+ # Generate a header file aecm_core_neon_offsets.h which will be included in
+ # assembly file aecm_core_neon.S, from file aecm_core_neon_offsets.c.
+-$(GEN): $(LOCAL_PATH)/../../../build/generate_asm_header.py \
+-            $(intermediates)/aecm_core_neon_offsets.S
+-	@python $^ $@ offset_aecm_
+-
+-$(intermediates)/aecm_core_neon_offsets.S: \
++$(AECM_ASM_HEADER): $(LOCAL_PATH)/../../../build/generate_asm_header.py \
+ 	    $(LOCAL_PATH)/aecm_core_neon_offsets.c
+-	@$(TARGET_CC) $(addprefix -I, $(LOCAL_INCLUDES)) $(addprefix -isystem ,\
+-            $(TARGET_C_INCLUDES)) -S -o $@ $^
++	@python $^ --compiler=$(TARGET_CC) --options="$(addprefix -I, \
++		$(LOCAL_INCLUDES)) $(addprefix -isystem , $(TARGET_C_INCLUDES)) -S" \
++		--dir=$(AECM_ASM_HEADER_DIR)
+ 
+-LOCAL_GENERATED_SOURCES := $(GEN)
++LOCAL_GENERATED_SOURCES := $(AECM_ASM_HEADER)
+ LOCAL_SRC_FILES := aecm_core_neon.S
+ 
+ # Flags passed to both C and C++ files.
+@@ -80,6 +78,7 @@
+     -flax-vector-conversions
+ 
+ LOCAL_C_INCLUDES := \
++    $(AECM_ASM_HEADER_DIR) \
+     $(LOCAL_PATH)/include \
+     $(LOCAL_PATH)/../../.. \
+     $(LOCAL_PATH)/../../../common_audio/signal_processing/include
+Index: webrtc/sources/modules/audio_processing/aecm/aecm_core.h
+===================================================================
+--- webrtc.orig/sources/modules/audio_processing/aecm/aecm_core.h	(revision 3040)
++++ webrtc/modules/audio_processing/aecm/aecm_core.h	(working copy)
+@@ -13,11 +13,10 @@
+ #ifndef WEBRTC_MODULES_AUDIO_PROCESSING_AECM_AECM_CORE_H_
+ #define WEBRTC_MODULES_AUDIO_PROCESSING_AECM_AECM_CORE_H_
+ 
++#include "common_audio/signal_processing/include/signal_processing_library.h"
++#include "modules/audio_processing/aecm/aecm_defines.h"
+ #include "typedefs.h"
+-#include "signal_processing_library.h"
+ 
+-#include "aecm_defines.h"
+-
+ #ifdef _MSC_VER // visual c++
+ #define ALIGN8_BEG __declspec(align(8))
+ #define ALIGN8_END
+Index: webrtc/sources/modules/audio_processing/aecm/aecm_core_neon.S
+===================================================================
+--- webrtc.orig/sources/modules/audio_processing/aecm/aecm_core_neon.S	(revision 3040)
++++ webrtc/sources/modules/audio_processing/aecm/aecm_core_neon.S	(working copy)
+@@ -26,66 +26,64 @@
+ .global WebRtcAecm_StoreAdaptiveChannelNeon
+ .global WebRtcAecm_ResetAdaptiveChannelNeon
+ 
+-@ void WebRtcAecm_WindowAndFFTNeon(WebRtc_Word16* fft,
++@ void WebRtcAecm_WindowAndFFTNeon(AecmCore_t* aecm,
++@                                  WebRtc_Word16* fft,
+ @                                  const WebRtc_Word16* time_signal,
+ @                                  complex16_t* freq_signal,
+ @                                  int time_signal_scaling);
+ .align  2
+ WebRtcAecm_WindowAndFFTNeon:
+ .fnstart
+-.save {r4, r5, lr}
+-  push {r4, r5, lr}
++.save {r4, r5, r6, lr}
++  push {r4, r5, r6, lr}
+ 
+-  vdup.16 d16, r3
+-  mov r5, r2                                 @ WebRtcSpl_ComplexIFFT changes r2.
++  ldr r12, [sp, #16]                         @ time_signal_scaling
++  vdup.16 d16, r12
+ 
+   vmov.i16 d21, #0                           @ For imaginary parts of |fft|.
+   vmov.i16 d27, #0                           @ For imaginary parts of |fft|.
+-  ldr r2, =WebRtcAecm_kSqrtHanning
++  ldr r5, =WebRtcAecm_kSqrtHanning
+   adr lr, kSqrtHanningReversed
+-  add r4, r0, #(PART_LEN2 * 2)               @ &fft[PART_LEN2]
+-  add r12, r1, #(PART_LEN * 2)               @ time_signal[PART_LEN]
+-  mov r3, #(PART_LEN / 4)                    @ Loop counter, unrolled by 4
++  add r4, r1, #(PART_LEN2 * 2)               @ &fft[PART_LEN2]
++  add r12, r2, #(PART_LEN * 2)               @ time_signal[PART_LEN]
++  mov r6, #(PART_LEN / 4)                    @ Loop counter, unrolled by 4
+ 
+ LOOP_PART_LEN:
+-  vld1.16 d0, [r1, :64]!                     @ time_signal[i]
++  vld1.16 d0, [r2, :64]!                     @ time_signal[i]
+   vld1.16 d22, [r12, :64]!                   @ time_signal[i + PART_LEN]
+-  vld1.16 d17, [r2, :64]!                    @ WebRtcAecm_kSqrtHanning[i]
++  vld1.16 d17, [r5, :64]!                    @ WebRtcAecm_kSqrtHanning[i]
+   vld1.16 d23, [lr, :64]!                    @ kSqrtHanningReversed[i]
+   vshl.s16  d18, d0, d16
+   vshl.s16  d22, d22, d16
+   vmull.s16 q9, d18, d17
+   vmull.s16 q12, d22, d23
+-  subs r3, #1
++  subs r6, #1
+   vshrn.i32 d20, q9, #14
+   vshrn.i32 d26, q12, #14
+-  vst2.16 {d20, d21}, [r0, :128]!            @ fft[j]
++  vst2.16 {d20, d21}, [r1, :128]!            @ fft[j]
+   vst2.16 {d26, d27}, [r4, :128]!            @ fft[PART_LEN2 + j]
+   bgt LOOP_PART_LEN
+ 
+-  sub r4, r0, #(PART_LEN2 * 2)               @ r4 points to fft[0]
+-  mov r0, r4
+-  mov r1, #7
+-  bl  WebRtcSpl_ComplexBitReverse
++  @ WebRtcSpl_RealForwardFFT(aecm->real_fft, fft, (int16_t*)freq_signal);
++  ldr r12, =offset_aecm_real_fft
++  sub r1, #(PART_LEN * 4)                    @ Get r1 back to &fft[0].
++  mov r2, r3                                 @ freq_signal
++  mov r4, r3
++  ldr r0, [r0, r12]                          @ aecm->real_fft
++  bl  WebRtcSpl_RealForwardFFTNeon
+ 
+-  mov r0, r4
+-  mov r1, #7
+-  mov r2, #1
+-  bl  WebRtcSpl_ComplexFFT
++  mov r12, #(PART_LEN * 2 / 16)              @ Loop counter, unrolled by 16.
+ 
+-  mov r3, #(PART_LEN * 2 / 16)               @ Loop counter, unrolled by 16.
+-
+ LOOP_PART_LEN2:
+-  @ freq_signal[i].real = fft[j];
+-  @ freq_signal[i].imag = - fft[j+1];
+-  vld2.16 {d20, d21, d22, d23}, [r4, :256]!
+-  subs r3, #1
++  @ freq_signal[i].imag = - freq_signal[i].imag;
++  vld2.16 {d20, d21, d22, d23}, [r4, :256]
++  subs r12, #1
+   vneg.s16 d22, d22
+   vneg.s16 d23, d23
+-  vst2.16 {d20, d21, d22, d23}, [r5, :256]!
++  vst2.16 {d20, d21, d22, d23}, [r4, :256]!
+   bgt LOOP_PART_LEN2
+ 
+-  pop {r4, r5, pc}
++  pop {r4, r5, r6, pc}
+ .fnend
+ 
+ @ void WebRtcAecm_InverseFFTAndWindowNeon(AecmCore_t* aecm,
+@@ -123,30 +121,19 @@
+   @  fft[PART_LEN2] = efw[PART_LEN].real;
+   @  fft[PART_LEN2 + 1] = -efw[PART_LEN].imag;
+   ldr r8, [r12]
+-  ssub16 r2, r6, r8
+-  mov r1, #(PART_LEN2 * 2)
+-  pkhbt r8, r8, r2
+-  str r8, [r4, r1]
++  ssub16 r12, r6, r8
++  mov r3, #(PART_LEN2 * 2)
++  pkhbt r8, r8, r12
++  str r8, [r4, r3]
+ 
+-  mov r0, r4
+-  mov r1, #7
+-  bl  WebRtcSpl_ComplexBitReverse
++  @ outCFFT = WebRtcSpl_RealInverseFFT(aecm->real_fft, fft, (int16_t*)efw);
++  ldr r12, =offset_aecm_real_fft
++  sub r1, #(PART_LEN * 4)                    @ Get r1 back to &fft[0].
++  sub r2, #(PART_LEN * 4)                    @ Get r2 back to &efw[0].
++  mov r4, r2                                 @ Keep efw in r4.
++  ldr r0, [r0, r12]                          @ aecm->real_fft
++  bl  WebRtcSpl_RealInverseFFTNeon
+ 
+-  mov r0, r4
+-  mov r1, #7
+-  mov r2, #1
+-  bl  WebRtcSpl_ComplexIFFT
+-
+-  mov r1, r4
+-  mov r2, r4
+-  mov r3, #(PART_LEN * 2 / 8)                @ Loop counter, unrolled by 8.
+-
+-LOOP_GET_REAL_VALUES:
+-  vld2.16 {q10, q11}, [r2, :256]!
+-  subs r3, #1
+-  vst1.16 {q10}, [r1, :128]!
+-  bgt LOOP_GET_REAL_VALUES
+-
+   ldr r6, =offset_aecm_outBuf
+   ldr r12, =offset_aecm_dfaCleanQDomain
+   ldr r8, [r5, r6]                           @ &aecm->outBuf[0]
+@@ -156,24 +143,24 @@
+   ldr r6, =WebRtcAecm_kSqrtHanning
+   rsb r0, r2, r0                             @ outCFFT - aecm->dfaCleanQDomain
+   vdup.32 q9, r0
+-  add r0, r4, #(PART_LEN * 2)                @ &fft[PART_LEN]
+-  mov r3, #(PART_LEN / 4)                    @ Loop counter, unrolled by 4.
++  add r0, r4, #(PART_LEN * 4)                @ &efw[PART_LEN]
++  mov r3, #(PART_LEN / 4)                    @ Loop counter, unrolled by 4
+ 
+ LOOP_POST_IFFT:
+-  vld1.16 d16, [r4, :64]                     @ fft[i];
++  vld2.16 {d4, d5}, [r4, :128]               @ &efw[i];
+   vld1.16 d17, [r6, :64]!                    @ WebRtcAecm_kSqrtHanning[i]
+   vld1.16 d20, [r8, :64]                     @ aecm->outBuf[i]
+-  vmull.s16 q8, d16, d17
++  vmull.s16 q8, d4, d17
+   vmovl.s16 q10, d20
+   vrshr.s32 q8, q8, #14
+-  vld1.16 d0, [r0, :64]!                     @ &fft[PART_LEN + i]
++  vld1.16 d0, [r0, :64]!                     @ &efw[PART_LEN + i]
+   vshl.s32 q8, q8, q9
+   vld1.16 d1, [r12, :64]!                    @ kSqrtHanningReversed[i]
+   vadd.i32 q8, q10
+   vmull.s16 q0, d0, d1
+-  vqshrn.s32 d16, q8, #0
++  vqshrn.s32 d4, q8, #0
+   vshr.s32 q0, q0, #14
+-  vst1.16 d16, [r4, :64]!                    @ fft[i];
++  vst2.16 {d4, d5}, [r4, :128]!              @ &efw[i];
+   vshl.s32 q0, q0, q9
+   vst1.16 d16, [r7, :64]!                    @ output[i]
+   vqshrn.s32 d0, q0, #0
+@@ -197,7 +184,7 @@
+   vst1.16 {q12, q13}, [r1, :256]!
+   bgt LOOP_COPY
+ 
+-  ldr r2, [sp, #24]
++  ldr r2, [sp, #16]
+   cmp r2, #0                                  @ Check if (nearendClean != NULL).
+   beq END
+ 
+Index: webrtc/sources/modules/audio_processing/aecm/aecm_core_neon_offsets.c
+===================================================================
+--- webrtc.orig/sources/modules/audio_processing/aecm/aecm_core_neon_offsets.c	(revision 3040)
++++ webrtc/sources/modules/audio_processing/aecm/aecm_core_neon_offsets.c	(working copy)
+@@ -23,4 +23,4 @@
+ int offset_aecm_channelStored = offsetof(AecmCore_t, channelStored);
+ int offset_aecm_channelAdapt16 = offsetof(AecmCore_t, channelAdapt16);
+ int offset_aecm_channelAdapt32 = offsetof(AecmCore_t, channelAdapt32);
+-
++int offset_aecm_real_fft = offsetof(AecmCore_t, real_fft);
+Index: webrtc/sources/modules/audio_processing/audio_processing.gypi
+===================================================================
+--- webrtc.orig/sources/modules/audio_processing/audio_processing.gypi	(revision 3040)
++++ webrtc/sources/modules/audio_processing/audio_processing.gypi	(working copy)
+@@ -159,19 +159,50 @@
+       ],
+     }],
+     ['target_arch=="arm" and armv7==1', {
+-      'targets': [
+-        {
+-          'target_name': 'audio_processing_neon',
+-          'type': 'static_library',
+-          'includes': ['../../build/arm_neon.gypi',],
+-          'dependencies': [
+-            '<(webrtc_root)/common_audio/common_audio.gyp:signal_processing',
+-          ],
+-          'sources': [
+-            'aecm/aecm_core_neon.c',
+-            'ns/nsx_core_neon.c',
+-          ],
+-        },
++      'targets': [{
++        'target_name': 'audio_processing_neon',
++        'type': 'static_library',
++        'includes': ['../../build/arm_neon.gypi',],
++        'dependencies': [
++          '<(webrtc_root)/common_audio/common_audio.gyp:signal_processing',
++        ],
++        'sources': [
++          'aecm/aecm_core_neon.c',
++          'ns/nsx_core_neon.c',
++        ],
++        'conditions': [
++          ['OS=="android"', {
++            'dependencies': [
++              'audio_processing_offsets',
++            ],
++            # TODO(kma): port this block from Android into other build systems.
++            'sources': [
++              'aecm/aecm_core_neon.S',
++              'ns/nsx_core_neon.S',
++            ],
++            'sources!': [
++              'aecm/aecm_core_neon.c',
++              'ns/nsx_core_neon.c',
++            ],
++            'includes!': ['../../build/arm_neon.gypi',],
++          }],
++        ],
++      }],
++      'conditions': [
++        ['OS=="android"', {
++          'targets': [{
++            'target_name': 'audio_processing_offsets',
++            'type': 'none',
++            'sources': [
++              'aecm/aecm_core_neon_offsets.c',
++              'ns/nsx_core_neon_offsets.c',
++            ],
++            'variables': {
++              'asm_header_dir': 'asm_offsets',
++            },
++            'includes': ['../../build/generate_asm_header.gypi',],
++          }],
++        }],
+       ],
+     }],
+   ],
+Index: webrtc/sources/modules/audio_processing/ns/Android.mk
+===================================================================
+--- webrtc.orig/sources/modules/audio_processing/ns/Android.mk	(revision 3040)
++++ webrtc/sources/modules/audio_processing/ns/Android.mk	(working copy)
+@@ -57,19 +57,18 @@
+ LOCAL_MODULE_CLASS := STATIC_LIBRARIES
+ LOCAL_MODULE := libwebrtc_ns_neon
+ LOCAL_MODULE_TAGS := optional
+-GEN := $(LOCAL_PATH)/nsx_core_neon_offsets.h
++NS_ASM_HEADER := $(intermediates)/ns_core_neon_offsets.h
++NS_ASM_HEADER_DIR := $(intermediates)
+ 
+ # Generate a header file nsx_core_neon_offsets.h which will be included in
+ # assembly file nsx_core_neon.S, from file nsx_core_neon_offsets.c.
+-$(GEN): $(LOCAL_PATH)/../../../build/generate_asm_header.py \
+-            $(intermediates)/nsx_core_neon_offsets.S
+-	@python $^ $@ offset_nsx_
++$(NS_ASM_HEADER): $(LOCAL_PATH)/../../../build/generate_asm_header.py \
++	    $(LOCAL_PATH)/nsx_core_neon_offsets.c
++	@python $^ --compiler=$(TARGET_CC) --options="$(addprefix -I, \
++		$(LOCAL_INCLUDES)) $(addprefix -isystem , $(TARGET_C_INCLUDES)) -S" \
++		--dir=$(NS_ASM_HEADER_DIR)
+ 
+-$(intermediates)/nsx_core_neon_offsets.S: $(LOCAL_PATH)/nsx_core_neon_offsets.c
+-	@$(TARGET_CC) $(addprefix -I, $(LOCAL_INCLUDES)) $(addprefix -isystem ,\
+-            $(TARGET_C_INCLUDES)) -S -o $@ $^
+-
+-LOCAL_GENERATED_SOURCES := $(GEN)
++LOCAL_GENERATED_SOURCES := $(NS_ASM_HEADER)
+ LOCAL_SRC_FILES := nsx_core_neon.S
+ 
+ # Flags passed to both C and C++ files.
+@@ -80,6 +79,7 @@
+     -flax-vector-conversions
+ 
+ LOCAL_C_INCLUDES := \
++    $(NS_ASM_HEADER_DIR) \
+     $(LOCAL_PATH)/include \
+     $(LOCAL_PATH)/../../.. \
+     $(LOCAL_PATH)/../../../common_audio/signal_processing/include
+Index: webrtc/sources/modules/audio_processing/ns/nsx_core.h
+===================================================================
+--- webrtc.orig/sources/modules/audio_processing/ns/nsx_core.h	(revision 3040)
++++ webrtc/sources/modules/audio_processing/ns/nsx_core.h	(working copy)
+@@ -11,11 +11,10 @@
+ #ifndef WEBRTC_MODULES_AUDIO_PROCESSING_NS_MAIN_SOURCE_NSX_CORE_H_
+ #define WEBRTC_MODULES_AUDIO_PROCESSING_NS_MAIN_SOURCE_NSX_CORE_H_
+ 
++#include "common_audio/signal_processing/include/signal_processing_library.h"
++#include "modules/audio_processing/ns/nsx_defines.h"
+ #include "typedefs.h"
+-#include "signal_processing_library.h"
+ 
+-#include "nsx_defines.h"
+-
+ #ifdef NS_FILEDEBUG
+ #include <stdio.h>
+ #endif
+Index: webrtc/sources/modules/audio_processing/ns/nsx_core_neon.S
+===================================================================
+--- webrtc.orig/sources/modules/audio_processing/ns/nsx_core_neon.S	(revision 3040)
++++ webrtc/sources/modules/audio_processing/ns/nsx_core_neon.S	(working copy)
+@@ -335,7 +335,7 @@
+ 
+   mov r0, r4
+   mov r1, r6
+-  bl WebRtcSpl_MaxValueW16
++  bl WebRtcSpl_MaxValueW16Neon
+ 
+   sub r12, r6, #1             @ Loop counter: inst->magnLen - 1.
+ 
+@@ -351,7 +351,6 @@
+   vdup.32 q13, r0
+   str r0, [r5, r1]
+ 
+-
+ LOOP_UPDATE:
+   vld1.16 {d0, d1}, [r4]!     @ &inst->noiseEstLogQuantile[offset + i]
+   vmull.s16 q1, d0, d16

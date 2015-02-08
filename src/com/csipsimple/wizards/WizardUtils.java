@@ -1163,7 +1163,7 @@ public class WizardUtils {
                     new Locale[]{new Locale("PT", "br")}, false, false, 
                     Telefonet.class));
             WIZARDS_DICT.put("DIALSPORATEL", new WizardInfo("DIALSPORATEL", "Dialsporatel", 
-                    R.drawable.ic_wizard_basic, 20, 
+                    R.drawable.ic_wizard_dialspora, 20, 
                     new Locale[]{ Locale.UK }, false, false, 
                     DialsporaTel.class));
             WIZARDS_DICT.put("AVANVOIP", new WizardInfo("AVANVOIP", "AVANVOIP", 

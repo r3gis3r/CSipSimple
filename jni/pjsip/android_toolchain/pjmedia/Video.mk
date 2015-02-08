@@ -56,14 +56,14 @@ LOCAL_STATIC_LIBRARIES += libwebrtc_yuv libyuv libwebrtc_apm_utility \
 
 # Ffmpeg codec
 BASE_FFMPEG_BUILD_DIR :=  $(LOCAL_PATH)/../../../ffmpeg/build/ffmpeg/$(TARGET_ARCH_ABI)/lib
-LOCAL_LDLIBS += $(BASE_FFMPEG_BUILD_DIR)/libavcodec.a \
+LOCAL_STATIC_LIBRARIES += $(BASE_FFMPEG_BUILD_DIR)/libavcodec.a \
 		$(BASE_FFMPEG_BUILD_DIR)/libavformat.a \
 		$(BASE_FFMPEG_BUILD_DIR)/libswscale.a \
 		$(BASE_FFMPEG_BUILD_DIR)/libavutil.a
 
 # Add X264	
 BASE_X264_BUILD_DIR :=  $(LOCAL_PATH)/../../../ffmpeg/build/x264/$(TARGET_ARCH_ABI)/lib
-LOCAL_LDLIBS += $(BASE_X264_BUILD_DIR)/libx264.a
+LOCAL_STATIC_LIBRARIES += $(BASE_X264_BUILD_DIR)/libx264.a
  
 # Add ffmpeg to flags for pj part build
 LOCAL_CFLAGS := $(MY_PJSIP_FLAGS) -DWEBRTC_ANDROID \
