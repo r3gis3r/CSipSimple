@@ -1,5 +1,6 @@
 /**
  * Copyright (C) 2010-2012 Regis Montoya (aka r3gis - www.r3gis.fr)
+ * Copyright (C) 2015 Antonio Eugenio Burriel
  * This file is part of CSipSimple.
  *
  *  CSipSimple is free software: you can redistribute it and/or modify
@@ -62,7 +63,7 @@ public class RegHandlerCallback extends MobileRegHandlerCallback {
         String key_expires = REG_EXPIRES_PREFIX + Long.toString(db_acc_id);
         String key_uri = REG_URI_PREFIX + Long.toString(db_acc_id);
         int expires = prefs_db.getInt(key_expires, 0);
-        int now = (int) Math.ceil(System.currentTimeMillis() / 1000);
+        int now = (int) Math.ceil(System.currentTimeMillis() / 1000.0);
         if(expires >= now) {
             String ret = prefs_db.getString(key_uri, "");
             Log.d(THIS_FILE, "We restore " + ret);
@@ -78,7 +79,7 @@ public class RegHandlerCallback extends MobileRegHandlerCallback {
         String key_uri = REG_URI_PREFIX + Long.toString(db_acc_id);
         Editor edt = prefs_db.edit();
         edt.putString(key_uri, PjSipService.pjStrToString(contact));
-        int now = (int) Math.ceil(System.currentTimeMillis() / 1000);
+        int now = (int) Math.ceil(System.currentTimeMillis() / 1000.0);
         edt.putInt(key_expires, now + expires);
         // TODO : have this asynchronous
         edt.commit();
