@@ -46,7 +46,7 @@ typedef struct pjmedia_port_info
 
 typedef struct pjmedia_port
 {
-    pjmedia_port_info    info;              /**< Port information.  */
+    pjmedia_port_info    info;          /**< Port information.  */
 
     /** Port data can be used by the port creator to attach arbitrary
      *  value to be associated with the port.
@@ -57,18 +57,25 @@ typedef struct pjmedia_port
     } port_data;
 
     /**
+     * Get clock source.
+     * This should only be called by #pjmedia_port_get_clock_src().
+     */
+    pjmedia_clock_src* (*get_clock_src)(struct pjmedia_port *this_port,
+                                        pjmedia_dir dir);
+
+    /**
      * Sink interface.
      * This should only be called by #pjmedia_port_put_frame().
      */
-    pj_status_t (*put_frame)(struct pjmedia_port *this_port,
-                             pjmedia_frame *frame);
+    pj_status_t (*put_frame)(struct pjmedia_port *this_port, 
+                 pjmedia_frame *frame);
 
     /**
      * Source interface.
      * This should only be called by #pjmedia_port_get_frame().
      */
-    pj_status_t (*get_frame)(struct pjmedia_port *this_port,
-                             pjmedia_frame *frame);
+    pj_status_t (*get_frame)(struct pjmedia_port *this_port, 
+                 pjmedia_frame *frame);
 
     /**
      * Called to destroy this port.
@@ -86,16 +93,31 @@ enum pjmedia_dir
     /** None */
     PJMEDIA_DIR_NONE = 0,
 
-    /** Encoding (outgoing to network) stream */
+    /** Encoding (outgoing to network) stream, also known as capture */
     PJMEDIA_DIR_ENCODING = 1,
 
-    /** Decoding (incoming from network) stream. */
+    /** Same as encoding direction. */
+    PJMEDIA_DIR_CAPTURE = PJMEDIA_DIR_ENCODING,
+
+    /** Decoding (incoming from network) stream, also known as playback. */
     PJMEDIA_DIR_DECODING = 2,
 
-    /** Incoming and outgoing stream. */
-    PJMEDIA_DIR_ENCODING_DECODING = 3
+    /** Same as decoding. */
+    PJMEDIA_DIR_PLAYBACK = PJMEDIA_DIR_DECODING,
 
-};
+    /** Same as decoding. */
+    PJMEDIA_DIR_RENDER = PJMEDIA_DIR_DECODING,
+
+    /** Incoming and outgoing stream, same as PJMEDIA_DIR_CAPTURE_PLAYBACK */
+    PJMEDIA_DIR_ENCODING_DECODING = 3,
+
+    /** Same as ENCODING_DECODING */
+    PJMEDIA_DIR_CAPTURE_PLAYBACK = PJMEDIA_DIR_ENCODING_DECODING,
+
+    /** Same as ENCODING_DECODING */
+    PJMEDIA_DIR_CAPTURE_RENDER = PJMEDIA_DIR_ENCODING_DECODING
+
+} ;
 
 
 // From pjsip/include/pjsip/sip_auth.h:108
@@ -247,6 +269,7 @@ struct pjmedia_tone_desc
     short   on_msec;        /**< Playback ON duration, in miliseconds.      */
     short   off_msec;       /**< Playback OFF duration, ini miliseconds.    */
     short   volume;         /**< Volume (1-16383), or 0 for default.        */
+    short   flags;          /**< Currently internal flags, must be 0        */
 };
 /**
  * This structure describes individual MF digits to be played
@@ -519,11 +542,13 @@ enum pjmedia_srtp_use
 /** SSL protocol method constants. */
 enum pjsip_ssl_method
 {
-    PJSIP_SSL_UNSPECIFIED_METHOD= 0,	/**< Default protocol method.	*/
-    PJSIP_TLSV1_METHOD		= 31,	/**< Use SSLv1 method.		*/
-    PJSIP_SSLV2_METHOD		= 20,	/**< Use SSLv2 method.		*/
-    PJSIP_SSLV3_METHOD		= 30,	/**< Use SSLv3 method.		*/
-    PJSIP_SSLV23_METHOD		= 23	/**< Use SSLv23 method.		*/
+    PJSIP_SSL_UNSPECIFIED_METHOD = 0,   /**< Default protocol method.   */    
+    PJSIP_SSLV2_METHOD       = 20,  /**< Use SSLv2 method.      */
+    PJSIP_SSLV3_METHOD       = 30,  /**< Use SSLv3 method.      */
+    PJSIP_TLSV1_METHOD       = 31,  /**< Use TLSv1 method.      */
+    PJSIP_TLSV1_1_METHOD     = 32,  /**< Use TLSv1_1 method.    */
+    PJSIP_TLSV1_2_METHOD     = 33,  /**< Use TLSv1_2 method.    */
+    PJSIP_SSLV23_METHOD      = 23,  /**< Use SSLv23 method.     */
 } ;
 
 
@@ -536,39 +561,48 @@ struct pjsip_tls_setting
     /**
      * Certificate of Authority (CA) list file.
      */
-    pj_str_t	ca_list_file;
+    pj_str_t    ca_list_file;
+
+    /**
+     * Certificate of Authority (CA) list directory path.
+     */
+    pj_str_t    ca_list_path;
 
     /**
      * Public endpoint certificate file, which will be used as client-
      * side  certificate for outgoing TLS connection, and server-side
      * certificate for incoming TLS connection.
      */
-    pj_str_t	cert_file;
+    pj_str_t    cert_file;
 
     /**
      * Optional private key of the endpoint certificate to be used.
      */
-    pj_str_t	privkey_file;
+    pj_str_t    privkey_file;
 
     /**
      * Password to open private key.
      */
-    pj_str_t	password;
+    pj_str_t    password;
 
     /**
-     * TLS protocol method from #pjsip_ssl_method, which can be:
-     *	- PJSIP_SSL_UNSPECIFIED_METHOD(0): default (which will use 
-     *                                     PJSIP_SSL_DEFAULT_METHOD)
-     *	- PJSIP_TLSV1_METHOD(1):	   TLSv1
-     *	- PJSIP_SSLV2_METHOD(2):	   SSLv2
-     *	- PJSIP_SSLV3_METHOD(3):	   SSL3
-     *	- PJSIP_SSLV23_METHOD(23):	   SSL23
+     * TLS protocol method from #pjsip_ssl_method. In the future, this field
+     * might be deprecated in favor of <b>proto</b> field. For now, this field 
+     * is only applicable only when <b>proto</b> field is set to zero.
      *
      * Default is PJSIP_SSL_UNSPECIFIED_METHOD (0), which in turn will
-     * use PJSIP_SSL_DEFAULT_METHOD, which default value is 
-     * PJSIP_TLSV1_METHOD.
+     * use PJSIP_SSL_DEFAULT_METHOD, which default value is PJSIP_TLSV1_METHOD.
      */
-    int		method;
+    pjsip_ssl_method    method;
+
+    /**
+     * TLS protocol type from #pj_ssl_sock_proto. Use this field to enable 
+     * specific protocol type. Use bitwise OR operation to combine the protocol 
+     * type.
+     *
+     * Default is PJSIP_SSL_DEFAULT_PROTO.
+     */
+    pj_uint32_t proto;
 
     /**
      * Number of ciphers contained in the specified cipher preference. 
@@ -601,7 +635,7 @@ struct pjsip_tls_setting
      *
      * Default value is PJ_FALSE.
      */
-    pj_bool_t	verify_server;
+    pj_bool_t   verify_server;
 
     /**
      * Specifies TLS transport behavior on the client TLS certificate 
@@ -619,7 +653,7 @@ struct pjsip_tls_setting
      *
      * Default value is PJ_FALSE.
      */
-    pj_bool_t	verify_client;
+    pj_bool_t   verify_client;
 
     /**
      * When acting as server (incoming TLS connections), reject inocming
@@ -628,14 +662,20 @@ struct pjsip_tls_setting
      * This setting corresponds to SSL_VERIFY_FAIL_IF_NO_PEER_CERT flag.
      * Default value is PJ_FALSE.
      */
-    pj_bool_t	require_client_cert;
+    pj_bool_t   require_client_cert;
 
     /**
      * TLS negotiation timeout to be applied for both outgoing and
      * incoming connection. If both sec and msec member is set to zero,
      * the SSL negotiation doesn't have a timeout.
      */
-    pj_time_val	timeout;
+    pj_time_val timeout;
+
+    /**
+     * Should SO_REUSEADDR be used for the listener socket.
+     * Default value is PJSIP_TLS_TRANSPORT_REUSEADDR.
+     */
+    pj_bool_t reuse_addr;
 
     /**
      * QoS traffic type to be set on this transport. When application wants
@@ -662,6 +702,23 @@ struct pjsip_tls_setting
      * Default: PJ_TRUE
      */
     pj_bool_t qos_ignore_error;
+
+    /**
+     * Specify options to be set on the transport. 
+     *
+     * By default there is no options.
+     * 
+     */
+    pj_sockopt_params sockopt_params;
+
+    /**
+     * Specify if the transport should ignore any errors when setting the 
+     * sockopt parameters.
+     *
+     * Default: PJ_TRUE
+     * 
+     */
+    pj_bool_t sockopt_ignore_error;
 
 };
 
@@ -712,7 +769,7 @@ struct pj_time_val
 
 
 
-//pjnat/include/nat_detect.h
+// pjnat/include/nat_detect.h
 
 /**
  * This enumeration describes the NAT types, as specified by RFC 3489
@@ -834,6 +891,13 @@ typedef enum pjsip_redirect_op
     PJSIP_REDIRECT_REJECT,
 
     /**
+     * Accept the redirection to the current target and replace the To
+     * header in the INVITE request with the current target. The INVITE
+     * request will be resent to the current target.
+     */
+    PJSIP_REDIRECT_ACCEPT_REPLACE,
+
+   /**
      * Accept the redirection to the current target. The INVITE request
      * will be resent to the current target.
      */
@@ -878,6 +942,7 @@ struct pjsip_timer_setting
 // Force decl of msg_data so that the real one is used -- this produce a build error but harmless
 struct pjsua_msg_data
 {
+    pj_str_t  target_uri;
     pjsip_hdr	hdr_list;
     pj_str_t	content_type;
     pj_str_t	msg_body;

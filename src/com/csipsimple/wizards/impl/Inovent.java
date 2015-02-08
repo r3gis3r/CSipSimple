@@ -108,7 +108,7 @@ public class Inovent extends SimpleImplementation {
         prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_QOS, true);
         prefs.setPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM, true);
         prefs.setPreferenceBooleanValue(SipConfigManager.SUPPORT_MULTIPLE_CALLS, true);
-        prefs.setPreferenceStringValue(SipConfigManager.TLS_METHOD, "1");
+        prefs.setPreferenceStringValue(SipConfigManager.TLS_METHOD, "31");
 
         // Prefer opus,silk
         prefs.setCodecPriority("opus/48000/1", SipConfigManager.CODEC_WB, "245");

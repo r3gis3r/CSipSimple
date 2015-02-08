@@ -968,6 +968,18 @@ public final class Compatibility {
                         Integer.toString(getDefaultAudioImplementation()));
             }
         }
+
+        if (lastSeenVersion < 2457) {
+            String method = prefWrapper.getPreferenceStringValue(SipConfigManager.TLS_METHOD);
+            if (method.equals("1")) {
+                prefWrapper.setPreferenceStringValue(SipConfigManager.TLS_METHOD, "31");
+            } else if (method.equals("2")) {
+                prefWrapper.setPreferenceStringValue(SipConfigManager.TLS_METHOD, "20");
+            } else if (method.equals("3")) {
+                prefWrapper.setPreferenceStringValue(SipConfigManager.TLS_METHOD, "30");
+            }
+        }
+
         prefWrapper.endEditing();
     }
 

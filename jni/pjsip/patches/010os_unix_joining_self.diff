@@ -1,8 +1,8 @@
 Index: pjsip/sources/pjlib/src/pj/os_core_unix.c
 ===================================================================
---- pjsip.orig/sources/pjlib/src/pj/os_core_unix.c	2013-03-02 13:31:51.353146255 +0100
-+++ pjsip/sources/pjlib/src/pj/os_core_unix.c	2013-03-02 13:32:11.549146684 +0100
-@@ -698,6 +698,9 @@
+--- pjsip.orig/sources/pjlib/src/pj/os_core_unix.c	2015-02-08 15:54:42.791139902 +0100
++++ pjsip/sources/pjlib/src/pj/os_core_unix.c	2015-02-08 15:54:42.707132287 +0100
+@@ -716,6 +716,9 @@
      int result;
  
      PJ_CHECK_STACK();

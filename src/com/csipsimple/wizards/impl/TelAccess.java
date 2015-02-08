@@ -56,7 +56,7 @@ public class TelAccess extends SimpleImplementation {
         prefs.setPreferenceBooleanValue(SipConfigManager.ENABLE_QOS, true);
         prefs.setPreferenceBooleanValue(SipConfigManager.USE_COMPACT_FORM, true);
         prefs.setPreferenceBooleanValue(SipConfigManager.SUPPORT_MULTIPLE_CALLS, true);
-        prefs.setPreferenceStringValue(SipConfigManager.TLS_METHOD, "1");
+        prefs.setPreferenceStringValue(SipConfigManager.TLS_METHOD, "31");
         prefs.setPreferenceStringValue("codec_g729_8000_fpp", "4");
 
         // Prefer silk, gsm

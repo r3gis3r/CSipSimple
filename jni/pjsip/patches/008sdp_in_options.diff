@@ -1,8 +1,8 @@
 Index: pjsip/sources/pjsip/src/pjsua-lib/pjsua_core.c
 ===================================================================
---- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_core.c	2014-08-23 14:28:08.401541894 +0200
-+++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_core.c	2014-08-23 14:28:08.401541894 +0200
-@@ -499,23 +499,30 @@
+--- pjsip.orig/sources/pjsip/src/pjsua-lib/pjsua_core.c	2015-02-08 15:54:38.358737882 +0100
++++ pjsip/sources/pjsip/src/pjsua-lib/pjsua_core.c	2015-02-08 15:54:38.302732799 +0100
+@@ -500,23 +500,30 @@
  	pjsip_msg_add_hdr(tdata->msg, h);
      }
  

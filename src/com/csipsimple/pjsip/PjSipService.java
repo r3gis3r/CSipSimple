@@ -1,6 +1,7 @@
 /**
- * Copyright (C) 2010-2013 Regis Montoya (aka r3gis - www.r3gis.fr)
+ * Copyright (C) 2010-2015 Regis Montoya (aka r3gis - www.r3gis.fr)
  * Copyright (C) 2012-2013 Dennis Guse (http://dennisguse.de)
+ * Copyright (C) 2015 Antonio Eugenio Burriel
  * This file is part of CSipSimple.
  *
  *  CSipSimple is free software: you can redistribute it and/or modify
@@ -78,6 +79,7 @@ import org.pjsip.pjsua.pj_qos_params;
 import org.pjsip.pjsua.pj_str_t;
 import org.pjsip.pjsua.pj_turn_tp_type;
 import org.pjsip.pjsua.pjmedia_srtp_use;
+import org.pjsip.pjsua.pjsip_ssl_method;
 import org.pjsip.pjsua.pjsip_timer_setting;
 import org.pjsip.pjsua.pjsip_tls_setting;
 import org.pjsip.pjsua.pjsip_transport_type_e;
@@ -766,7 +768,8 @@ public class PjSipService {
                     .getPreferenceBooleanValue(SipConfigManager.TLS_VERIFY_CLIENT);
             tlsSetting.setVerify_client(checkClient ? 1 : 0);
 
-            tlsSetting.setMethod(prefsWrapper.getTLSMethod());
+            tlsSetting.setMethod(pjsip_ssl_method.swigToEnum(prefsWrapper.getTLSMethod()));
+            tlsSetting.setProto(0);
             boolean checkServer = prefsWrapper
                     .getPreferenceBooleanValue(SipConfigManager.TLS_VERIFY_SERVER);
             tlsSetting.setVerify_server(checkServer ? 1 : 0);

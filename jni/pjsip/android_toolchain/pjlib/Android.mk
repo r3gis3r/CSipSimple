@@ -12,7 +12,8 @@ ifeq ($(MY_USE_TLS),1)
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../openssl/sources/include
 endif
 
-LOCAL_CFLAGS := $(MY_PJSIP_FLAGS)
+# Disable jni built in for android -- needs to add that into our jni loader or use pjsip one
+LOCAL_CFLAGS := $(MY_PJSIP_FLAGS) -DPJ_JNI_HAS_JNI_ONLOAD=0
 PJLIB_SRC_DIR := src/pj
 PJ_ANDROID_SRC_DIR := ../../android_sources/pjlib/src
 

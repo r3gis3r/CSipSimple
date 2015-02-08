@@ -99,14 +99,18 @@
     </string-array>
     <string-array name="tls_method_values">
         <item>0</item> <!-- Auto -->
-        <item>1</item> <!-- TLSv1 -->
-        <item>2</item> <!-- SSLv2 -->
-        <item>3</item> <!-- SSL3 -->
+        <item>31</item> <!-- TLSv1 -->
+        <item>32</item> <!-- TLSv1.1 -->
+        <item>33</item> <!-- TLSv1.2 -->
+        <item>20</item> <!-- SSLv2 -->
+        <item>30</item> <!-- SSL3 -->
         <item>23</item> <!-- SSL23 -->
     </string-array>
     <string-array name="tls_method_choices">
         <item>@string/auto</item>
         <item>TLSv1</item>
+        <item>TLSv1.1</item>
+        <item>TLSv1.2</item>
         <item>SSLv2</item>
         <item>SSL3</item>
         <item>SSL23</item>
