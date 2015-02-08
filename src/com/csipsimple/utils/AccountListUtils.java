@@ -57,19 +57,24 @@ public class AccountListUtils {
 		
 
 		SipProfileState accountInfo = null;
-        Cursor c = context.getContentResolver().query(ContentUris.withAppendedId(SipProfile.ACCOUNT_STATUS_ID_URI_BASE, accountId), 
-        		null, null, null, null);
-		if (c != null) {
-			try {
-				if(c.getCount() > 0) {
-					c.moveToFirst();
-					accountInfo = new SipProfileState(c);
-				}
-			} catch (Exception e) {
-				Log.e(THIS_FILE, "Error on looping over sip profiles states", e);
-			} finally {
-				c.close();
-			}
+		if(accountId < 0) {return accountDisplay;}
+		try {
+            Cursor c = context.getContentResolver().query(ContentUris.withAppendedId(SipProfile.ACCOUNT_STATUS_ID_URI_BASE, accountId), 
+            		null, null, null, null);
+    		if (c != null) {
+    			try {
+    				if(c.getCount() > 0) {
+    					c.moveToFirst();
+    					accountInfo = new SipProfileState(c);
+    				}
+    			} catch (Exception e) {
+    				Log.e(THIS_FILE, "Error on looping over sip profiles states", e);
+    			} finally {
+    				c.close();
+    			}
+    		}
+		}catch(Exception e) {
+		    Log.e(THIS_FILE, "Failed account id " + accountId);
 		}
 		
 		if (accountInfo != null && accountInfo.isActive()) {
