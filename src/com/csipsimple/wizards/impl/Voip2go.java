@@ -26,7 +26,7 @@ public class Voip2go extends SimpleImplementation {
 	
 	@Override
 	protected String getDomain() {
-		return "voice.voip2go.com:6050";
+		return "voice.voip2go.com";
 	}
 
 	@Override
