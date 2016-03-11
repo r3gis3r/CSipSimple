@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-  <string name="acct_inactive">Onaktief</string>
-  <string name="acct_unregistered">Nie Geregistreer Nie</string>
-  <string name="acct_expired">Registrasie het verval</string>
-  <string name="acct_registering">Registreer…</string>
-  <string name="acct_registered">Geregistreer</string>
-  <string name="acct_regerror">Fout met registrasie</string>
-</resources>

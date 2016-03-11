@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources>
-  <string name="test_audio">សាកល្បង​អូឌីយ៉ូ</string>
-  <string name="test_audio_prepare">កំពុង​រៀបចំ​សាកល្បង​អូឌីយ៉ូ...</string>
-  <string name="test_audio_network_failure">ការ​សាកល្បង​បរាជ័យ៖ \nប្ដូរ​ទៅ​បណ្ដាញ​ត្រឹមត្រូវ​សិន</string>
-</resources>

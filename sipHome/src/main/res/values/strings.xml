@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
+
+	This file is part of CSipSimple. 
+	CSipSimple is free software: you can
+	redistribute it and/or modify it under the terms of the GNU General
+	Public License as published by the Free Software Foundation, either
+	version 3 of the License, or (at your option) any later version.
+
+	CSipSimple is distributed in the hope that it will be useful, but
+	WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	General Public License for more details. You should have received a
+	copy of the GNU General Public License along with CSipSimple. If not,
+	see <http://www.gnu.org/licenses/>.
+-->
+
+<resources>
+
+    <string name="next">Next</string>
+    <string name="init">Init…</string>
+    <string name="unable_to_download_file">Unable to download file</string>
+    <string name="connection_not_valid">Selected network route not allowed with current settings you have setup</string>
+    <string name="invalid_sip_uri">Sip uri is invalid for call</string>
+    <string name="accounts">ACCOUNTS</string>
+    <string name="other_accounts">Other accounts</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="activate_account">Activate account</string>
+    <string name="deactivate_account">Deactivate account</string>
+    <string name="delete_account">Delete account</string>
+    <string name="modify_account">Modify account</string>
+    <string name="add_account">Add account</string>
+    <string name="choose_wizard">Choose wizard</string>
+    <string name="use">Use :</string>
+    <string name="use_pstn">Use mobile</string>
+    <string name="ongoing_call">Call in Progress</string>
+    <string name="missed_call">Missed call</string>
+    <string name="recentCalls_empty">No Call Logs</string>
+    <string name="filters">Filters</string>
+    <string name="filters_desc">To apply when integration to Android is used</string>
+    <string name="filters_for">Filters for</string>
+    <string name="add_filter">Add filter / rewrite rule</string>
+    <string name="delete_filter">Delete filter</string>
+    <string name="callLog_delete_entry">Delete this call</string>
+    <string name="callLog_delete_all">Delete all calls</string>
+    <string name="callLog_delDialog_title">Delete Call Logs</string>
+    <string name="callLog_delDialog_message">Are you sure you want to delete all calls from the log?</string>
+    <string name="callLog_delDialog_yes">Yes</string>
+    <string name="callLog_delDialog_no">No</string>
+    <string name="gsm">Mobile</string>
+    <string name="dial_tab_name_text">Dial</string>
+    <string name="calllog_tab_name_text">CallLogs</string>
+    <string name="messages_tab_name_text">Messages</string>
+    <string name="favorites_tab_name_text">Favorites</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="service_ticker_registered_text">SIP Registered</string>
+    <string name="outgoing_call_chooser_call_text">Call</string>
+    <string name="reorder">Reorder</string>
+    <string name="backup_restore">Backup / Restore</string>
+    <string name="backup">Backup</string>
+    <string name="faq">FAQ</string>
+    <string name="help">Help</string>
+    <string name="record_logs">Record logs to send it to dev team and report a bug</string>
+    <string name="send_logs">Stop recording logs (OPTIONALLY send it)</string>
+    <string name="view_existing_issues">Consult existing issues</string>
+    <string name="ok">OK</string>
+    <string name="misc">Misc</string>
+    <string name="warning">WARNING</string>
+    <string name="disconnect_and_incoming_explaination">You are configured to be available for this network !!! By clicking OK here you confirm that you don\'t want to be available until next start of the application</string>
+    <string name="disconnect_and_future_incoming_explaination">By disconnecting the application, you will not be available on SIP until next start of the application, whatever network settings you set</string>
+    <string name="gadget_title">SIP - Account switcher</string>
+    <string name="pickup_sip_uri">Pickup SIP contact</string>
+    <string name="display_icon_in_status_bar_desc">Should the application display an icon in the status bar when registered</string>
+    <string name="display_icon_in_status_bar">Display icon in status bar</string>
+    <string name="another_application_use_sip_port">Another application is currently using SIP port! Can\'t start !!!</string>
+    <string name="no_phone_found">No phone found for this contact</string>
+    <string name="show_password">Show password</string>
+    <string name="this_codec_is_not_free">**This codec is not free !!!**\nPlease ensure that somebody (your SIP provider or yourself) have purchased a license that allow you to use this codec! We (as application distributors) are not responsible for an illegal use of this codec.\nIt\'s up to you to be sure that you are authorized to use this codec.\nPurchase link : </string>
+    <string name="voice_mail">Voice mail</string>
+    <string name="voice_mail_number">VM number</string>
+    <string name="type_sip_uri_or_autocomplete">Sip uri or autocomplete</string>
+    <string name="not_configured_multiple_calls">The application is not configured to allow multiple calls</string>
+    <string name="legal_information">Legal information</string>
+    <string name="update_nightly_build">Update nightly build</string>
+    <string name="loading">Loading</string>
+    <string name="reconnect">Reconnect</string>
+    <string name="switch_to_text">Switch to text mode</string>
+    <string name="switch_to_digit">Switch to digit mode</string>
+    <string name="no_voice_mail_configured">No voicemail configured</string>
+    <string name="no_accounts">No accounts</string>
+    <string name="activate">Activate</string>
+    <string name="deactivate">Deactivate</string>
+    <string name="audio">Audio</string>
+    <string name="video">Video</string>
+    <string name="invert_selection">Invert selection</string>
+    <string name="cant_write_file">Error writing file</string>
+    <string name="info">Info</string>
+    <string name="csipsimple_shortcut">SIP - shortcut</string>
+    <string name="apply_rewrite">Apply rewriting</string>
+
+    <!-- Presence stuff -->
+    <string name="online">Online</string>
+    <string name="offline">Offline</string>
+    <string name="away">Away</string>
+    <string name="busy">Busy</string>
+    <string name="activate_presence_sharing">Share presence</string>
+    <string name="deactivate_presence_sharing">Stop sharing presence</string>
+    <string name="presence">Presence</string>
+    <string name="configure">Configure</string>
+    <string name="set_android_group">Choose android group</string>
+    <string name="set_sip_data">Choose sip uri data</string>
+    <string name="uri_nbr">Phone number</string>
+    <string name="uri_im">IM with custom SIP scheme</string>
+    <string name="uri_sip">Internet call</string>
+
+</resources>

@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources>
-  <string name="w_iinet_state">Status</string>
-  <string name="w_iinet_state_desc">Entsprechender Status aus der folgenden Liste</string>
-  <string name="w_iinet_username">VoIP Telefonnummer</string>
-  <string name="w_iinet_username_desc">Jegliche Formatierung, wie Leerzeichen und Bindestriche, entfernen</string>
-  <string name="w_iinet_password">Spezielles VoIP Passwort</string>
-  <string name="w_iinet_password_desc">Nit identisch mit Verbindungspasswort</string>
-</resources>

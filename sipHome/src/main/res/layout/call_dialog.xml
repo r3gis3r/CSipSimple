@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr) 
+
+	This file is part of CSipSimple.
+    CSipSimple is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+	If you own a pjsip commercial license you can also redistribute it
+	and/or modify it under the terms of the GNU Lesser General Public License
+	as an android library.
+
+    CSipSimple is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainFrame"
+    android:layout_width="600dp"
+    android:layout_height="wrap_content" >
+
+    <ViewStub
+        android:id="@+id/dropZones"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout="@layout/in_call_drop_zones" />
+
+    <LinearLayout
+        android:id="@+id/inCallContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:orientation="horizontal" >
+
+            <!--
+				Can we do better than using two linear layouts here?
+				The problem is that RelativeLayout doesn't allow to use weight and
+				plays bad with hidden childs and above/below only support one id
+            -->
+            <!-- Grid for active calls -->
+
+            <com.csipsimple.ui.incall.InCallInfoGrid
+                android:id="@+id/activeCallsGrid"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:paddingBottom="4dip"
+                android:paddingTop="4dip"
+                tools:ignore="NestedWeights" />
+
+            <!-- Grid for held calls -->
+
+            <com.csipsimple.ui.incall.InCallInfoGrid
+                android:id="@+id/heldCallsGrid"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/in_call_held_background"
+                android:padding="4dip"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- Answer slider/buttons -->
+
+        <com.csipsimple.ui.incall.locker.InCallAnswerControls
+            android:id="@+id/inCallAnswerControls"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:visibility="invisible" />
+
+        <!-- Wraps split action bar manually managed -->
+
+        <!--
+        <com.csipsimple.ui.incall.InCallControls
+            android:id="@+id/inCallControls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/incall_bottom_bar_bg" />
+            -->
+    </LinearLayout>
+
+    <com.csipsimple.ui.incall.locker.ScreenLocker
+        android:id="@+id/lockerOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#8000"
+        android:visibility="gone" >
+
+        <!--
+		<TextView android:id="@+id/lockerIcon"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:gravity="center" android:layout_alignParentBottom="true"
+			android:layout_centerHorizontal="true" android:layout_marginBottom="70dip"
+			android:text="@string/touch_lock" android:textAppearance="?android:attr/textAppearanceLarge"
+			android:background="@drawable/dialpad_lock" />
+        -->
+    </com.csipsimple.ui.incall.locker.ScreenLocker>
+
+</RelativeLayout>

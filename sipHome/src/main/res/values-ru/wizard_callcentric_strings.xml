@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="w_callcentric_phone_number">Номер SIP телефона</string>
+  <string name="w_callcentric_phone_number_desc">Номер Callcentric SIP телефона</string>
+  <string name="w_callcentric_password">Пароль</string>
+  <string name="w_callcentric_password_desc">Ваш пароль Callcentric аккаунта</string>
+</resources>

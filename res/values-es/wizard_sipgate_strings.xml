@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources>
-  <string name="w_sipgate_display_name">Nombre de cuenta</string>
-  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_display_name_desc" ns0:ignore="UnusedResources">Mostrar el nombre de esta cuenta</string>
-  <string name="w_sipgate_username">SIP-ID</string>
-  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_password" ns0:ignore="UnusedResources">Contraseña de SIP</string>
-  <string xmlns:ns0="http://schemas.android.com/tools" name="w_sipgate_server_desc" ns0:ignore="UnusedResources">Algo como: sipgate.co.uk</string>
-</resources>

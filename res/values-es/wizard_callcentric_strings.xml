@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources>
-  <string name="w_callcentric_phone_number">Número telefónico SIP</string>
-  <string name="w_callcentric_password">Contraseña</string>
-  <string name="w_callcentric_password_desc">Contraseña para su cuenta de Callcentric</string>
-</resources>

@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources>
-  <string name="w_basic_username">Bruger</string>
-  <string name="w_basic_username_desc">Account name / Login (do not write the @sip.server)</string>
-  <string name="w_basic_password">Adgangskode</string>
-  <string name="w_basic_password_desc">Adgangskode til din konto</string>
-</resources>

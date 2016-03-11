@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-  <string name="w_basic_username">משתמש</string>
-  <string name="w_basic_username_desc">שם חשבון / התחברות (לא לכתוב את ה-\@sip.server)</string>
-  <string name="w_basic_password">סיסמה</string>
-  <string name="w_basic_password_desc">סיסמה לקבלת גישה לחשבון שלך</string>
-</resources>

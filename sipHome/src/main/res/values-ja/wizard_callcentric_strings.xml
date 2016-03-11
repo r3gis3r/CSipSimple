@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="w_callcentric_phone_number">SIP電話番号</string>
+  <string name="w_callcentric_phone_number_desc">Callcentric SIP電話番号 (1777xxxxxxx)</string>
+  <string name="w_callcentric_password">パスワード</string>
+  <string name="w_callcentric_password_desc">Callcentricアカウントのパスワード</string>
+</resources>
