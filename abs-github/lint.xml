@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="ContentDescription" severity="ignore" />
+    <issue id="Deprecated" severity="ignore" />
+    <issue id="DuplicateIds" severity="ignore" />
+    <issue id="MissingRegistered" severity="ignore" />
+    <issue id="NewApi" severity="ignore" />
+    <issue id="ObsoleteLayoutParam" severity="ignore" />
+    <issue id="RequiredSize" severity="ignore" />
+    <issue id="UnusedResources" severity="ignore" />
+    <issue id="UseCompoundDrawables" severity="ignore" />
+    <issue id="UselessParent" severity="ignore" />
+</lint>

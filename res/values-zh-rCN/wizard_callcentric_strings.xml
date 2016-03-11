@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources>
-  <string name="w_callcentric_phone_number">SIP电话号码</string>
-  <string name="w_callcentric_phone_number_desc">Callcentric SIP 电话号码(1777xxxxxxx)</string>
-  <string name="w_callcentric_password">密码</string>
-  <string name="w_callcentric_password_desc">Callcentric 账号密码</string>
-</resources>

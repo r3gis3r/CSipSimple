@@ -1,0 +1,10 @@
+# generated files
+build/
+sipHome/build/
+abs-github/build/
+
+.idea/
+.iml
+
+# gradle and idea files and cache
+.gradle

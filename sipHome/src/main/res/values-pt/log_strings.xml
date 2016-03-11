@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="unknown">Desconhecido</string>
+    <string name="type_incoming">Entrada</string>
+    <string name="type_outgoing">Saída</string>
+    <string name="type_missed">Perdidas</string>
+    <string name="callBack">Ligar de volta</string>
+    <string name="callAgain">Ligar novamente</string>
+    <string name="returnCall">Devolver a chamada</string>
+
+</resources>

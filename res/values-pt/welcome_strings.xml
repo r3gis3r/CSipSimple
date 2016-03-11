@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-  <string name="intializing_text">Inicializar</string>
-  <string name="downloading_text">Baixando</string>
-  <string name="installing_library_text">Instalando biblioteca</string>
-</resources>

@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources>
-  <string name="test_audio">בדיקת קול</string>
-  <string name="test_audio_prepare">מכין בדיקת קול…</string>
-  <string name="test_audio_network_failure">בדיקה נכשלה:\nנא לעבור קודם כל לרשת תקנית</string>
-</resources>

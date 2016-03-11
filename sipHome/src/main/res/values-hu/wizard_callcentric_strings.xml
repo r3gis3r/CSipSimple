@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="w_callcentric_phone_number">SIP telefonszám</string>
+  <string name="w_callcentric_phone_number_desc">Callcentric-es SIP telefonszám (1777xxxxxxx)</string>
+  <string name="w_callcentric_password">Jelszó</string>
+  <string name="w_callcentric_password_desc">Callcentric-es fiók jelszava</string>
+</resources>
